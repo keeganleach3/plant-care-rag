@@ -1,0 +1,19 @@
+services:
+  db:
+    image: pgvector/pgvector:0.8.6-pg17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: plant
+      POSTGRES_PASSWORD: plant
+      POSTGRES_DB: plantcare
+    ports: ["127.0.0.1:5432:5432"]
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U plant -d plantcare"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+volumes:
+  pgdata:

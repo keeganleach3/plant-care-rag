@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+.pytest_cache/
+.env
+.rag-tmp/
+eval/results/**/traces/
+app/node_modules/
+app/.next/
+app/.env.local
+.claude/hillclimb/
