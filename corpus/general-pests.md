@@ -23,6 +23,14 @@ Spider mites are an easier kill than thrips. Neem oil, spinosad, or most other p
 
 Oil-based sprays, homemade or store-bought, work on mealybugs. Removing them by hand with a rubbing-alcohol swab is very effective and easy.
 
+## Fungus gnats: treat premixed soil the day you use it
+
+Any premixed potting soil or similar product should be treated for fungus gnats immediately on first use, before an infestation starts. The method: soak Mosquito Bits (the brand) in the water you are about to water with for a few hours, then water with it. This kills the larvae in the soil far more efficiently than the usual published methods like spraying oil on the surface or covering the top of the soil.
+
+## Pesticide and fungicide products: follow the bottle
+
+Pesticides and fungicides here are bought premixed, or diluted per the instructions on each bottle. Products come from several brands on Amazon and every one dilutes differently, so there is no single dilution rule; read the label of the product in hand.
+
 ## Beneficial insects are not used here
 
 Beneficial insects have not been used here. Growers who tried them found they sounded better in theory than they worked in practice: they take too long, they maintain a pest population instead of stopping the spread, and you cannot spray pesticides while they are present without killing them. Pesticides kill the pests and they stay gone.
