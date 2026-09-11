@@ -50,3 +50,7 @@ There is no single tell. Acclimation is done when the dome or lid can stay compl
 ## Mistakes beginners make most
 
 First: overdoing the start. Distilled water, extra coatings, hormones, and fertilizer on top of each other are not needed, and success rates were higher doing the whole first stage with plain sink water. Second: mistiming the humidity step-down, either dragging it out (delayed growth, the plant needs airflow) or yanking the dome off or never starting at 100 percent (kills the plant). Third: potting into a soil that is too dense.
+
+## Up-potting: wait for root-bound, do not disturb the roots
+
+Do not rush the up-pot. Wait until the plant is properly root-bound, with lots of roots circling the pot. Alocasia especially like to be tightly bound. Customers often up-pot the moment a plant looks snug, but most of these plants prefer it and do not want their roots disturbed. When you do up-pot, leave the root ball alone even if the roots are circling everywhere; at most loosen the bottom slightly. Breaking the root ball apart damages the fine root hairs, including ones you cannot see, and the plant takes much longer to recover.

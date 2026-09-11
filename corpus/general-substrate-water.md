@@ -18,3 +18,11 @@ Water is balanced to a pH of about 7, or the high sixes. Plain tap water from th
 ## What goes in the first watering
 
 For the first watering, per half liter of water: one vial of water-soluble IBA rooting hormone [CONFIRM: IBA, and the vial size], a small amount of a high-phosphorus fertilizer, and Trichoderma T-22 [CONFIRM: the transcript says "T-22 mycorrhizae"; T-22 is a Trichoderma harzianum strain, not a mycorrhizal fungus. Which product?]. Water the freshly potted plantlets with this once. Under a 100 percent humidity dome it is usually at least ten days before they need water again.
+
+## Second-stage mix after acclimation: chunky aroid soil
+
+Past the first mix, plants move to a chunky aroid soil: coco coir, perlite, charcoal, coconut husk chips, and a bit of orchid bark. Monstera and Anthurium get the chunkiest version because they love airflow around the roots. Alocasia and Philodendron get the same ingredients with slightly more fine material and coco coir to hold water, because their finer roots struggle in a mix that is too chunky. A very large Alocasia with thick roots can eventually move to a chunkier mix, but that is far in the future.
+
+## Light fertilizing with every watering
+
+Every watering carries a light dose of fertilizer, for all plants, and this produced a large increase in growth. The other levers for a plant that has stalled are more light and a consistent routine.
