@@ -23,6 +23,10 @@ For the first watering, per half liter of water: one dropper of water-soluble IB
 
 Past the first mix, plants move to a chunky aroid soil: coco coir, perlite, charcoal, coconut husk chips, and a bit of orchid bark. Monstera and Anthurium get the chunkiest version because they love airflow around the roots. Alocasia and Philodendron get the same ingredients with slightly more fine material and coco coir to hold water, because their finer roots struggle in a mix that is too chunky. A very large Alocasia with thick roots can eventually move to a chunkier mix, but that is far in the future.
 
+## Top watering after the dome: water until it drains
+
+Once a plant is past the dome and not on a wick, it is top watered. Water until a little runs out of the bottom of the pot every time, so the whole pot is evenly saturated, then let it drain fully. Do not leave it soaked; the goal is a complete, even watering, not a heavy one.
+
 ## Light fertilizing with every watering
 
 Every watering carries a light dose of fertilizer, for all plants, and this produced a large increase in growth. The other levers for a plant that has stalled are more light and a consistent routine.
