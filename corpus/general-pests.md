@@ -9,7 +9,7 @@ verified: false
 
 ## Root rot is the biggest risk for small plants
 
-Root rot is the main problem across all genera, especially while plants are small and held in high humidity. The cause is almost always too little airflow under the dome or lid. With Alocasia, watch for fungus as well, for the same reason: give them a good amount of airflow.
+Root rot is the main problem across all genera, especially while plants are small and held in high humidity. The cause is almost always too little airflow under the dome or lid. With Alocasia, watch for fungus as well, for the same reason: give them a good amount of airflow. On an established plant, rot looks the same as overwatering: yellowing, wilting, droopiness, browning edges, and mushy sections. Directly after planting from tissue culture the only early sign is usually a loss of firmness, and by the time leaves die it is too late.
 
 ## Thrips: rotate sprays every four days, or use systemic granules
 

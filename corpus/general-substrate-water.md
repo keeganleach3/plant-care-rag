@@ -27,6 +27,10 @@ Past the first mix, plants move to a chunky aroid soil: coco coir, perlite, char
 
 Once a plant is past the dome and not on a wick, it is top watered. Water until a little runs out of the bottom of the pot every time, so the whole pot is evenly saturated, then let it drain fully. Do not leave it soaked; the goal is a complete, even watering, not a heavy one.
 
+## Let plants dry out more than you think, except Alocasia
+
+For most plants, let the top 50 percent of the pot dry out before watering again. That is more drying than most people expect. Alocasia are the exception and need consistent moisture. Clear pots are highly recommended for anyone who tends to overthink or underthink watering, because you can see the moisture level instead of guessing.
+
 ## Light fertilizing with every watering
 
 Every watering carries a light dose of fertilizer, for all plants, and this produced a large increase in growth. The other levers for a plant that has stalled are more light and a consistent routine.

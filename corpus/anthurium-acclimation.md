@@ -19,14 +19,14 @@ Anthurium are more humidity-sensitive than Monstera. Their step-down gets more t
 
 Monstera root fastest. Anthurium and Alocasia are the second tier and root and grow at a similar speed to each other. Philodendron are the slowest.
 
-## Rot in Anthurium shows late and subtly
+## Rot right after deflasking shows late and subtly
 
-Alocasia are the only genus that gives an obvious leaf sign the moment it starts doing poorly. In Anthurium and most others, the first sign of rot after deflasking is a loss of firmness: the plant cannot stand up on its own. By the time leaves start dying it is usually too late. A plant you care about needs close, regular inspection; beyond that, some of it is trial and error, and every grower's substrate, watering, and fertilizer choices shift where the line is.
+Alocasia are the only genus that gives an obvious leaf sign the moment it starts doing poorly. In Anthurium and most others, directly after planting from tissue culture the first sign of rot is a loss of firmness: the plant cannot stand up on its own. By the time leaves start dying it is usually too late. A plant you care about needs close, regular inspection; beyond that, some of it is trial and error, and every grower's substrate, watering, and fertilizer choices shift where the line is. Once a plant is established, rot shows the normal way: yellowing, wilting, droopiness, browning edges, and mushy sections.
 
 ## Anthurium substrate and watering
 
 Anthurium want lots of light and a chunky soil, but slightly thicker and not quite as chunky as the Monstera mix, because their roots start thinner. Do not let an Anthurium dry out as much as a Monstera.
 
-## Moss at the base speeds Anthurium rooting
+## Moss at the base speeds rooting on larger Anthurium
 
-Anthurium root from the base of the plant. Stacking a little moss over the soil around the root base, or adding a bit of soil there, gives those roots something to grow into and usually speeds up growth. Anthurium also do well climbing.
+This is for larger, established Anthurium, not for tissue-culture acclimation. Anthurium root from the base of the plant, so stacking a little moss over the soil around the root base, or adding a bit of soil there, gives those roots something to grow into and usually speeds up growth. Anthurium also do well climbing.
