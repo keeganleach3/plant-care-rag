@@ -17,7 +17,7 @@ DLI (daily light integral) is PPFD multiplied by the hours the light is on, so i
 
 ## Aroids are high-light plants, whatever the store label says
 
-Big-box labels call tropical aroids medium- or low-light plants. Indoors, they almost never are. These are not outdoor plants unless they are slowly acclimated to sun, but as indoor plants they need more light than people think. Every aroid grown here is treated as a high-light plant with a target DLI of 15 or more, and established plants are given at least 250 PPFD [CONFIRM: session 2 said "at least 300 PPFD"; which figure stands?]. Tissue-culture plantlets start lower, around 100 to 150 PPFD [CONFIRM: session 1 said 150 to 200], and pick up more light as they grow toward the fixture.
+Big-box labels call tropical aroids medium- or low-light plants. Indoors, they almost never are. These are not outdoor plants unless they are slowly acclimated to sun, but as indoor plants they need more light than people think. Every aroid grown here is treated as a high-light plant with a target DLI of 15 or more, and established plants are given at least 250 PPFD, with 300 or more as the goal. Tissue-culture plantlets start lower, around 150 PPFD (it is not an exact figure), and pick up more light as they grow toward the fixture.
 
 ## How to measure light at the plant
 

@@ -39,9 +39,9 @@ Starting humidity is always 100 percent, either a single pot under its own dome 
 
 Water once at potting. Because humidity sits at 100 percent under the dome, it is usually at least ten days before the plantlets need water again.
 
-## Light: 150 to 200 PPFD for 10 to 12 hours
+## Light: around 150 PPFD for 10 to 12 hours
 
-Light intensity and fixture distance depend on the light, so the target is the reading, not the distance: 150 to 200 PPFD for about ten to twelve hours a day. As the plantlets grow taller they get closer to the fixture, which raises their light exposure on its own and matches their growing need for light.
+Light intensity and fixture distance depend on the light, so the target is the reading, not the distance: around 150 PPFD (not an exact figure) for about ten to twelve hours a day, versus at least 250 for established plants. As the plantlets grow taller they get closer to the fixture, which raises their light exposure on its own and matches their growing need for light.
 
 ## Signs acclimation is working
 

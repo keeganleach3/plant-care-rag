@@ -13,7 +13,7 @@ The first potting mix for tissue-culture Monstera and Anthurium is tree fern fib
 
 ## Water pH for the first watering
 
-Water is balanced to a pH of about 7, or the high sixes. Plain tap water from the sink is fine; distilled water is not needed and did not improve success rates.
+Water is balanced to a pH of about 7, or the high sixes. Plain tap water from the sink, with a tap water conditioner added, is fine; distilled water is not needed and did not improve success rates.
 
 ## What goes in the first watering
 

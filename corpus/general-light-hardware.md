@@ -17,7 +17,7 @@ The Barrina T5 is the most common cheap grow light customers own. It is full spe
 
 ## The stronger fixtures used here
 
-The grow tents run either AC Infinity S16 bars [CONFIRM: exact model], which use Samsung LED diodes and carry light much further down so it dissipates more slowly, or the thicker Barrina TXS45A bars [CONFIRM: exact model]. A few inches from the plants these deliver roughly 350 PPFD, which over 12 hours is a DLI of about 15. That is too much for a very small plant, but small plants are easy to set further from the fixture, and as they grow they move closer and their PPFD rises on its own.
+The grow tents run either AC Infinity S16 light bars, which use Samsung LED diodes and carry light much further down so it dissipates more slowly, or the thicker Barrina TXS45A bars. A few inches from the plants these deliver roughly 350 PPFD, which over 12 hours is a DLI of about 15. That is too much for a very small plant, but small plants are easy to set further from the fixture, and as they grow they move closer and their PPFD rises on its own.
 
 ## Where to put each plant under a bar
 

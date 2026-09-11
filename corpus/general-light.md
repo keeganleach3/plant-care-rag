@@ -7,9 +7,9 @@ verified: true
 
 <!-- Source: Keegan, corpus session 2, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
 
-## Established plants: at least 300 PPFD for 12 to 14 hours
+## Established plants: at least 250 PPFD for 12 to 14 hours
 
-Once past acclimation, all of these aroids, and variegated forms especially, want a lot of light. Grow lights here sit very close to the plants and run twelve to fourteen hours a day, with the plants getting at least 300 PPFD for the most part. Acclimating plantlets use a lower 150 to 200 PPFD target; see the acclimation protocol.
+Once past acclimation, all of these aroids, and variegated forms especially, want a lot of light. Grow lights here sit very close to the plants and run twelve to fourteen hours a day, with the plants getting at least 250 PPFD and ideally 300 or more. Acclimating plantlets use a lower target of around 150 PPFD; see the acclimation protocol.
 
 ## Light intensity drops off fast with distance
 
