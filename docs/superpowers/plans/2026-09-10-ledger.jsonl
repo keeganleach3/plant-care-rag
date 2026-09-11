@@ -4,3 +4,4 @@
 {"date":"2026-09-10","step":"1.2 chunker/embed/db/ingest + 13 tests (TDD)","tier":"inline","est_tokens":40000,"actual_tokens":30000}
 {"date":"2026-09-10","step":"2.1 retrieve.search vector/hybrid + genus filter + 4 tests (TDD)","tier":"inline","est_tokens":25000,"actual_tokens":15000}
 {"date":"2026-09-10","step":"0.5-1.1 corpus sessions 1-6 (18 docs) + 1.2/2.1 real-corpus verification + frontmatter bug fix","tier":"inline with Keegan","est_tokens":120000,"actual_tokens":110000}
+{"date":"2026-09-10","step":"3.1 generate + prompt v0 + schema + 6 tests + live sanity","tier":"inline (COMPLEX)","est_tokens":30000,"actual_tokens":25000}

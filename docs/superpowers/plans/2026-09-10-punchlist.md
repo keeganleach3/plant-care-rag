@@ -40,3 +40,14 @@ A box is checked only when DONE and verified with pasted output. Ledger rows: `|
 - [x] verified: `eval/sanity.py` → top-5 hits vector 9/10, hybrid 9/10; miss = "variegated monstera going all green" at rank 6 (logged in eval/notes.md for Phase 5)
 - ledger: `| 2.1 | inline | 25K | ~15K |`
 - ledger: `| 1.2 | inline | 40K | ~30K |`
+
+## 3.1 `rag/generate.py` + `prompts/answer.md` v0 + schema
+- [x] TDD: RED (ModuleNotFoundError) → GREEN `25 passed` — cited answer + usage, question wrapped as data, citation outside retrieved set → `citation_invalid`, refusal exact string, refusal drops citations, 500-char cap
+- [x] verified live via `claude -p` (cc): seeded → `refused False`, citations `[general-acclimation#humidity-...]`; off-topic → refused; empty context → refused; 22 s / 3 calls
+- note: v0 prompt asks for inline `[chunk_id]` brackets but the model returned a clean answer + correct `citations` array — acceptable for v0, revisit in prompt v1 if the eval wants inline marks
+- ledger: `| 3.1 | inline (COMPLEX) | 30K | ~25K |`
+
+## 3.2 `rag/api.py` (FastAPI, model loaded once)
+- [ ] TDD with TestClient + fake embedder/llm: response keys, timings 4 keys, k clamp, invalid genus dropped, 500-char → 422, refusal passthrough
+- [ ] verify: startup log shows one model load; `curl POST /ask` round-trip on the real stack
+- ledger: `| 3.2 | inline (single seam < 150 lines; contract estimated dispatch, delegation floor says inline) | 20K | — |`
