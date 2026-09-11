@@ -57,3 +57,14 @@ def test_unknown_genus_is_rejected(tmp_path):
 def test_text_before_first_h2_is_ignored_and_empty_sections_dropped(tmp_path):
     doc = parse(write(tmp_path, "\nIntro text.\n\n## Real\n\nContent.\n\n## Empty\n\n"))
     assert [s.heading for s in doc.sections] == ["Real"]
+
+
+def test_title_with_colon_parses(tmp_path):
+    head = HEAD.replace("title: Monstera humidity step-down", "title: Alocasia from TC: slower step-down, leaf drop")
+    doc = parse(write(tmp_path, "\n## A\n\nB.\n", head=head))
+    assert doc.title == "Alocasia from TC: slower step-down, leaf drop"
+
+
+def test_malformed_frontmatter_is_a_docerror_not_a_crash(tmp_path):
+    with pytest.raises(DocError):
+        parse(write(tmp_path, "\n## A\n\nB.\n", head="---\ntitle\ngenus: monstera\ntopic: humidity\nverified: true\n---\n"))

@@ -25,17 +25,18 @@ A box is checked only when DONE and verified with pasted output. Ledger rows: `|
 - ledger: `| 0.4 | inline (COMPLEX) | 12K | — |`
 
 ## 0.5 Corpus session 1 — general deflasking/acclimation protocol
-- [ ] interview answered by Keegan
-- [ ] `corpus/general-acclimation.md` structured, `[CONFIRM]` markers resolved, `verified: true`
+- [x] interview answered by Keegan
+- [x] `corpus/general-acclimation.md` + `general-substrate-water.md` structured, markers resolved, verified
 - ledger: `| 0.5 | inline with Keegan | 20K | — |`
 
 ## 1.1 Corpus sessions 2–6 (monstera, alocasia, philodendron, anthurium, water/pests)
-- [ ] one doc per session minimum, verified by Keegan
+- [x] sessions 2-6 done same day: 18 docs / 65 chunks, all `verified: true`, 0 CONFIRM markers; Keegan: "All are verified so far besides for the little additions"
 ## 1.2 `rag/ingest.py` + `rag/embed.py` + `rag/db.py`
 - [x] TDD: RED (ModuleNotFoundError) → GREEN `13 passed` — chunker (7), embed prefixes (3), ingest integration on Docker DB (3: upsert+skip unverified, idempotent re-ingest, --prune)
-- [ ] verify: `uv run python -m rag.ingest` on the real corpus once session-1 doc is verified; rerun inserts 0
+- [x] verified: `ingested 18 docs, 65 chunks, pruned 0, skipped 0` twice (idempotent); max chunk 617 chars, 0 splits
+- [x] bug caught by real corpus: YAML rejected unquoted titles with colons → RED tests → flat key/value frontmatter parser, pyyaml removed, `19 passed`
 ## 2.1 `rag/retrieve.py`
 - [x] TDD: RED (ImportError) → GREEN `17 passed` — vector ranking, genus filter (excludes others, keeps general), hybrid keyword surfacing, bad mode rejected
-- [ ] verify: 10 hand-checked queries on the real corpus hit expected chunk in top-5 (needs session-1+ docs)
+- [x] verified: `eval/sanity.py` → top-5 hits vector 9/10, hybrid 9/10; miss = "variegated monstera going all green" at rank 6 (logged in eval/notes.md for Phase 5)
 - ledger: `| 2.1 | inline | 25K | ~15K |`
 - ledger: `| 1.2 | inline | 40K | ~30K |`

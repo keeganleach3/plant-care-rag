@@ -3,8 +3,6 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
-import yaml
-
 from rag.config import GENERA, TOPICS
 
 CAP = 1800  # chars (~400 tokens); contract: H2 body cap 2,000 chars after split
@@ -45,16 +43,29 @@ def slugify(text: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", text.lower()).strip("-")
 
 
+def _frontmatter(path: Path, block: str) -> dict:
+    """Flat `key: value` lines only (titles may contain colons; values are never quoted or nested)."""
+    meta = {}
+    for line in block.splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        key, sep, value = line.partition(":")
+        if not sep or not key.strip():
+            raise DocError(f"{path.name}: malformed frontmatter line {line!r}")
+        meta[key.strip()] = value.split("  #")[0].strip()
+    return meta
+
+
 def parse(path: Path) -> Doc:
     text = path.read_text(encoding="utf-8")
     m = re.match(r"^---\n(.*?)\n---\n", text, re.S)
     if not m:
         raise DocError(f"{path.name}: missing frontmatter")
-    meta = yaml.safe_load(m.group(1)) or {}
+    meta = _frontmatter(path, m.group(1))
     for key in _REQUIRED:
         if key not in meta:
             raise DocError(f"{path.name}: frontmatter missing {key}")
-    if meta["verified"] is not True:
+    if meta["verified"] != "true":
         raise DocError(f"{path.name}: not verified")
     if meta["genus"] not in GENERA:
         raise DocError(f"{path.name}: unknown genus {meta['genus']!r}")

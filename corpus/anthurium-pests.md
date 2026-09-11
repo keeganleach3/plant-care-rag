@@ -2,7 +2,7 @@
 title: Anthurium pests and fungus
 genus: anthurium
 topic: pests
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 4, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

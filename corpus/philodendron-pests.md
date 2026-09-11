@@ -2,7 +2,7 @@
 title: Philodendron pests and fungus
 genus: philodendron
 topic: pests
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 5, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

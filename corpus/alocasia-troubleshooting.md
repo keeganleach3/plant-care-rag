@@ -2,7 +2,7 @@
 title: Alocasia symptoms customers ask about most
 genus: alocasia
 topic: troubleshooting
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 3, 2026-09-10 (typed, structured by Claude; no facts added). -->

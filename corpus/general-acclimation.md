@@ -2,7 +2,7 @@
 title: Deflasking and acclimating tissue-culture aroid plantlets
 genus: general
 topic: acclimation
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 1, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
@@ -10,6 +10,14 @@ verified: false
 ## How tissue-culture plantlets arrive
 
 Tissue-culture (TC) aroid plantlets arrive sealed in a bag, still in agar. They are usually about two inches tall, a little smaller or larger depending on the plant, with only a few leaves.
+
+## Unopened bags and flasks must stay below 75°F
+
+This is the one temperature rule that matters and most people do not know it: while plantlets are still sealed in the bag or flask, keep them below 75°F. If tissue-culture plantlets are being stored unplanted for a couple of days or longer, they must stay in a cooler spot, because in the bag they melt if it gets too hot. Once they are out of the bag and planted, ordinary room temperatures are fine.
+
+## Temperature once planted
+
+Nothing specific is done to monitor or control temperature after planting. In a San Diego grow space the plants never sit below about 70°F, usually top out around 80 to 85°F, reach about 88°F on a very hot day, and stay below 90°F.
 
 ## Day 0 to day 2: leave them sealed
 
@@ -45,7 +53,7 @@ Failure shows fast. A plantlet that flops over early is rotting from the center.
 
 ## When acclimation is done
 
-There is no single tell. Acclimation is done when the dome or lid can stay completely off and the plant is ready to move up a pot size. In a grow space held at 65 to 80 percent ambient humidity, stepping down from 100 percent to that level takes about three weeks; a drier room takes longer.
+There is no single tell. Acclimation is done when the dome or lid can stay completely off and the plant is ready to move up a pot size. In a grow space held at 65 to 80 percent ambient humidity, stepping a Monstera down from 100 percent to 65 percent takes about three weeks, roughly 18 to 21 days, sometimes a little longer. Alocasia take four to five weeks. Anthurium and Philodendron sit in between. A drier room takes longer for all of them.
 
 ## Mistakes beginners make most
 

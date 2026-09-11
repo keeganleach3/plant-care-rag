@@ -2,7 +2,7 @@
 title: Pests and rot on tissue-culture aroids
 genus: general
 topic: pests
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 2, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

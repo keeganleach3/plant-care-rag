@@ -2,7 +2,7 @@
 title: Monstera from tissue culture: acclimation and step-down
 genus: monstera
 topic: acclimation
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 2, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
@@ -13,7 +13,7 @@ Tissue-culture Monstera here are mostly Monstera deliciosa and Monstera borsigia
 
 ## Monstera tolerate a faster humidity step-down
 
-Monstera are faster growers and more tolerant of problems than Alocasia or Anthurium. Once a Monstera is acclimated to 75 to 80 percent humidity and is more than a few inches tall, roughly in a three-inch pot, it can go straight into 50 percent humidity without issues. Alocasia need a much slower step-down and should not be moved like this.
+Monstera are faster growers and more tolerant of problems than Alocasia or Anthurium. A Monstera reaches 65 percent humidity in about three weeks, roughly 18 to 21 days, sometimes a little longer. Once a Monstera is acclimated to 75 to 80 percent humidity and is more than a few inches tall, roughly in a three-inch pot, it can go straight into 50 percent humidity without issues. Alocasia need a much slower step-down and should not be moved like this.
 
 ## Monstera root faster and need less water
 

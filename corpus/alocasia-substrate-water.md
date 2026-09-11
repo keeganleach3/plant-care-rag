@@ -2,7 +2,7 @@
 title: Alocasia self-watering wick setup
 genus: alocasia
 topic: substrate-water
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 6, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

@@ -2,7 +2,7 @@
 title: Airflow and vent timing in grow cabinets and tents
 genus: general
 topic: humidity
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 6, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

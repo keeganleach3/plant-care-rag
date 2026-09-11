@@ -8,7 +8,6 @@ dependencies = [
     "fastapi>=0.141.1",
     "pgvector>=0.5.0",
     "psycopg[binary]>=3.2",
-    "pyyaml>=6.0.3",
     "sentence-transformers>=6.0.1",
     "torch>=2.14.0",
     "uvicorn>=0.52.4",

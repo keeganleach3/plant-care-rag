@@ -2,7 +2,7 @@
 title: Variegated Monstera: managing variegation
 genus: monstera
 topic: quirks
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 2, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

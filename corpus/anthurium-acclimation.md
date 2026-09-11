@@ -2,7 +2,7 @@
 title: Anthurium from tissue culture: step-down, rooting, and substrate
 genus: anthurium
 topic: acclimation
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 4, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

@@ -2,7 +2,7 @@
 title: Monstera symptoms customers ask about most
 genus: monstera
 topic: troubleshooting
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 2, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

@@ -2,7 +2,7 @@
 title: Alocasia leaf spot, fungus, and pest pressure
 genus: alocasia
 topic: pests
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 3, 2026-09-10 (typed, structured by Claude; no facts added). -->
