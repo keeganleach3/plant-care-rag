@@ -4,20 +4,20 @@ Plan of record: `~/.claude/plans/ok-lets-plan-this-glistening-heron.md` (approve
 A box is checked only when DONE and verified with pasted output. Ledger rows: `| step | tier | est | actual |`.
 
 ## 0.1 WSL2 + Docker Desktop (Keegan)
-- [ ] `wsl --install` (admin) → reboot → Docker Desktop installed, WSL2 backend
-- [ ] verify: `docker run --rm hello-world` prints the hello message
+- [x] `wsl --install` (admin) → reboot → Docker Desktop installed, WSL2 backend (Keegan, 2026-09-10)
+- [x] verify: Keegan confirmed docker works in terminal; architect: `Docker version 29.7.2`, `Compose v5.5.1`
 
 ## 0.2 Repo scaffold
 - [x] dirs, `uv init --python 3.12`, pyproject with CPU torch index, .gitignore/.gitattributes/.env.example, LICENSE
 - [x] deps installed; verified: `torch 2.14.0+cpu cuda False`, `sentence-transformers 6.0.1`
-- [ ] first commit
+- [x] first commit `2253611`
 - ledger: `| 0.2 | inline | 15K | — |`
 
 ## 0.3 Docker compose + schema
 - [x] `docker-compose.yml` (pgvector 0.8.6-pg17, named volume, healthcheck, init mount, port bound to 127.0.0.1)
 - [x] `db/init/001_schema.sql` (documents, chunks, HNSW cosine, GIN tsv, hybrid_search RRF)
-- [ ] verify (needs 0.1): `docker compose ps` healthy; `\dx` lists vector; `SELECT * FROM hybrid_search('anthurium yellow leaves', array_fill(0,ARRAY[768])::vector, 5)` runs
-- ledger: `| 0.3 | inline | 10K | — |`
+- [x] verified: `plant-care-rag-db-1 Up (healthy) 127.0.0.1:5432`; `vector 0.8.6`; tables chunks+documents; indexes chunks_hnsw (hnsw cosine), chunks_tsv (gin), chunks_genus; `hybrid_search(...)` → 0 rows, no error
+- ledger: `| 0.3 | inline | 10K | ~12K |`
 
 ## 0.4 Contract
 - [x] `docs/design/contract-pipeline.md` written
