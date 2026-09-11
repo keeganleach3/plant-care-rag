@@ -6,8 +6,16 @@ class FakeModel:
         self.seen = []
 
     def encode(self, texts, **kw):
+        """Bag-of-characters vector: similar text → similar direction, so ordering tests are meaningful."""
         self.seen.extend(texts)
-        return [[float(len(t))] * 768 for t in texts]
+        out = []
+        for t in texts:
+            v = [0.0] * 768
+            for ch in t.lower():
+                v[ord(ch) % 768] += 1.0
+            n = sum(x * x for x in v) ** 0.5 or 1.0
+            out.append([x / n for x in v])
+        return out
 
 
 def test_query_and_doc_prefixes_come_from_model_config():

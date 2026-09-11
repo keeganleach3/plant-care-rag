@@ -35,5 +35,7 @@ A box is checked only when DONE and verified with pasted output. Ledger rows: `|
 - [x] TDD: RED (ModuleNotFoundError) → GREEN `13 passed` — chunker (7), embed prefixes (3), ingest integration on Docker DB (3: upsert+skip unverified, idempotent re-ingest, --prune)
 - [ ] verify: `uv run python -m rag.ingest` on the real corpus once session-1 doc is verified; rerun inserts 0
 ## 2.1 `rag/retrieve.py`
-- [ ] verify: 10 hand-checked queries hit expected chunk in top-5; genus filter test
+- [x] TDD: RED (ImportError) → GREEN `17 passed` — vector ranking, genus filter (excludes others, keeps general), hybrid keyword surfacing, bad mode rejected
+- [ ] verify: 10 hand-checked queries on the real corpus hit expected chunk in top-5 (needs session-1+ docs)
+- ledger: `| 2.1 | inline | 25K | ~15K |`
 - ledger: `| 1.2 | inline | 40K | ~30K |`
