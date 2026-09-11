@@ -11,6 +11,10 @@ verified: true
 
 Small tissue-culture Monstera often carry less variegation than they will later, and some simply have less from the start. Do not worry about low variegation until the plant is larger.
 
+## All variegated Monstera get the same light and care
+
+Thai Constellation, albo, aurea, white monster, and the other variegated Monstera all get the same treatment; there is no real care difference between them. They all get a lot of light, placed in the strongest spot under the bar, to fight reversion and grow quickly.
+
 ## If a variegated Monstera is reverting to green
 
 Two options: cut the stem back to the last node where variegation was visible, or give the plant more light. Both are ways to push variegation when new growth is showing less of it.

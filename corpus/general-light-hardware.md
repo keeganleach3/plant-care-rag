@@ -1,0 +1,28 @@
+---
+title: Grow light hardware: what is used here and what to buy
+genus: general
+topic: light
+verified: false
+---
+
+<!-- Source: Keegan, corpus session 7, 2026-09-10 (voice-to-text, structured by Claude; product figures are from the listings he cited). -->
+
+## Full-spectrum white LED bars are the recommendation
+
+Every fixture used here is an LED bar. Bars are the most useful form and the easiest to place around a shelf or tent; large full panels are overkill for these builds and do not penetrate as far down. One hanging bulb is used only because it was convenient. The light must be full spectrum; that is the thing to check when a customer asks which grow light to buy. Color does not matter in practice: white works fine, and while pink or red-blue lights might show a statistical difference if you dug deep, a balanced white light is the choice here.
+
+## The Barrina T5 is weak: the numbers
+
+The Barrina T5 is the most common cheap grow light customers own. It is full spectrum, but a single bar puts out very little usable light and it falls off fast with distance. Per its product chart, one bar delivers about 91 PPFD at 8 inches, 59.3 at 12 inches, and 31.2 at 20 inches. At 8 inches, which is quite close, for 12 hours a day, that is a DLI of 3.93, below even the low-light band. To make a T5 setup work, stack several bars side by side or buy a stronger fixture.
+
+## The stronger fixtures used here
+
+The grow tents run either AC Infinity S16 bars [CONFIRM: exact model], which use Samsung LED diodes and carry light much further down so it dissipates more slowly, or the thicker Barrina TXS45A bars [CONFIRM: exact model]. A few inches from the plants these deliver roughly 350 PPFD, which over 12 hours is a DLI of about 15. That is too much for a very small plant, but small plants are easy to set further from the fixture, and as they grow they move closer and their PPFD rises on its own.
+
+## Where to put each plant under a bar
+
+A light bar is strongest directly under its center and weaker toward its ends, so PPFD drops as you move a plant toward the sides. The most light-hungry plants go in the center: variegated Monstera and Alocasia get the most light here. Anything that wants less light, or is getting too much under a strong fixture, goes toward the side or further away.
+
+## Photoperiod used here
+
+All established plants get at least 12 hours of light a day. Acclimating plantlets get 10 to 12, sometimes 12. The schedule is never shortened.
