@@ -21,7 +21,7 @@ A box is checked only when DONE and verified with pasted output. Ledger rows: `|
 
 ## 0.4 Contract
 - [x] `docs/design/contract-pipeline.md` written
-- [ ] Keegan approval message
+- [x] Keegan approved 2026-09-10: "Contract pipeline approved"
 - ledger: `| 0.4 | inline (COMPLEX) | 12K | — |`
 
 ## 0.5 Corpus session 1 — general deflasking/acclimation protocol
@@ -32,7 +32,8 @@ A box is checked only when DONE and verified with pasted output. Ledger rows: `|
 ## 1.1 Corpus sessions 2–6 (monstera, alocasia, philodendron, anthurium, water/pests)
 - [ ] one doc per session minimum, verified by Keegan
 ## 1.2 `rag/ingest.py` + `rag/embed.py` + `rag/db.py`
-- [ ] TDD: chunker cap/split/slug-stability tests fail → pass
-- [ ] verify: `uv run python -m rag.ingest` chunk count matches; rerun inserts 0
+- [x] TDD: RED (ModuleNotFoundError) → GREEN `13 passed` — chunker (7), embed prefixes (3), ingest integration on Docker DB (3: upsert+skip unverified, idempotent re-ingest, --prune)
+- [ ] verify: `uv run python -m rag.ingest` on the real corpus once session-1 doc is verified; rerun inserts 0
 ## 2.1 `rag/retrieve.py`
 - [ ] verify: 10 hand-checked queries hit expected chunk in top-5; genus filter test
+- ledger: `| 1.2 | inline | 40K | ~30K |`

@@ -63,7 +63,7 @@ Chain: `down -v` is the only destructive operation in Phases 0–5. Nothing in t
 | 0.1 WSL2 + Docker (Keegan) | `docker run --rm hello-world` |
 | 0.2 scaffold | ✅ `torch 2.14.0+cpu cuda False`, `sentence-transformers 6.0.1`, Python 3.12 via uv |
 | 0.3 compose + schema | `docker compose ps` healthy; `\dx` shows `vector 0.8.x`; `hybrid_search` with a zero vector returns without error |
-| 0.4 this contract | Keegan's approval message |
+| 0.4 this contract | ✅ approved by Keegan 2026-09-10 |
 | 0.5–1.1 corpus | each doc `verified: true`; `grep -c CONFIRM corpus/*.md` → 0 before ingest |
 | 1.2 ingest | tests: cap, paragraph-boundary split, slug stability across two runs, unverified doc skipped; `SELECT count(*) FROM chunks` equals the chunker count; rerun → 0 inserts |
 | 2.1 retrieve | 10 sanity queries logged with hit rank in `eval/notes.md`; genus filter test excludes other genera but includes `general` |
