@@ -17,11 +17,12 @@ class Hit:
     score: float
 
 
-def search(conn, embedder: Embedder, question: str, k: int = 5, mode: str = "vector", genus: str | None = None) -> list[Hit]:
+def search(conn, embedder: Embedder, question: str, k: int = 5, mode: str = "vector", genus: str | None = None,
+           query_embedding: list[float] | None = None) -> list[Hit]:
     if mode not in MODES:
         raise ValueError(f"mode must be one of {MODES}")
     k = max(1, min(int(k), 20))
-    q = embedder.embed_query(question)
+    q = query_embedding if query_embedding is not None else embedder.embed_query(question)
     if mode == "vector":
         rows = conn.execute(
             f"""SELECT {_COLS}, 1 - (c.embedding <=> %(q)s::vector) AS score FROM chunks c

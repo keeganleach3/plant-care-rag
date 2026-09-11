@@ -5,3 +5,4 @@
 {"date":"2026-09-10","step":"2.1 retrieve.search vector/hybrid + genus filter + 4 tests (TDD)","tier":"inline","est_tokens":25000,"actual_tokens":15000}
 {"date":"2026-09-10","step":"0.5-1.1 corpus sessions 1-6 (18 docs) + 1.2/2.1 real-corpus verification + frontmatter bug fix","tier":"inline with Keegan","est_tokens":120000,"actual_tokens":110000}
 {"date":"2026-09-10","step":"3.1 generate + prompt v0 + schema + 6 tests + live sanity","tier":"inline (COMPLEX)","est_tokens":30000,"actual_tokens":25000}
+{"date":"2026-09-10","step":"3.2 api.py + 5 tests + test-DB isolation fix + live verify","tier":"inline","est_tokens":20000,"actual_tokens":35000,"note":"contract estimated sonnet dispatch; delegation floor (single seam <150 lines) routed inline"}

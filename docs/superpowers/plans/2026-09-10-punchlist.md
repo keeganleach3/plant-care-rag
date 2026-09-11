@@ -48,6 +48,7 @@ A box is checked only when DONE and verified with pasted output. Ledger rows: `|
 - ledger: `| 3.1 | inline (COMPLEX) | 30K | ~25K |`
 
 ## 3.2 `rag/api.py` (FastAPI, model loaded once)
-- [ ] TDD with TestClient + fake embedder/llm: response keys, timings 4 keys, k clamp, invalid genus dropped, 500-char → 422, refusal passthrough
-- [ ] verify: startup log shows one model load; `curl POST /ask` round-trip on the real stack
-- ledger: `| 3.2 | inline (single seam < 150 lines; contract estimated dispatch, delegation floor says inline) | 20K | — |`
+- [x] TDD: RED (ModuleNotFoundError) → GREEN `30 passed` — response keys, 4 timings, k clamp 99→20, genus hoya→None, 501 chars→422, bad mode→422, refusal passthrough
+- [x] DEFECT caught by live curl: prune test against the dev DB wiped all 65 chunks → `tests/conftest.py` creates isolated `plantcare_test` from the init SQL; suite re-run leaves dev at 65 (CODE-LEARNINGS 2026-09-10 test-isolation)
+- [x] verified live: `embedding model BAAI/bge-base-en-v1.5 loaded in 10.6s` once; alocasia leaf-drop (hybrid) → 2 citations, embed 25 ms / retrieve 7 ms / generate 11.9 s (CLI-bound); monstera flowering → refused; 501 chars → 422
+- ledger: `| 3.2 | inline (single seam < 150 lines; contract estimated dispatch, delegation floor says inline) | 20K | ~35K incl. isolation fix |`
