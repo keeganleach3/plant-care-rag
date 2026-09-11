@@ -21,7 +21,7 @@ After the one-to-two day rest, take the plantlets out of the bag and rinse them 
 
 ## Starting containers: small clear pots under a dome
 
-Plantlets go into very small clear pots, about one and a half inches, set in a 72-cell plant tray with a humidity dome over it [CONFIRM: 72-cell trays?]. Clear pots matter because root growth through the pot wall is the main sign that acclimation is working.
+Plantlets go into very small clear pots, about one and a half inches, set in a 72-cell plant tray with a humidity dome over it. Clear pots matter because root growth through the pot wall is the main sign that acclimation is working.
 
 ## Humidity: hold 100 percent for the first week
 
