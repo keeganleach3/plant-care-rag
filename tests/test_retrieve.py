@@ -43,6 +43,13 @@ def test_hybrid_mode_surfaces_keyword_match(seeded):
     assert all(h.content for h in hits)
 
 
+def test_hybrid_lexical_leg_matches_when_any_question_word_does(seeded):
+    conn, emb = seeded
+    # no chunk holds quarantine + new + aroid together, so an AND'd full-text query matches nothing and hybrid is vector-only
+    top = retrieve.search(conn, emb, "should i quarantine my new aroid", k=1, mode="hybrid")[0]
+    assert top.chunk_id == "t-general#quarantine-rule" and top.score > 1 / 61  # above 1/61: both legs contributed
+
+
 def test_unknown_mode_rejected(seeded):
     conn, emb = seeded
     with pytest.raises(ValueError):

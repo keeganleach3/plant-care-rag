@@ -29,20 +29,27 @@ CREATE INDEX IF NOT EXISTS chunks_tsv   ON chunks USING gin (tsv);
 CREATE INDEX IF NOT EXISTS chunks_genus ON chunks (genus);
 
 -- Hybrid retrieval: reciprocal rank fusion over the top-50 vector hits and top-50 full-text hits.
+-- The full-text leg ORs the question's lexemes: plainto_tsquery ANDs them, and a whole customer question almost never
+-- has every word in one section (1 of 38 eval questions matched anything, so hybrid silently returned the vector ranking).
+-- A stopword-only question yields a NULL tsquery, which matches nothing.
 CREATE OR REPLACE FUNCTION hybrid_search(query_text text, query_embedding vector(768), k int DEFAULT 5, genus_filter text DEFAULT NULL)
 RETURNS TABLE(chunk_id text, score float) AS $$
-  WITH vec AS (
+  WITH q AS (
+    SELECT to_tsquery('simple', nullif(array_to_string(ARRAY(
+             SELECT quote_literal(l) FROM unnest(tsvector_to_array(to_tsvector('english', query_text))) l), ' | '), '')) AS tsq
+  ),
+  vec AS (
     SELECT c.chunk_id, row_number() OVER (ORDER BY c.embedding <=> query_embedding) AS rnk
     FROM chunks c
     WHERE genus_filter IS NULL OR c.genus = genus_filter OR c.genus = 'general'
     ORDER BY c.embedding <=> query_embedding LIMIT 50
   ),
   fts AS (
-    SELECT c.chunk_id, row_number() OVER (ORDER BY ts_rank_cd(c.tsv, plainto_tsquery('english', query_text)) DESC) AS rnk
-    FROM chunks c
-    WHERE c.tsv @@ plainto_tsquery('english', query_text)
+    SELECT c.chunk_id, row_number() OVER (ORDER BY ts_rank_cd(c.tsv, q.tsq) DESC) AS rnk
+    FROM chunks c, q
+    WHERE c.tsv @@ q.tsq
       AND (genus_filter IS NULL OR c.genus = genus_filter OR c.genus = 'general')
-    LIMIT 50
+    ORDER BY ts_rank_cd(c.tsv, q.tsq) DESC LIMIT 50
   )
   SELECT COALESCE(vec.chunk_id, fts.chunk_id) AS chunk_id,
          COALESCE(1.0 / (60 + vec.rnk), 0) + COALESCE(1.0 / (60 + fts.rnk), 0) AS score
