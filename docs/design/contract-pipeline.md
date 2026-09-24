@@ -21,7 +21,7 @@ Worst cases that touch someone else:
 | LLM output (`rag/generate.py`) | `--json-schema` / `output_config` schema `{answer, citations[], refused}`; local `validate()`; every `citations[i]` must be in the retrieved `chunk_id` set, otherwise the answer is rejected and logged (`citation_invalid`), never shown |
 | `claude -p` stdout (`rag/llm.py`) | Trailing-JSON parse only; `is_error` → `errors.jsonl`; `modelUsage` must contain the requested model; tools, MCP, and settings disabled on every call |
 | Anthropic SDK response (`api` backend, Act 2 only) | `stop_reason == refusal` → error row; `response.model == requested`; same schema validation |
-| Eval questions (`eval/questions.jsonl`) | Required keys `id, question, category, gold_chunk_ids, must_refuse`; every `gold_chunk_id` must exist in `chunks` or the run refuses to start; leakage check: a question's 10-word shingle found in any corpus file aborts the run |
+| Eval questions (`eval/questions.jsonl`) | Required keys `id, question, category, gold_chunk_ids, must_refuse`; `gold_chunk_ids` is a list of any-of groups, one per required fact, and recall@k is the share of groups with at least one member retrieved (amended 2026-09-24, Keegan: "yes"); every gold chunk ID must exist in `chunks` or the run refuses to start; leakage check: a question's 10-word shingle found in any corpus file aborts the run |
 | `.env` (`rag/config.py`) | Required keys checked at import; values never logged |
 
 ## 3. Data & secrets inventory
