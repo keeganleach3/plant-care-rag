@@ -7,6 +7,7 @@ verified: true
 
 <!-- Source: Keegan, corpus session 1, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
 <!-- 2026-09-24: leaf-melt and yellowing sections plus the sink-water fix come from Keegan's answers during eval gold review (typed, structured by Claude; no facts added). Added after the eval questions f06 and m05 were written. -->
+<!-- 2026-09-24: "base of the plant" instead of "stem" in the leaf-melt section, from Keegan's v0 grading feedback. -->
 
 ## How tissue-culture plantlets arrive
 
@@ -54,7 +55,7 @@ Failure shows fast. A plantlet that flops over early is rotting from the center.
 
 ## Leaves melting away after planting is common
 
-After planting from tissue culture, leaves sometimes melt away: they turn to mush and die off. This is pretty common. As long as the stem is fine, keep taking care of the plant. If leaves are turning to mush, consider a slight change to watering, because you might be overwatering, and add some daily airflow if you can. Early in the stage, even opening the dome slightly for a few minutes gets fresh air in.
+After planting from tissue culture, leaves sometimes melt away: they turn to mush and die off. This is pretty common. As long as the base of the plant is fine (the base, not a leaf's stalk), keep taking care of it. If leaves are turning to mush, consider a slight change to watering, because you might be overwatering, and add some daily airflow if you can. Early in the stage, even opening the dome slightly for a few minutes gets fresh air in.
 
 ## Yellowing leaves once the dome comes off
 

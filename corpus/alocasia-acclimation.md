@@ -6,6 +6,7 @@ verified: true
 ---
 
 <!-- Source: Keegan, corpus session 3, 2026-09-10 (typed, structured by Claude; no facts added). -->
+<!-- 2026-09-24: the 15-20 day hold and the ambient acclimation line come from Keegan's v0 grading feedback (typed, structured by Claude; no facts added). -->
 
 ## All Alocasia get the same treatment
 
@@ -13,7 +14,7 @@ No single Alocasia is grown here more than the others. Some are more sensitive a
 
 ## Alocasia need a slower humidity step-down than Monstera
 
-Alocasia get an extra five to seven days at 100 percent humidity compared with Monstera. Then, instead of reaching 65 percent humidity in about three weeks the way a Monstera does, an Alocasia takes four to five weeks to reach 65 percent. Once acclimated, an Alocasia is still not moved straight into ambient room humidity the way a Monstera can be.
+Alocasia stay at 100 percent humidity for about 15 to 20 days before the step-down starts, longer than a Monstera. Then, instead of reaching 65 percent humidity in about three weeks the way a Monstera does, an Alocasia takes four to five weeks to reach 65 percent. Once acclimated, an Alocasia is still not moved straight into ambient room humidity the way a Monstera can be; to bring one down to ambient humidity, give it a gradual acclimation like the one used for the tissue culture.
 
 ## Leaf drop during Alocasia acclimation is normal
 
