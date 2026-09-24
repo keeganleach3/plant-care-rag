@@ -63,3 +63,17 @@ def test_refusal_with_citations_is_normalised_to_none():
 def test_question_length_cap():
     with pytest.raises(ValueError):
         generate.answer("x" * 501, HITS, call=fake_llm({"answer": "", "citations": [], "refused": True}))
+
+
+def test_an_inline_citation_outside_the_retrieved_set_rejects_the_answer():
+    call = fake_llm({"answer": "Hold 100% for a week [general-substrate-water#secret-override].",
+                     "citations": ["general-acclimation#humidity-hold-100-percent-for-the-first-week"], "refused": False})
+    with pytest.raises(generate.GenerationError) as exc_info:
+        generate.answer("how humid at first?", HITS, call=call)
+    assert exc_info.value.kind == "citation_invalid" and "secret-override" in exc_info.value.detail
+
+
+def test_inline_citations_from_the_retrieved_set_pass():
+    call = fake_llm({"answer": "Hold 100% [general-acclimation#humidity-hold-100-percent-for-the-first-week]; leaves drop "
+                               "[alocasia-acclimation#leaf-drop].", "citations": [], "refused": False})
+    assert generate.answer("how humid at first?", HITS, call=call).refused is False
