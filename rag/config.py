@@ -26,7 +26,7 @@ EMBED_MODELS = {
     "nomic-ai/nomic-embed-text-v1.5": {"dim": 768, "query_prefix": "search_query: ", "doc_prefix": "search_document: ", "trust_remote_code": True},
 }
 
-_KEYS = ("DATABASE_URL", "LLM_BACKEND", "ANTHROPIC_API_KEY", "EMBED_MODEL")
+_KEYS = ("DATABASE_URL", "LLM_BACKEND", "ANTHROPIC_API_KEY", "EMBED_MODEL", "API_KEY", "MAX_INFLIGHT")
 _REQUIRED = ("DATABASE_URL",)
 
 
@@ -57,6 +57,7 @@ def settings(required: tuple = _REQUIRED) -> dict:
             values[key] = os.environ[key]
     values.setdefault("LLM_BACKEND", "cc")
     values.setdefault("EMBED_MODEL", "BAAI/bge-base-en-v1.5")
+    values.setdefault("MAX_INFLIGHT", "4")
     for key in required:
         if not values.get(key):
             raise ConfigError(f"missing required config key: {key}")
@@ -64,4 +65,6 @@ def settings(required: tuple = _REQUIRED) -> dict:
         raise ConfigError("missing required config key: ANTHROPIC_API_KEY")
     if values["EMBED_MODEL"] not in EMBED_MODELS:
         raise ConfigError(f"unknown EMBED_MODEL: {values['EMBED_MODEL']}")
+    if not values["MAX_INFLIGHT"].isdecimal() or int(values["MAX_INFLIGHT"]) < 1:
+        raise ConfigError(f"MAX_INFLIGHT must be a positive integer: {values['MAX_INFLIGHT']!r}")
     return values
