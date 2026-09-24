@@ -68,3 +68,19 @@ score over the message and its clauses:
 Every reranker fixes m04 and breaks others (f01, f04, f09, m02, m06, m10 across the four runs): on short
 customer-voice questions over a 96-section corpus it promotes lexically close sections over the ones that answer.
 Not shipped; revisit only if the corpus grows enough that first-stage recall drops.
+
+## Hybrid with an OR'd full-text leg — 2026-09-24 — dev split, answerable (n=14), recall@5 (probe, not shipped)
+
+`hybrid_search` builds its full-text leg with `plainto_tsquery`, which ANDs every lexeme, so only 1 of 38 questions
+matched any chunk and hybrid returned the vector ranking. OR-ing the question's lexemes (a session-only `pg_temp`
+copy of the function) makes 37 of 38 match. Recall with that leg fused in (RRF, c=60):
+
+| retrieval | recall@5 | differs from v2 on |
+|---|---|---|
+| v2: vector + decompose | 0.946 | — |
+| hybrid (OR) | 0.780 | m02 0.67, m05 0.50, m06 0.00, m10 0.25 |
+| hybrid (OR) + decompose | 0.815 | m04 1.00 (fixed), m02 0.67, m05 0.50, m06 0.00, m10 0.25 |
+
+`ts_rank_cd` has no IDF, so common words ("plant", "light", "dome") outrank the rare ones that carry the question
+("feed", "S16"). Vector stays the served default. The OR'd leg still replaces the AND'd one so `mode=hybrid` means
+what it says for the Act 2 grid; a BM25-weighted lexical leg is the candidate if lexical retrieval is revisited.
