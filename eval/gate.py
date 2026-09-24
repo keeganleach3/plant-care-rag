@@ -1,9 +1,10 @@
 """Gate a candidate eval run against a baseline. Dev split only, latest attempt per (id, rep).
 
   uv run python -m eval.gate <baseline> <candidate>
-Exit 1 with one line per failed rule: candidate errors > 0; hallucination hits > 0; false refusal count
-> baseline; recall mean < baseline (overall or any category). Prints a pass table otherwise. Warns (no
-fail) when the two runs' questions_sha or chunks_sha differ.
+Fails before comparing anything when either run has no config.json, no dev rows, or a different (id, rep)
+set than the other. Otherwise exit 1 with one line per failed rule: candidate errors > 0; hallucination
+hits > 0; false refusal count > baseline; recall mean < baseline (overall or any category). Prints a pass
+table otherwise. Warns (no fail) on every config.json key where the two runs differ.
 """
 import argparse
 import json
@@ -22,6 +23,23 @@ def _pairs(out_dir: Path, rows: list[dict]) -> list[tuple[dict, dict]]:
     return [(by_id[r["id"]], r) for r in _latest(out_dir).values() if r["id"] in by_id]
 
 
+def _validate(baseline_dir: Path, candidate_dir: Path, rows: list[dict]) -> list[str]:
+    """Preconditions for comparing two runs: each needs a config.json and dev rows, over the same (id, rep) pairs."""
+    fails = []
+    for name, out_dir in (("baseline", baseline_dir), ("candidate", candidate_dir)):
+        if not (out_dir / "config.json").exists():
+            fails.append(f"{name} run {out_dir.name!r}: no config.json")
+    base_ids = {(q["id"], r["rep"]) for q, r in _pairs(baseline_dir, rows)}
+    cand_ids = {(q["id"], r["rep"]) for q, r in _pairs(candidate_dir, rows)}
+    for name, ids, out_dir in (("baseline", base_ids, baseline_dir), ("candidate", cand_ids, candidate_dir)):
+        if not ids:
+            fails.append(f"{name} run {out_dir.name!r}: no dev rows")
+    if not fails and base_ids != cand_ids:
+        fails.append(f"(id, rep) sets differ: baseline {len(base_ids)} rows, candidate {len(cand_ids)} rows; "
+                      f"missing from candidate: {sorted(base_ids - cand_ids)}; missing from baseline: {sorted(cand_ids - base_ids)}")
+    return fails
+
+
 def _config(out_dir: Path) -> dict:
     p = out_dir / "config.json"
     return json.loads(p.read_text(encoding="utf-8")) if p.exists() else {}
@@ -33,6 +51,10 @@ def _summaries(out_dir: Path, rows: list[dict]) -> dict:
 
 
 def evaluate(baseline_dir: Path, candidate_dir: Path, rows: list[dict]) -> tuple[int, list[str]]:
+    problems = _validate(baseline_dir, candidate_dir, rows)
+    if problems:
+        return 1, problems
+
     base, cand = _summaries(baseline_dir, rows), _summaries(candidate_dir, rows)
     fails = []
 
@@ -57,9 +79,10 @@ def evaluate(baseline_dir: Path, candidate_dir: Path, rows: list[dict]) -> tuple
 
     lines = []
     base_cfg, cand_cfg = _config(baseline_dir), _config(candidate_dir)
-    for key in ("questions_sha", "chunks_sha"):
-        if base_cfg.get(key) != cand_cfg.get(key):
-            lines.append(f"warning: {key} differs (baseline {base_cfg.get(key)}, candidate {cand_cfg.get(key)})")
+    for key in sorted(base_cfg.keys() | cand_cfg.keys()):
+        b, c = base_cfg.get(key), cand_cfg.get(key)
+        if b != c:
+            lines.append(f"warning: {key}: {b} → {c}")
 
     if fails:
         return 1, lines + fails
