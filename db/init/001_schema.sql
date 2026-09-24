@@ -39,20 +39,20 @@ RETURNS TABLE(chunk_id text, score float) AS $$
              SELECT quote_literal(l) FROM unnest(tsvector_to_array(to_tsvector('english', query_text))) l), ' | '), '')) AS tsq
   ),
   vec AS (
-    SELECT c.chunk_id, row_number() OVER (ORDER BY c.embedding <=> query_embedding) AS rnk
+    SELECT c.chunk_id, row_number() OVER (ORDER BY c.embedding <=> query_embedding, c.chunk_id) AS rnk
     FROM chunks c
     WHERE genus_filter IS NULL OR c.genus = genus_filter OR c.genus = 'general'
-    ORDER BY c.embedding <=> query_embedding LIMIT 50
+    ORDER BY c.embedding <=> query_embedding, c.chunk_id LIMIT 50
   ),
   fts AS (
-    SELECT c.chunk_id, row_number() OVER (ORDER BY ts_rank_cd(c.tsv, q.tsq) DESC) AS rnk
+    SELECT c.chunk_id, row_number() OVER (ORDER BY ts_rank_cd(c.tsv, q.tsq) DESC, c.chunk_id) AS rnk
     FROM chunks c, q
     WHERE c.tsv @@ q.tsq
       AND (genus_filter IS NULL OR c.genus = genus_filter OR c.genus = 'general')
-    ORDER BY ts_rank_cd(c.tsv, q.tsq) DESC LIMIT 50
+    ORDER BY ts_rank_cd(c.tsv, q.tsq) DESC, c.chunk_id LIMIT 50
   )
   SELECT COALESCE(vec.chunk_id, fts.chunk_id) AS chunk_id,
          COALESCE(1.0 / (60 + vec.rnk), 0) + COALESCE(1.0 / (60 + fts.rnk), 0) AS score
   FROM vec FULL OUTER JOIN fts USING (chunk_id)
-  ORDER BY score DESC LIMIT k;
+  ORDER BY score DESC, chunk_id LIMIT k;
 $$ LANGUAGE sql STABLE;

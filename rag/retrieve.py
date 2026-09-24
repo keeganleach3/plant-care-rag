@@ -10,6 +10,7 @@ _COLS = "c.chunk_id, c.content, c.heading, c.genus, c.topic"
 POOL = 20        # depth of each ranking that gets fused
 RRF_C = 60       # the reciprocal-rank constant hybrid_search uses
 MIN_WORDS = 4    # a shorter fragment ("is that bad") is too thin to search on its own
+MAX_CLAUSES = 4  # a message with more turns into an unwieldy fan-out of searches
 _ASKS = r"how|what|whats|what's|when|where|which|why|who|can|could|should|would|will|do|does|is|are"
 _JOIN = re.compile(rf",?\s+(?:and|or|also|plus)\s+(?=(?:{_ASKS})\b)", re.IGNORECASE)
 
@@ -50,7 +51,7 @@ def clauses(question: str) -> list[str]:
     """The separate questions in one message: split at '?' and where and/or/also/plus opens a new question
     ("... how long in the dome and when do i start feeding"). [] when fewer than two are long enough to search."""
     parts = [p.strip(" ,.;") for s in re.split(r"\?+", question) for p in _JOIN.split(s)]
-    parts = [p for p in parts if len(p.split()) >= MIN_WORDS]
+    parts = [p for p in parts if len(p.split()) >= MIN_WORDS][:MAX_CLAUSES]
     return parts if len(parts) > 1 else []
 
 

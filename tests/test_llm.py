@@ -139,6 +139,31 @@ def test_cc_rate_limited_error_is_retried_then_succeeds(cc):
     assert llm.call("sys", "user", SCHEMA).attempts == 2
 
 
+def test_cc_stack_trace_mentioning_529_is_not_retried(cc):
+    """A line number in a stack trace ('cli.js:529:17') is not a rate-limit signal."""
+    calls = []
+
+    def fake_run(*a, **kw):
+        calls.append(1)
+        return _proc(stdout="", stderr="at Object.<anonymous> (cli.js:529:17)", returncode=1)
+
+    cc.setattr(llm.subprocess, "run", fake_run)
+    cc.setattr(llm.time, "sleep", lambda *a: None)
+    with pytest.raises(llm.LLMError) as exc_info:
+        llm.call("sys", "user", SCHEMA)
+    assert exc_info.value.kind == "cli_error"
+    assert exc_info.value.attempts == 1
+    assert len(calls) == 1
+
+
+def test_cc_rate_limit_error_kind_is_retried_then_succeeds(cc):
+    replies = iter([_proc(stdout=json.dumps({"is_error": True, "result": "rate_limit_error: too many requests"}), returncode=1),
+                    _proc(stdout=_ok_payload(), returncode=0)])
+    cc.setattr(llm.subprocess, "run", lambda *a, **kw: next(replies))
+    cc.setattr(llm.time, "sleep", lambda *a: None)
+    assert llm.call("sys", "user", SCHEMA).attempts == 2
+
+
 def test_cc_is_error_detail_carries_the_cli_result_text(cc):
     payload = json.dumps({"is_error": True, "subtype": "success", "result": "Failed to authenticate. API Error: 401"})
     cc.setattr(llm.subprocess, "run", lambda *a, **kw: _proc(stdout=payload, returncode=1))
@@ -154,6 +179,41 @@ def test_cc_timeout(cc):
     with pytest.raises(llm.LLMError) as exc_info:
         llm.call("sys", "user", SCHEMA)
     assert exc_info.value.kind == "timeout"
+
+
+def test_cc_subprocess_oserror_is_cli_error(cc):
+    def fake_run(*a, **kw):
+        raise OSError("no such file or directory")
+    cc.setattr(llm.subprocess, "run", fake_run)
+    with pytest.raises(llm.LLMError) as exc_info:
+        llm.call("sys", "user", SCHEMA)
+    assert exc_info.value.kind == "cli_error"
+    assert "no such file or directory" in exc_info.value.detail
+
+
+def test_cc_prompt_file_write_oserror_is_cli_error(cc):
+    def fail(system):
+        raise OSError("disk full")
+    cc.setattr(llm, "_system_prompt_file", fail)
+    with pytest.raises(llm.LLMError) as exc_info:
+        llm.call("sys", "user", SCHEMA)
+    assert exc_info.value.kind == "cli_error"
+    assert "disk full" in exc_info.value.detail
+
+
+def test_cc_validate_failure_after_a_retry_carries_the_loop_attempts_and_usage(cc):
+    bad_schema_payload = json.dumps({"is_error": False, "structured_output": {}, "modelUsage": {"claude-sonnet-5": {}},
+                                     "usage": {"output_tokens": 7}})
+    replies = iter([_proc(stdout=json.dumps({"is_error": True, "result": "rate limit exceeded"}), returncode=1),
+                    _proc(stdout=bad_schema_payload, returncode=0)])
+    cc.setattr(llm.subprocess, "run", lambda *a, **kw: next(replies))
+    cc.setattr(llm.time, "sleep", lambda *a: None)
+    with pytest.raises(llm.LLMError) as exc_info:
+        llm.call("sys", "user", SCHEMA)
+    err = exc_info.value
+    assert err.kind == "schema_invalid"
+    assert err.attempts == 2
+    assert err.usage == {"output_tokens": 7}
 
 
 # --- api backend (Anthropic SDK) ---
@@ -213,3 +273,22 @@ def test_api_non_json_text_is_schema_invalid(api):
     with pytest.raises(llm.LLMError) as exc_info:
         llm.call("sys", "user", SCHEMA)
     assert exc_info.value.kind == "schema_invalid"
+
+
+def test_api_validate_failure_after_a_retry_carries_the_loop_attempts_and_usage(api):
+    calls = {"n": 0}
+
+    def create(**kw):
+        calls["n"] += 1
+        if calls["n"] == 1:
+            raise anthropic.APIConnectionError(request=REQUEST)
+        return _response(text="{}")  # valid JSON, missing the required "answer" key
+
+    FakeAnthropic = _fake_anthropic(create)
+    api.setattr(llm.anthropic, "Anthropic", FakeAnthropic)
+    with pytest.raises(llm.LLMError) as exc_info:
+        llm.call("sys", "user", SCHEMA)
+    err = exc_info.value
+    assert err.kind == "schema_invalid"
+    assert err.attempts == 2
+    assert err.usage == {"input_tokens": 10, "output_tokens": 5}

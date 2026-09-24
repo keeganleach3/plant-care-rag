@@ -50,6 +50,21 @@ def test_hybrid_lexical_leg_matches_when_any_question_word_does(seeded):
     assert top.chunk_id == "t-general#quarantine-rule" and top.score > 1 / 61  # above 1/61: both legs contributed
 
 
+def test_hybrid_search_breaks_ties_by_chunk_id(conn, tmp_path):
+    """5 chunks with identical content tie on both vector distance and full-text rank, inserted in an order that
+    matches neither insertion nor chunk_id order; every ORDER BY inside hybrid_search must still resolve the tie
+    deterministically, in chunk_id order."""
+    body = "Identical pest control guidance repeated verbatim for the chunk id tie break test scenario."
+    headings = ["Zulu heading", "Mango heading", "Alpha heading", "Delta heading", "Kilo heading"]
+    sections = "".join(f"\n## {h}\n\n{body}\n" for h in headings)
+    (tmp_path / "t-tie.md").write_text(head("general") + sections, encoding="utf-8")
+    emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
+    ingest.run(tmp_path, conn, emb)
+    q = emb.embed_query(body)
+    rows = conn.execute("SELECT chunk_id FROM hybrid_search(%s, %s::vector, %s, NULL)", (body, q, 5)).fetchall()
+    assert [r[0] for r in rows] == sorted(f"t-tie#{h.lower().replace(' ', '-')}" for h in headings)
+
+
 def test_unknown_mode_rejected(seeded):
     conn, emb = seeded
     with pytest.raises(ValueError):
@@ -74,6 +89,19 @@ def test_clauses_split_at_question_marks():
 ])
 def test_clauses_leave_a_single_question_whole(q):
     assert retrieve.clauses(q) == []
+
+
+def test_clauses_caps_at_max_clauses_keeping_the_first_four():
+    q = ("how long should acclimation take and when do i start feeding and how humid should the dome be "
+         "and when can i repot it and is scale normal on new growth")
+    result = retrieve.clauses(q)
+    assert retrieve.MAX_CLAUSES == 4
+    assert result == [
+        "how long should acclimation take",
+        "when do i start feeding",
+        "how humid should the dome be",
+        "when can i repot it",
+    ]
 
 
 def _hit(cid):

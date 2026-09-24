@@ -18,7 +18,7 @@ import anthropic
 from rag.config import PRICES, ROOT, settings as _settings
 
 _MAX_ATTEMPTS = 3
-_RATE_LIMITED = re.compile(r"rate limit|overloaded|\b529\b", re.IGNORECASE)  # matched in error text only, never a success
+_RATE_LIMITED = re.compile(r"rate.?limit|overload", re.IGNORECASE)  # matched in error text only, never a success
 
 
 @dataclass
@@ -106,6 +106,10 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
     claude = shutil.which("claude")
     if claude is None:
         raise LLMError("cli_error", "claude CLI not found on PATH", 0)
+    try:
+        system_prompt_file = _system_prompt_file(system)
+    except OSError as exc:
+        raise LLMError("cli_error", str(exc), 0) from exc
     cmd = [
         claude, "-p",
         "--model", model,
@@ -114,7 +118,7 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
         "--json-schema", json.dumps(schema),
         "--no-session-persistence",
         "--tools", "",
-        "--system-prompt-file", _system_prompt_file(system),
+        "--system-prompt-file", system_prompt_file,
         "--setting-sources", "",
         "--strict-mcp-config",
         "--mcp-config", '{"mcpServers":{}}',
@@ -129,6 +133,8 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
             )
         except subprocess.TimeoutExpired as exc:
             raise LLMError("timeout", str(exc), attempts) from exc
+        except OSError as exc:
+            raise LLMError("cli_error", str(exc), attempts) from exc
 
         try:
             payload = _extract_trailing_json(proc.stdout)
@@ -153,7 +159,12 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
         if model not in model_usage:
             raise LLMError("model_mismatch", f"requested {model}, modelUsage has {list(model_usage)}", attempts, usage=payload.get("usage"))
 
-        validate(structured, schema)
+        try:
+            validate(structured, schema)
+        except LLMError as exc:
+            exc.attempts = attempts
+            exc.usage = payload.get("usage")
+            raise
 
         return Result(
             parsed=structured,
@@ -209,9 +220,15 @@ def _call_api(system: str, user: str, schema: dict, model: str, effort: str, tim
             structured = json.loads(text)
         except json.JSONDecodeError as exc:
             raise LLMError("schema_invalid", f"non-JSON text block: {exc}", attempts) from exc
-        validate(structured, schema)
 
         usage = {"input_tokens": response.usage.input_tokens, "output_tokens": response.usage.output_tokens}
+        try:
+            validate(structured, schema)
+        except LLMError as exc:
+            exc.attempts = attempts
+            exc.usage = usage
+            raise
+
         in_price, out_price = PRICES.get(model, (0, 0))
         cost_usd = (usage["input_tokens"] * in_price + usage["output_tokens"] * out_price) / 1_000_000
 

@@ -68,6 +68,17 @@ def test_reingest_is_idempotent_and_updates_in_place(conn, corpus):
     assert conn.execute("SELECT content FROM chunks WHERE chunk_id='t-b#scale'").fetchone()[0] == "Alcohol swab, repeat in 7 days."
 
 
+def test_prune_refuses_when_nothing_was_ingested(conn, corpus, tmp_path):
+    emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
+    ingest.run(corpus, conn, emb)
+    before = _tables(conn)
+    empty_dir = tmp_path / "empty"
+    empty_dir.mkdir()
+    with pytest.raises(ValueError, match="nothing was ingested"):
+        ingest.run(empty_dir, conn, emb, prune=True)
+    assert _tables(conn) == before
+
+
 def test_prune_removes_chunks_no_longer_in_corpus(conn, corpus):
     emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
     ingest.run(corpus, conn, emb)

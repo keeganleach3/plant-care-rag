@@ -41,6 +41,8 @@ def run(corpus_dir: Path, conn, embedder: Embedder, prune: bool = False) -> Repo
             keep_docs.add(doc.slug)
             keep_chunks.update(c.chunk_id for c in chunks)
         if prune:
+            if report.ingested == 0:
+                raise ValueError("ingest.run: refusing to prune, nothing was ingested (empty or unreadable corpus?)")
             report.pruned = db.prune(conn, keep_chunks, keep_docs)
     return report
 
