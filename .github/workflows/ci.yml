@@ -1,0 +1,30 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      db:
+        image: pgvector/pgvector:0.8.6-pg17
+        env:
+          POSTGRES_USER: plant
+          POSTGRES_PASSWORD: plant
+          POSTGRES_DB: plantcare
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U plant -d plantcare"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://plant:plant@localhost:5432/plantcare  # keegan-code:allow secret — ephemeral CI service fixture, same plant/plant credential already committed in .env.example and docker-compose.yml, not a live credential
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --frozen
+      - run: uv run pytest -q

@@ -15,5 +15,17 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
+  api:
+    build: .
+    profiles: ["api"]
+    environment:
+      DATABASE_URL: postgresql://plant:plant@db:5432/plantcare  # keegan-code:allow secret — same plant/plant fixture credential as the db service above, not a live credential
+      LLM_BACKEND: ${LLM_BACKEND:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      API_KEY: ${API_KEY:-}
+    ports: ["127.0.0.1:8000:8000"]
+    depends_on:
+      db:
+        condition: service_healthy
 volumes:
   pgdata:

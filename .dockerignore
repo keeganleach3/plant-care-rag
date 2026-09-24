@@ -1,0 +1,6 @@
+.venv
+.env
+.git
+eval/results
+.rag-tmp
+app/
