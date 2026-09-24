@@ -12,6 +12,7 @@ from rag.retrieve import Hit
 
 REFUSAL = "I don't have information on that in my notes."
 MAX_QUESTION = 500
+MODEL, EFFORT = "claude-sonnet-5", "low"
 SYSTEM = (PROMPTS / "answer.md").read_text(encoding="utf-8")
 SCHEMA = json.loads((PROMPTS / "answer.schema.json").read_text(encoding="utf-8"))
 
@@ -38,7 +39,7 @@ def build_user(question: str, hits: list[Hit]) -> str:
     return f"<passages>\n{passages}\n</passages>\n\n<question>{question}</question>"
 
 
-def answer(question: str, hits: list[Hit], *, call=llm.call, model="claude-sonnet-5", effort="low") -> Answer:
+def answer(question: str, hits: list[Hit], *, call=llm.call, model=MODEL, effort=EFFORT) -> Answer:
     if len(question) > MAX_QUESTION:
         raise ValueError(f"question exceeds {MAX_QUESTION} characters")
     result = call(SYSTEM, build_user(question, hits), SCHEMA, model=model, effort=effort)

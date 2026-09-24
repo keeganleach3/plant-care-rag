@@ -69,7 +69,7 @@ Chain: `down -v` is the only destructive operation in Phases 0–5. Nothing in t
 | 2.1 retrieve | 10 sanity queries logged with hit rank in `eval/notes.md`; genus filter test excludes other genera but includes `general` |
 | 3.1 generate | `--sanity`: empty context → `refused: true`; seeded context → citations ⊆ retrieved; forged citation → `citation_invalid` |
 | 3.2 api | startup log shows one model load; `curl` round-trip returns `timings` with four keys |
-| 4.x eval | see plan; every results row has non-trivial `model`, `usage`, `grade`; report has no blank cells |
+| 4.x eval | see plan; every results row records the requested `model`; answered rows carry `usage`, error rows carry the error kind plus `attempts`/`usage` when the backend returned them; grades are computed at report time from the results files, never stored by hand; `config.json` freezes everything that changes results (mode, k, models, effort, code/SQL/chunks/questions hashes); report has no blank cells (amended 2026-09-24 after review) |
 
 ## 6. Model & budget plan (opening ledger entry)
 

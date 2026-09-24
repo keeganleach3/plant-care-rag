@@ -5,14 +5,13 @@ The embedding model is loaded once at startup (≈11 s) and held in memory; per-
 """
 import time
 from contextlib import asynccontextmanager
-from dataclasses import asdict
 from typing import Literal
 
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, Field
 
-from rag import db, generate, llm, retrieve
-from rag.config import GENERA, settings
+from rag import db, generate, llm, pipeline
+from rag.config import settings
 from rag.embed import Embedder
 
 
@@ -40,27 +39,10 @@ def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
 
     @app.post("/ask")
     def ask(req: AskRequest):
-        k = max(1, min(req.k, 20))
-        genus = req.genus if req.genus in GENERA else None
-        emb, conn = state["embedder"], state["conn"]
-        t0 = time.perf_counter()
-        q = emb.embed_query(req.question)
-        t1 = time.perf_counter()
-        hits = retrieve.search(conn, emb, req.question, k=k, mode=req.mode, genus=genus, query_embedding=q)
-        t2 = time.perf_counter()
-        try:
-            ans = generate.answer(req.question, hits, call=call)
-        except (generate.GenerationError, llm.LLMError) as exc:
-            raise HTTPException(status_code=502, detail=str(exc)) from exc
-        t3 = time.perf_counter()
-        ms = lambda a, b: round((b - a) * 1000, 1)
-        return {
-            "answer": ans.answer, "citations": ans.citations, "refused": ans.refused,
-            "chunks": [asdict(h) for h in hits],
-            "params": {"k": k, "mode": req.mode, "genus": genus},
-            "model": ans.model, "usage": ans.usage,
-            "timings": {"embed_ms": ms(t0, t1), "retrieve_ms": ms(t1, t2), "generate_ms": ms(t2, t3), "total_ms": ms(t0, t3)},
-        }
+        out = pipeline.ask(state["conn"], state["embedder"], req.question, k=req.k, mode=req.mode, genus=req.genus, call=call)
+        if err := out.pop("error"):
+            raise HTTPException(status_code=502, detail=f"{err['kind']}: {err['detail']}")
+        return out
 
     return app
 
