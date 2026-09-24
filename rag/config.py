@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -43,9 +44,11 @@ def _parse_env(path: Path) -> dict:
         if not line or line.startswith("#") or "=" not in line:
             continue
         key, _, value = line.partition("=")
-        value = value.split("#", 1)[0].strip()
-        if len(value) >= 2 and value[0] == value[-1] and value[0] in ("'", '"'):
-            value = value[1:-1]
+        value = value.strip()
+        end = value.find(value[:1], 1) if value[:1] in ("'", '"') else -1
+        # quoted: taken whole, '#' included (an API key may hold one); unquoted: a comment starts at a '#' that opens the
+        # value or follows whitespace, so `KEY=   # note` is empty, never the note
+        value = value[1:end] if end > 0 else re.split(r"(?:^|\s)#", value, maxsplit=1)[0].strip()
         values[key.strip()] = value
     return values
 

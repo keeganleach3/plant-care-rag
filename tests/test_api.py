@@ -5,6 +5,7 @@ import logging
 import re
 import secrets
 import threading
+import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import psycopg
@@ -20,7 +21,7 @@ from tests.test_pipeline import forged
 HEAD = "---\ntitle: T\ngenus: alocasia\ntopic: pests\nverified: true\n---\n"
 Q = {"question": "alocasia spider mites"}
 LOG_KEYS = ["request_id", "status", "total_ms", "k", "mode", "decompose", "n_queries", "chunk_ids", "citations", "refused",
-            "error_kind", "model", "usage", "question_chars", "question_sha"]
+            "error_kind", "error_detail", "model", "usage", "question_chars", "question_sha"]
 
 
 @pytest.fixture(autouse=True)
@@ -189,9 +190,9 @@ def test_one_json_log_line_per_ask_with_the_request_id_never_the_question(client
     [line] = _lines(caplog)
     assert list(line) == LOG_KEYS and line["total_ms"] > 0
     assert line | {"total_ms": None} == {
-        "request_id": "trace-42", "status": 200, "total_ms": None, "k": 5, "mode": "vector", "decompose": False,
+        "request_id": "trace-42", "status": 200, "total_ms": None, "k": 5, "mode": "vector", "decompose": True,
         "n_queries": 1, "chunk_ids": ["t-a#mites"], "citations": ["t-a#mites"], "refused": False, "error_kind": None,
-        "model": "claude-sonnet-5", "usage": {"input_tokens": 10, "output_tokens": 5}, "question_chars": len(q),
+        "error_detail": None, "model": "claude-sonnet-5", "usage": {"input_tokens": 10, "output_tokens": 5}, "question_chars": len(q),
         "question_sha": hashlib.sha256(q.encode()).hexdigest()[:12]}
     assert "Zelda" not in caplog.text
 
@@ -205,20 +206,21 @@ def test_ask_returns_answer_citations_chunks_and_timings(client):
     assert body["citations"] == ["t-a#mites"]
     assert body["chunks"][0]["chunk_id"] == "t-a#mites" and "content" in body["chunks"][0]
     assert set(body["timings"]) == {"embed_ms", "retrieve_ms", "generate_ms", "total_ms"}
-    assert body["params"] == {"k": 5, "mode": "vector", "genus": None, "decompose": False}
+    assert body["params"] == {"k": 5, "mode": "vector", "genus": None, "decompose": True}
     assert body["queries"] == ["alocasia spider mites"]
 
 
 def test_k_is_clamped_and_invalid_genus_dropped(client):
     r = client.post("/ask", json={"question": "mites", "k": 99, "genus": "hoya", "mode": "hybrid"})
     assert r.status_code == 200
-    assert r.json()["params"] == {"k": 20, "mode": "hybrid", "genus": None, "decompose": False}
+    assert r.json()["params"] == {"k": 20, "mode": "hybrid", "genus": None, "decompose": True}
 
 
-def test_decompose_is_a_request_option(client):
+def test_decompose_is_served_by_default_and_can_be_turned_off(client):
     q = "how do i treat spider mites on alocasia and when should i quarantine new plants"
-    body = client.post("/ask", json={"question": q, "decompose": True}).json()
-    assert body["params"]["decompose"] is True and len(body["queries"]) == 3
+    assert len(client.post("/ask", json={"question": q}).json()["queries"]) == 3
+    body = client.post("/ask", json={"question": q, "decompose": False}).json()
+    assert body["params"]["decompose"] is False and body["queries"] == [q]
 
 
 def test_question_too_long_is_422(client):
@@ -236,6 +238,26 @@ def test_refusal_passes_through(client):
 
 def test_generation_error_is_502_with_its_kind(conn, tmp_path, caplog):
     r = _client(conn, tmp_path, forged).post("/ask", json=Q)
-    assert r.status_code == 502 and r.json()["detail"].startswith("citation_invalid")
+    assert r.status_code == 502 and r.json() == {"detail": "citation_invalid"}  # the kind only; internals stay in the log
     [line] = _lines(caplog)
     assert line["status"] == 502 and line["error_kind"] == "citation_invalid" and line["citations"] is None
+    assert "not in retrieved set" in line["error_detail"]
+
+
+def test_readyz_and_startup_refuse_vectors_from_another_embedding_model(conn, tmp_path):
+    (tmp_path / "t-a.md").write_text(HEAD + "\n## Mites\n\nAlocasia spider mites: wipe leaves, spray weekly.\n", encoding="utf-8")
+    ingest.run(tmp_path, conn, Embedder("nomic-ai/nomic-embed-text-v1.5", model=FakeModel()))
+    app = api.create_app(conn=conn, embedder=Embedder("BAAI/bge-base-en-v1.5", model=FakeModel()), call=fake_call)
+    r = TestClient(app).get("/readyz")
+    assert r.status_code == 503 and r.json() == {"status": "not ready", "failed": ["embed_model"]}
+    with pytest.raises(RuntimeError, match="nomic-ai/nomic-embed-text-v1.5"):
+        with TestClient(app):
+            pass
+
+
+def test_readyz_gives_up_on_an_unreachable_database_within_seconds(monkeypatch):
+    monkeypatch.setenv("DATABASE_URL", "postgresql://plant:plant@127.0.0.1:1/plantcare")
+    with TestClient(api.create_app(embedder=Embedder("BAAI/bge-base-en-v1.5", model=FakeModel()), call=fake_call)) as client:
+        t = time.perf_counter()
+        r = client.get("/readyz")
+        assert r.status_code == 503 and r.json()["failed"] == ["db"] and time.perf_counter() - t < 10

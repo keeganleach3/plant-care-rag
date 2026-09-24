@@ -30,7 +30,8 @@ from rag.embed import Embedder
 log = logging.getLogger(__name__)
 log.setLevel(logging.INFO)
 REQUEST_ID = re.compile(r"[A-Za-z0-9._-]{1,64}")
-LOG_FIELDS = ("k", "mode", "decompose", "n_queries", "chunk_ids", "citations", "refused", "error_kind", "model", "usage",
+READY_TIMEOUT_S = 2  # a readiness check answers fast or says "db"; the pool's 30 s default outlives any probe
+LOG_FIELDS = ("k", "mode", "decompose", "n_queries", "chunk_ids", "citations", "refused", "error_kind", "error_detail", "model", "usage",
               "question_chars", "question_sha")
 
 
@@ -39,7 +40,7 @@ class AskRequest(BaseModel):
     k: int = 5
     mode: Literal["vector", "hybrid"] = "vector"
     genus: str | None = None
-    decompose: bool = False
+    decompose: bool = True  # served since eval v2 (eval/results/v2/change.md)
 
 
 def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
@@ -59,6 +60,16 @@ def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
             state["pool"] = ConnectionPool(settings()["DATABASE_URL"], kwargs={"autocommit": True}, min_size=1,
                                            max_size=inflight + 2, configure=db.register,
                                            check=ConnectionPool.check_connection, open=True)
+        try:
+            with borrow(READY_TIMEOUT_S) as c:
+                models = db.embed_models(c)
+        except psycopg.Error:
+            models = set()  # database not answering yet: /readyz reports "db" until it does
+        if models and models != {cfg["EMBED_MODEL"]}:  # vectors from another model rank garbage with no error
+            if state["pool"] is not None:
+                state["pool"].close()
+            raise RuntimeError(f"chunks are embedded with {sorted(models)} but EMBED_MODEL is {cfg['EMBED_MODEL']!r}; "
+                               "re-ingest or set EMBED_MODEL to match")
         if state["embedder"] is None:
             t = time.perf_counter()
             state["embedder"] = Embedder(cfg["EMBED_MODEL"])
@@ -69,8 +80,8 @@ def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
 
     app = FastAPI(title="plant-care-rag", lifespan=lifespan)
 
-    def borrow():
-        return nullcontext(conn) if conn is not None else state["pool"].connection()
+    def borrow(timeout=None):
+        return nullcontext(conn) if conn is not None else state["pool"].connection(timeout=timeout)
 
     def authorize(authorization: str = Header("")):
         # Bytes, not str: compare_digest raises TypeError on non-ASCII str, turning a bad header into a 500.
@@ -83,10 +94,15 @@ def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
 
     @app.get("/readyz")
     def readyz():
+        failed = []
         try:
-            with borrow() as c:
+            with borrow(READY_TIMEOUT_S) as c:
                 n = c.execute("SELECT count(*) FROM chunks").fetchone()[0]
-            failed = [] if n else ["chunks"]
+                models = db.embed_models(c)
+            if not n:
+                failed.append("chunks")
+            elif models != {cfg["EMBED_MODEL"]}:
+                failed.append("embed_model")
         except psycopg.Error:
             n, failed = None, ["db"]
         if state["embedder"] is None:
@@ -110,10 +126,11 @@ def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
         err = out.pop("error")
         request.state.log |= {"k": out["params"]["k"], "n_queries": len(out["queries"]),
                               "chunk_ids": [h["chunk_id"] for h in out["chunks"]], "citations": out.get("citations"),
-                              "refused": out.get("refused"), "error_kind": err and err["kind"], "model": out["model"],
+                              "refused": out.get("refused"), "error_kind": err and err["kind"],
+                              "error_detail": err and err["detail"], "model": out["model"],
                               "usage": err["usage"] if err else out["usage"]}
-        if err:
-            raise HTTPException(status_code=502, detail=f"{err['kind']}: {err['detail']}")
+        if err:  # the caller gets the kind; the detail (CLI stderr, cited ids) stays in the server log
+            raise HTTPException(status_code=502, detail=err["kind"])
         return out
 
     @app.middleware("http")
