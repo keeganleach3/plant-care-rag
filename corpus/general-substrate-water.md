@@ -2,7 +2,7 @@
 title: First substrate mix and watering for tissue-culture aroids
 genus: general
 topic: substrate-water
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 1, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

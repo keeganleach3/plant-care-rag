@@ -2,7 +2,7 @@
 title: Deflasking and acclimating tissue-culture aroid plantlets
 genus: general
 topic: acclimation
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 1, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

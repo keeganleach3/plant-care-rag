@@ -2,7 +2,7 @@
 title: Grow light hardware: what is used here and what to buy
 genus: general
 topic: light
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 7, 2026-09-10 (voice-to-text, structured by Claude; product figures are from the listings he cited). -->

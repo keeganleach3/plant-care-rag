@@ -2,7 +2,7 @@
 title: Humidity equipment: domes, cabinets, hygrometers, and dry homes
 genus: general
 topic: humidity
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 10, 2026-09-10 (typed, structured by Claude; no facts added). -->

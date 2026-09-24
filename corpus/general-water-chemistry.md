@@ -2,7 +2,7 @@
 title: Water chemistry and feeding: pH down, flushing, fertilizer ratio
 genus: general
 topic: substrate-water
-verified: false
+verified: true
 ---
 
 <!-- Source: Keegan, corpus session 8, 2026-09-10 (typed, structured by Claude; no facts added). -->
