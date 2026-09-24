@@ -7,6 +7,7 @@ import re
 import psycopg
 import pytest
 from psycopg import sql
+from psycopg.conninfo import conninfo_to_dict, make_conninfo
 
 from rag import db
 from rag.config import ROOT, settings
@@ -15,15 +16,18 @@ MIGRATIONS = sorted((ROOT / "db" / "init").glob("*.sql"))
 NAME = os.environ.get("TEST_DB", "plantcare_test")
 
 
-def _test_url() -> str:
-    url = settings()["DATABASE_URL"]
-    assert not url.endswith("_test") and re.fullmatch(r"plantcare_test\w*", NAME), NAME
-    return url.rsplit("/", 1)[0] + "/" + NAME
+def _test_conninfo(url: str, name: str = NAME) -> str:
+    """The dev URL with only the database swapped (never string surgery on the URL: a '/' in its query string would
+    leave the dev database in place), refused unless it lands on a plantcare_test* database."""
+    assert re.fullmatch(r"plantcare_test\w*", name), name
+    info = make_conninfo(url, dbname=name)
+    assert conninfo_to_dict(info)["dbname"] == name != conninfo_to_dict(url).get("dbname"), (url, name)
+    return info
 
 
 @pytest.fixture(scope="session")
 def test_db_url():
-    url = _test_url()
+    url = _test_conninfo(settings()["DATABASE_URL"])
     try:
         admin = psycopg.connect(settings()["DATABASE_URL"], autocommit=True)
     except psycopg.OperationalError:
