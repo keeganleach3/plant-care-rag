@@ -1,6 +1,8 @@
+-- Idempotent: docker runs db/init/*.sql in order on a fresh volume; tests/conftest.py re-applies them every session.
+-- keegan-code:allow rls — single-tenant public corpus: every row is readable by the app and there are no per-user rows (contract-pipeline §3)
 CREATE EXTENSION IF NOT EXISTS vector;
 
-CREATE TABLE documents (
+CREATE TABLE IF NOT EXISTS documents (
   id          serial PRIMARY KEY,
   slug        text UNIQUE NOT NULL,
   genus       text NOT NULL,          -- philodendron | anthurium | monstera | alocasia | general
@@ -10,7 +12,7 @@ CREATE TABLE documents (
   ingested_at timestamptz NOT NULL DEFAULT now()
 );
 
-CREATE TABLE chunks (
+CREATE TABLE IF NOT EXISTS chunks (
   id          serial PRIMARY KEY,
   document_id int NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
   chunk_id    text UNIQUE NOT NULL,   -- <doc-slug>#<section-slug>[-n]; stable across re-ingest
@@ -22,12 +24,12 @@ CREATE TABLE chunks (
   embedding   vector(768)             -- bge-base-en-v1.5 and nomic-embed-text-v1.5 are both 768-dim
 );
 
-CREATE INDEX chunks_hnsw  ON chunks USING hnsw (embedding vector_cosine_ops);
-CREATE INDEX chunks_tsv   ON chunks USING gin (tsv);
-CREATE INDEX chunks_genus ON chunks (genus);
+CREATE INDEX IF NOT EXISTS chunks_hnsw  ON chunks USING hnsw (embedding vector_cosine_ops);
+CREATE INDEX IF NOT EXISTS chunks_tsv   ON chunks USING gin (tsv);
+CREATE INDEX IF NOT EXISTS chunks_genus ON chunks (genus);
 
 -- Hybrid retrieval: reciprocal rank fusion over the top-50 vector hits and top-50 full-text hits.
-CREATE FUNCTION hybrid_search(query_text text, query_embedding vector(768), k int DEFAULT 5, genus_filter text DEFAULT NULL)
+CREATE OR REPLACE FUNCTION hybrid_search(query_text text, query_embedding vector(768), k int DEFAULT 5, genus_filter text DEFAULT NULL)
 RETURNS TABLE(chunk_id text, score float) AS $$
   WITH vec AS (
     SELECT c.chunk_id, row_number() OVER (ORDER BY c.embedding <=> query_embedding) AS rnk

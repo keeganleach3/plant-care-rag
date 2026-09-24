@@ -1,32 +1,40 @@
-"""Integration tests run in an isolated `plantcare_test` database (same container), never the dev DB.
-Created on first use from db/init/001_schema.sql; every test starts from empty tables."""
+"""Integration tests run in an isolated test database (same container), never the dev DB.
+TEST_DB names it (default plantcare_test) so parallel sessions never share tables. Every db/init/*.sql is applied
+each session (the files are idempotent), and every test starts from empty tables."""
+import os
+import re
+
 import psycopg
 import pytest
+from psycopg import sql
 
 from rag import db
 from rag.config import ROOT, settings
 
-SCHEMA = (ROOT / "db" / "init" / "001_schema.sql").read_text(encoding="utf-8")
+MIGRATIONS = sorted((ROOT / "db" / "init").glob("*.sql"))
+NAME = os.environ.get("TEST_DB", "plantcare_test")
 
 
 def _test_url() -> str:
     url = settings()["DATABASE_URL"]
-    assert not url.endswith("_test")
-    return url.rsplit("/", 1)[0] + "/plantcare_test"
+    assert not url.endswith("_test") and re.fullmatch(r"plantcare_test\w*", NAME), NAME
+    return url.rsplit("/", 1)[0] + "/" + NAME
 
 
 @pytest.fixture(scope="session")
 def test_db_url():
+    url = _test_url()
     try:
         admin = psycopg.connect(settings()["DATABASE_URL"], autocommit=True)
     except psycopg.OperationalError:
         pytest.skip("database not reachable")
-    if not admin.execute("SELECT 1 FROM pg_database WHERE datname='plantcare_test'").fetchone():
-        admin.execute("CREATE DATABASE plantcare_test")
-        with psycopg.connect(_test_url(), autocommit=True) as c:
-            c.execute(SCHEMA)
+    if not admin.execute("SELECT 1 FROM pg_database WHERE datname = %s", (NAME,)).fetchone():
+        admin.execute(sql.SQL("CREATE DATABASE {}").format(sql.Identifier(NAME)))
     admin.close()
-    return _test_url()
+    with psycopg.connect(url, autocommit=True) as c:
+        for m in MIGRATIONS:
+            c.execute(m.read_text(encoding="utf-8"))
+    return url
 
 
 @pytest.fixture
