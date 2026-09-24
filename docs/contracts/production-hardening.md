@@ -78,3 +78,4 @@ P6 no-regression                              → verify: v2 config re-run on ha
 ## Open (named, not built this round)
 
 Least-privilege DB role for the API (read-only on `chunks`/`documents`); per-client rate limiting (belongs at the gateway); answer cache; red-team prompt-injection eval set; streaming responses (needs the chat UI).
+Found during the round: on Windows a `claude -p` timeout should leave the `node` child running, because `subprocess.run` terminates only its direct child, the `cmd.exe` launcher (from the code path, not yet observed; dev backend only, the API backend has no subprocess). Inline `[chunk_id]` markers appear in about half of all answers in every version since v0, although prompt rule 2 asks for them; the validated `citations` list is never empty, so this is a presentation decision (footnote numbers, or no inline markers) for Keegan, not a grounding gap.
