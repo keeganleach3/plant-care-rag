@@ -33,18 +33,25 @@ def test_ask_returns_answer_citations_chunks_and_timings(client):
     r = client.post("/ask", json={"question": "alocasia spider mites"})
     assert r.status_code == 200
     body = r.json()
-    assert set(body) == {"answer", "citations", "refused", "chunks", "params", "model", "usage", "timings"}
+    assert set(body) == {"answer", "citations", "refused", "chunks", "params", "queries", "model", "usage", "timings"}
     assert body["answer"] == "Wipe and spray weekly." and body["refused"] is False
     assert body["citations"] == ["t-a#mites"]
     assert body["chunks"][0]["chunk_id"] == "t-a#mites" and "content" in body["chunks"][0]
     assert set(body["timings"]) == {"embed_ms", "retrieve_ms", "generate_ms", "total_ms"}
-    assert body["params"] == {"k": 5, "mode": "vector", "genus": None}
+    assert body["params"] == {"k": 5, "mode": "vector", "genus": None, "decompose": False}
+    assert body["queries"] == ["alocasia spider mites"]
 
 
 def test_k_is_clamped_and_invalid_genus_dropped(client):
     r = client.post("/ask", json={"question": "mites", "k": 99, "genus": "hoya", "mode": "hybrid"})
     assert r.status_code == 200
-    assert r.json()["params"] == {"k": 20, "mode": "hybrid", "genus": None}
+    assert r.json()["params"] == {"k": 20, "mode": "hybrid", "genus": None, "decompose": False}
+
+
+def test_decompose_is_a_request_option(client):
+    q = "how do i treat spider mites on alocasia and when should i quarantine new plants"
+    body = client.post("/ask", json={"question": q, "decompose": True}).json()
+    assert body["params"]["decompose"] is True and len(body["queries"]) == 3
 
 
 def test_question_too_long_is_422(client):

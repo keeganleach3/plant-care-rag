@@ -146,5 +146,14 @@ def test_main_runs_only_the_requested_split_and_freezes_everything_that_changes_
     R.main(["--version", "t", "--k", "50"])
     assert calls == ["question f1"]
     cfg = json.loads((tmp_path / "t" / "config.json").read_text(encoding="utf-8"))
-    assert cfg["k"] == 20 and set(cfg) == {"mode", "k", "embed_model", "llm_backend", "llm_model", "effort",
-                                           "code_sha", "sql_sha", "chunks_sha", "questions_sha"}
+    assert cfg["k"] == 20 and cfg["decompose"] is False and set(cfg) == {
+        "mode", "k", "decompose", "embed_model", "llm_backend", "llm_model", "effort", "code_sha", "sql_sha", "chunks_sha", "questions_sha"}
+
+
+def test_main_passes_decompose_through_and_freezes_it(tmp_path, monkeypatch):
+    seen = {}
+    _patch_main(monkeypatch, tmp_path, [q("f1")], ["a#1"])
+    monkeypatch.setattr(R.pipeline, "ask", lambda conn, emb, question, **kw: seen.update(kw) or FakeAsk()(question))
+    R.main(["--version", "t", "--decompose"])
+    assert seen["decompose"] is True
+    assert json.loads((tmp_path / "t" / "config.json").read_text(encoding="utf-8"))["decompose"] is True

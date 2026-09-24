@@ -29,6 +29,15 @@ def test_generation_error_keeps_chunks_timings_and_the_requested_model(conn, emb
     assert set(out["timings"]) == {"embed_ms", "retrieve_ms", "generate_ms", "total_ms"}
 
 
+def test_decompose_searches_the_whole_question_and_each_clause(conn, emb):
+    q = "how do i treat spider mites on alocasia and when should i quarantine new plants"
+    out = pipeline.ask(conn, emb, q, call=forged, decompose=True)
+    assert out["queries"] == [q, "how do i treat spider mites on alocasia", "when should i quarantine new plants"]
+    assert out["params"]["decompose"] is True
+    plain = pipeline.ask(conn, emb, q, call=forged)
+    assert plain["queries"] == [q] and plain["params"]["decompose"] is False
+
+
 def test_backend_error_records_its_attempts(conn, emb):
     def down(*_args, **_kw):
         raise LLMError("timeout", "no reply in 120 s", attempts=3)

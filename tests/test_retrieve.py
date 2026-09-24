@@ -47,3 +47,46 @@ def test_unknown_mode_rejected(seeded):
     conn, emb = seeded
     with pytest.raises(ValueError):
         retrieve.search(conn, emb, "x", mode="magic")
+
+
+def test_clauses_split_where_and_opens_a_new_question():
+    q = "just potted my plantlets, how wet should the mix stay and when do i start feeding them"
+    assert retrieve.clauses(q) == ["just potted my plantlets, how wet should the mix stay", "when do i start feeding them"]
+
+
+def test_clauses_split_at_question_marks():
+    assert retrieve.clauses("How humid should the dome be? When can I start feeding them?") == [
+        "How humid should the dome be", "When can I start feeding them"]
+
+
+@pytest.mark.parametrize("q", [
+    "do monstera and anthurium need the same soil mix",                     # "and" joins nouns, not questions
+    "my alocasia leaves are yellow, what should i change",                  # one question
+    "my monstera is sending out aerial roots, what should i do? is that bad?",  # a 3-word tail is too thin to search
+    "is it light or is it humidity",                                        # both halves too thin
+])
+def test_clauses_leave_a_single_question_whole(q):
+    assert retrieve.clauses(q) == []
+
+
+def _hit(cid):
+    return retrieve.Hit(cid, f"text {cid}", "", "general", "t", 0.0)
+
+
+def test_fuse_rewards_agreement_and_breaks_ties_by_first_seen():
+    whole, part1, part2 = [_hit("a"), _hit("b"), _hit("c")], [_hit("b"), _hit("d")], [_hit("e"), _hit("a")]
+    fused = retrieve.fuse([whole, part1, part2], k=4)
+    # a and b tie at 1/61 + 1/62 (a seen first); then e 1/61 > d 1/62 > c 1/63
+    assert [h.chunk_id for h in fused] == ["a", "b", "e", "d"]
+    assert fused[0].content == "text a" and fused[0].score == pytest.approx(1 / 61 + 1 / 62)
+    assert all(x.score >= y.score for x, y in zip(fused, fused[1:]))
+
+
+def test_search_all_is_plain_search_for_one_query_and_fused_for_several(seeded):
+    conn, emb = seeded
+    one = retrieve.search_all(conn, ["alocasia spider mites"], [emb.embed_query("alocasia spider mites")], k=2)
+    assert [(h.chunk_id, h.score) for h in one] == [(h.chunk_id, h.score) for h in retrieve.search(conn, emb, "alocasia spider mites", k=2)]
+    qs = ["alocasia spider mites and quarantine", "alocasia spider mites", "quarantine new plants"]
+    many = retrieve.search_all(conn, qs, [emb.embed_query(q) for q in qs], k=3)
+    expected = retrieve.fuse([retrieve.search(conn, emb, q, k=retrieve.POOL) for q in qs], k=3)
+    assert [h.chunk_id for h in many] == [h.chunk_id for h in expected]

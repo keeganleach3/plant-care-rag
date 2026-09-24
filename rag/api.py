@@ -20,6 +20,7 @@ class AskRequest(BaseModel):
     k: int = 5
     mode: Literal["vector", "hybrid"] = "vector"
     genus: str | None = None
+    decompose: bool = False
 
 
 def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
@@ -39,7 +40,8 @@ def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
 
     @app.post("/ask")
     def ask(req: AskRequest):
-        out = pipeline.ask(state["conn"], state["embedder"], req.question, k=req.k, mode=req.mode, genus=req.genus, call=call)
+        out = pipeline.ask(state["conn"], state["embedder"], req.question, k=req.k, mode=req.mode, genus=req.genus,
+                           decompose=req.decompose, call=call)
         if err := out.pop("error"):
             raise HTTPException(status_code=502, detail=f"{err['kind']}: {err['detail']}")
         return out

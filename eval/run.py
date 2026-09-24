@@ -2,6 +2,7 @@
 
   uv run python -m eval.run --version v0                  # dev split, vector, k=5, 1 rep
   uv run python -m eval.run --version v1 --mode hybrid
+  uv run python -m eval.run --version v2 --decompose      # also search each question of a multi-question message
   uv run python -m eval.run --version v0 --report         # rebuild report.md from the results files only, no calls
 eval/results/<version>/ holds config.json (frozen by the first run), results.jsonl (dev) and results.holdout.jsonl
 (append-only; a rerun resumes and retries backend errors) and report.md. Never read results.holdout.jsonl row by row.
@@ -155,6 +156,7 @@ def main(argv=None):
     ap.add_argument("--split", choices=questions.SPLITS, default="dev")
     ap.add_argument("--mode", choices=retrieve.MODES, default="vector")
     ap.add_argument("--k", type=int, default=5)
+    ap.add_argument("--decompose", action="store_true", help="also search each question of a multi-question message, fused")
     ap.add_argument("--model", default=generate.MODEL)
     ap.add_argument("--effort", default=generate.EFFORT)
     ap.add_argument("--reps", type=int, default=1)
@@ -171,11 +173,12 @@ def main(argv=None):
             sql = conn.execute("SELECT string_agg(pg_get_functiondef(p.oid), ' ' ORDER BY p.oid) FROM pg_proc p "
                                "WHERE p.proname = 'hybrid_search'").fetchone()[0]
             cfg, k = settings(), max(1, min(args.k, 20))
-            config = {"mode": args.mode, "k": k, "embed_model": cfg["EMBED_MODEL"], "llm_backend": cfg["LLM_BACKEND"],
+            config = {"mode": args.mode, "k": k, "decompose": args.decompose, "embed_model": cfg["EMBED_MODEL"], "llm_backend": cfg["LLM_BACKEND"],
                       "llm_model": args.model, "effort": args.effort, "code_sha": _code_sha(), "sql_sha": _sha(str(sql)),
                       "chunks_sha": _sha(json.dumps(chunks)),
                       "questions_sha": _sha(json.dumps(sorted((r["id"], r["question"]) for r in rows)))}
-            ask = partial(pipeline.ask, conn, Embedder(cfg["EMBED_MODEL"]), k=k, mode=args.mode, model=args.model, effort=args.effort)
+            ask = partial(pipeline.ask, conn, Embedder(cfg["EMBED_MODEL"]), k=k, mode=args.mode, decompose=args.decompose,
+                          model=args.model, effort=args.effort)
             print(f"ran {run(out_dir, [r for r in rows if r['split'] == args.split], ask, config, reps=args.reps)} new rows")
         print(report(out_dir, rows))
     except RunError as exc:
