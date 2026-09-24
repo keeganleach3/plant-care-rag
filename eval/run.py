@@ -109,9 +109,10 @@ def report(out_dir: Path, rows: list[dict]) -> str:
               "Hallucination = answered a must-refuse question; false refusal = refused an answerable one; error rows are "
               f"excluded from both and listed by kind. Accuracy covers answerable questions: Keegan's manual grade (correct / "
               "partial / wrong) for each answer, a refusal counted as wrong; unfaithful = graded answers he marked as saying "
-              f"something not in his notes. Latency covers the timed (non-error) rows; P95 needs {P95_MIN} of them.", "",
-              "| split | category | n | recall@k | accuracy | unfaithful | hallucination | false refusal | errors | timed | P50 total ms | P95 total ms | P50 generate ms | P95 generate ms |",
-              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+              "something not in his notes; narrates = answers that talk about notes or passages instead of the plant. "
+              f"Latency covers the timed (non-error) rows; P95 needs {P95_MIN} of them.", "",
+              "| split | category | n | recall@k | accuracy | unfaithful | narrates | hallucination | false refusal | errors | timed | P50 total ms | P95 total ms | P50 generate ms | P95 generate ms |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for split in questions.SPLITS:
         in_split = [(q, r) for q, r in pairs if q["split"] == split]
         for cat in ("all",) + (questions.CATEGORIES if split == "dev" else ()):
@@ -124,7 +125,7 @@ def report(out_dir: Path, rows: list[dict]) -> str:
             acc = s["accuracy"]
             accuracy = "—" if not acc else ", ".join(f"{acc.get(k, 0)} {k}" for k in "cpw") + (f", {acc['ungraded']} ungraded" if acc.get("ungraded") else "")
             cells = [split, cat, s["n"], "—" if not n_recall else f"{recall:.2f} (n={n_recall})", accuracy, _frac(s["unfaithful"]),
-                     _frac(s["hallucination"]),
+                     _frac(s["narrates"]), _frac(s["hallucination"]),
                      _frac(s["false_refusal"]), ", ".join(f"{k} {v}" for k, v in sorted(s["errors"].items())) or "0",
                      s["timed"], _num(s["p50_total_ms"], "{:.0f}"), p95("p95_total_ms"),
                      _num(s["p50_generate_ms"], "{:.0f}"), p95("p95_generate_ms")]

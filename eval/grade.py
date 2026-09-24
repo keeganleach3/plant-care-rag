@@ -1,6 +1,14 @@
 """Deterministic eval metrics. Answer accuracy and citation faithfulness are graded separately (manual first, then a judge)."""
+import re
 import statistics
 from collections import Counter
+
+# An answer that talks about its own retrieval ("the notes say", "the passages") instead of about the plant.
+_NARRATION = re.compile(r"\b(?:my|the|these) notes\b|\bpassages?\b|\bprovided (?:text|context|information|sources?)\b", re.I)
+
+
+def narrates(answer: str) -> bool:
+    return bool(_NARRATION.search(answer))
 
 
 def recall_at_k(gold_groups: list[list[str]], retrieved: list[str]) -> float | None:
@@ -58,6 +66,8 @@ def summarize(pairs: list[tuple[dict, dict]], grades: dict | None = None) -> dic
         "false_refusal": count("false_refusal"),
     }
     out["accuracy"], out["unfaithful"] = _accuracy(pairs, grades or {})
+    answered = [r for r, g in graded if not g["error"] and not r["refused"]]
+    out["narrates"] = (sum(narrates(r["answer"]) for r in answered), len(answered))
     timed = [r["timings"] for r, g in graded if not g["error"]]
     out["timed"] = len(timed)
     for stage in ("total", "generate"):

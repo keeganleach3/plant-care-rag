@@ -3,7 +3,7 @@ from eval import grade as G
 
 
 def res(ids=("a#1",), refused=False, error=None, total=100.0, gen=80.0):
-    return {"rep": 1, "chunks": [{"chunk_id": c} for c in ids], "refused": None if error else refused,
+    return {"rep": 1, "answer": "About 150 PPFD.", "chunks": [{"chunk_id": c} for c in ids], "refused": None if error else refused,
             "error": {"kind": error, "detail": "x"} if error else None,
             "timings": {"embed_ms": 10.0, "retrieve_ms": 10.0, "generate_ms": gen, "total_ms": total}}
 
@@ -46,6 +46,18 @@ def test_accuracy_takes_manual_grades_for_answers_and_scores_a_wrongful_refusal_
     s = G.summarize(list(zip(qs, rs)), grades)
     assert s["accuracy"] == {"c": 1, "p": 1, "w": 1, "ungraded": 1}  # f3 refused → w; f4 answered but ungraded; f5 errored
     assert s["unfaithful"] == (1, 2)
+
+
+def test_narration_of_sources_is_caught_without_flagging_plain_answers():
+    assert G.narrates("The notes don't give a PPFD for that light.") and G.narrates("Per the provided passages, hold 100%.")
+    assert not G.narrates("Hold 100 percent for about 15 to 20 days [alocasia-acclimation#x], then step down slowly.")
+
+
+def test_summary_counts_narration_over_answered_rows_only():
+    qs = [ANSWER_Q, {**ANSWER_Q, "id": "f2"}, {**ANSWER_Q, "id": "f3"}, REFUSE_Q]
+    rs = [{**res(), "answer": "My notes say 150 PPFD."}, {**res(), "answer": "About 150 PPFD."},
+          {**res(refused=True), "answer": "I don't have information on that in my notes."}, {**res(refused=True), "answer": "I don't have information on that in my notes."}]
+    assert G.summarize(list(zip(qs, rs)))["narrates"] == (1, 2)
 
 
 def test_summary_of_nothing_applicable_has_a_zero_denominator():
