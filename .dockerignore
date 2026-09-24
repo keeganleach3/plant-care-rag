@@ -1,6 +1,10 @@
 .venv
 .env
 .git
+.github
+.claude
+.pytest_cache
+**/__pycache__
 eval/results
 .rag-tmp
 app/
