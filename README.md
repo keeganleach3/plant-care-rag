@@ -40,8 +40,8 @@ flowchart LR
   do they stay in the dome and when can i start feeding them") is also searched per question and the rankings are
   fused. `mode=hybrid` adds a full-text leg fused by reciprocal rank.
 - **Generation** returns `{answer, citations, refused}` under a JSON schema. A citation outside the retrieved set,
-  in the list or inline in the text, rejects the answer; a refusal is one exact sentence; the question is wrapped as data and the prompt tells the model
-  to ignore any instructions inside it.
+  in the list or inline in the text, rejects the answer; a refusal is one exact sentence; the question is wrapped as
+  data and the prompt tells the model to ignore any instructions inside it.
 
 ## Evaluation
 
@@ -114,8 +114,9 @@ sections are retrieved.
 
 Each guard names the failure it prevents (`docs/contracts/production-hardening.md`). Every guard in Python has a test
 that was written first and failed before the guard existed; the container's are checked with `docker run`. An
-independent review of the round found 31 issues; 25 were fixed test-first, and the six left standing are recorded with
-their reasons in `docs/superpowers/plans/2026-09-24-punchlist.md`.
+independent review of the round found 31 issues: 28 were fixed (24 test-first; four were documentation or container
+and CI settings checked by hand) and three stand, with the reasons recorded in
+`docs/superpowers/plans/2026-09-24-punchlist.md`.
 
 | Failure it prevents | Guard |
 |---|---|
@@ -153,7 +154,8 @@ uv run python -m eval.gate v2 my-run
 The API also ships as a container (API backend only, since the CLI login stays on the host):
 
 ```bash
-LLM_BACKEND=api ANTHROPIC_API_KEY=... API_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(32))") \n  docker compose --profile api up -d --build
+LLM_BACKEND=api ANTHROPIC_API_KEY=... API_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(32))") \
+  docker compose --profile api up -d --build
 ```
 
 ## License
