@@ -4,6 +4,7 @@ import json
 import logging
 import re
 import secrets
+import shutil
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -11,10 +12,11 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import psycopg
 import pytest
 from fastapi.testclient import TestClient
+from psycopg_pool import ConnectionPool
 
 from rag import api, config, ingest
 from rag.embed import Embedder
-from rag.llm import Result
+from rag.llm import LLMError, Result
 from tests.test_embed import FakeModel
 from tests.test_pipeline import forged
 
@@ -22,16 +24,19 @@ HEAD = "---\ntitle: T\ngenus: alocasia\ntopic: pests\nverified: true\n---\n"
 Q = {"question": "alocasia spider mites"}
 LOG_KEYS = ["request_id", "status", "total_ms", "k", "mode", "decompose", "n_queries", "chunk_ids", "citations", "refused",
             "error_kind", "error_detail", "model", "usage", "question_chars", "question_sha"]
+DOCS = ("/docs", "/redoc", "/openapi.json")
+SERVED_KEYS = ("API_KEY", "MAX_INFLIGHT", "LLM_BACKEND")
 
 
 @pytest.fixture(autouse=True)
 def served_env(monkeypatch):
-    """API_KEY and MAX_INFLIGHT come from each test's own env, never the developer's .env or shell."""
+    """API_KEY, MAX_INFLIGHT and LLM_BACKEND come from each test's own env, never the developer's .env or shell; the claude
+    CLI counts as installed (CI has none) unless a test says otherwise."""
     parse = config._parse_env
-    monkeypatch.setattr(config, "_parse_env",
-                        lambda path: {k: v for k, v in parse(path).items() if k not in ("API_KEY", "MAX_INFLIGHT")})
-    for key in ("API_KEY", "MAX_INFLIGHT"):
+    monkeypatch.setattr(config, "_parse_env", lambda path: {k: v for k, v in parse(path).items() if k not in SERVED_KEYS})
+    for key in SERVED_KEYS:
         monkeypatch.delenv(key, raising=False)
+    monkeypatch.setattr(shutil, "which", lambda name: f"/usr/bin/{name}")
 
 
 def fake_call(system, user, schema, **kw):
@@ -68,7 +73,7 @@ def client(conn, tmp_path):
 
 
 def test_ask_needs_the_bearer_key_when_api_key_is_set(conn, tmp_path, monkeypatch, caplog):
-    key = secrets.token_urlsafe(16)
+    key = secrets.token_urlsafe(32)
     monkeypatch.setenv("API_KEY", key)
     client = _client(conn, tmp_path, fake_call)
     bad = [None, "", "Bearer", "Bearer wrong", f"Bearer {key}x", f"Bearer {key[:-1]}", key, f"Basic {key}",
@@ -92,7 +97,7 @@ def test_open_ask_is_warned_once_at_startup(conn, monkeypatch, caplog):
         pass
     assert len(warnings()) == 1 and "/ask" in warnings()[0]
     caplog.clear()
-    monkeypatch.setenv("API_KEY", secrets.token_urlsafe(16))
+    monkeypatch.setenv("API_KEY", secrets.token_urlsafe(32))
     with TestClient(api.create_app(conn=conn, embedder=emb)):
         pass
     assert warnings() == []
@@ -255,9 +260,136 @@ def test_readyz_and_startup_refuse_vectors_from_another_embedding_model(conn, tm
             pass
 
 
-def test_readyz_gives_up_on_an_unreachable_database_within_seconds(monkeypatch):
+def test_an_unreachable_database_fails_ask_and_readyz_within_seconds(monkeypatch, caplog):
     monkeypatch.setenv("DATABASE_URL", "postgresql://plant:plant@127.0.0.1:1/plantcare")
+    monkeypatch.setenv("MAX_INFLIGHT", "1")
     with TestClient(api.create_app(embedder=Embedder("BAAI/bge-base-en-v1.5", model=FakeModel()), call=fake_call)) as client:
+        for _ in range(2):  # the second is not shed as busy: the first gave its slot back
+            t = time.perf_counter()
+            r = client.post("/ask", json=Q)
+            assert r.status_code == 503 and r.json() == {"detail": "db"} and r.headers["Retry-After"] == "5"
+            assert time.perf_counter() - t < 10
         t = time.perf_counter()
         r = client.get("/readyz")
         assert r.status_code == 503 and r.json()["failed"] == ["db"] and time.perf_counter() - t < 10
+    warned = [rec.getMessage() for rec in caplog.records if rec.name == "rag.api" and rec.levelno == logging.WARNING]
+    assert any("first /ask" in w for w in warned)  # the embed_model check waits for the database
+
+
+def test_the_paid_backend_refuses_to_start_without_an_api_key(conn, monkeypatch):
+    monkeypatch.setenv("LLM_BACKEND", "api")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "unused")
+    emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
+    with pytest.raises(config.ConfigError, match="API_KEY"), TestClient(api.create_app(conn=conn, embedder=emb)):
+        pass
+    monkeypatch.setenv("API_KEY", secrets.token_urlsafe(32))
+    with TestClient(api.create_app(conn=conn, embedder=emb)) as client:
+        assert client.get("/healthz").status_code == 200
+
+
+def test_a_short_api_key_refuses_to_start_without_echoing_it(conn, monkeypatch, caplog):
+    key = secrets.token_urlsafe(32)
+    emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
+    monkeypatch.setenv("API_KEY", key[:31])
+    with pytest.raises(config.ConfigError, match="32") as exc, TestClient(api.create_app(conn=conn, embedder=emb)):
+        pass
+    assert key[:31] not in str(exc.value) + caplog.text
+    monkeypatch.setenv("API_KEY", key[:32])
+    with TestClient(api.create_app(conn=conn, embedder=emb)):
+        pass
+
+
+def test_docs_and_schema_are_hidden_when_api_key_is_set(conn, monkeypatch):
+    emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
+    monkeypatch.setenv("API_KEY", secrets.token_urlsafe(32))
+    keyed = TestClient(api.create_app(conn=conn, embedder=emb))
+    assert [keyed.get(p).status_code for p in DOCS] == [404, 404, 404]
+    monkeypatch.delenv("API_KEY")
+    local = TestClient(api.create_app(conn=conn, embedder=emb))
+    assert [local.get(p).status_code for p in DOCS] == [200, 200, 200]
+
+
+def test_pooled_connections_carry_the_db_timeouts(conn, test_db_url, monkeypatch):
+    monkeypatch.setenv("DATABASE_URL", test_db_url)
+    pools = []
+
+    class Recorded(ConnectionPool):
+        def __init__(self, *args, **kw):
+            super().__init__(*args, **kw)
+            pools.append(self)
+
+    monkeypatch.setattr(api, "ConnectionPool", Recorded)
+    emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
+    with TestClient(api.create_app(embedder=emb, call=fake_call)), pools[0].connection() as c:
+        assert c.execute("SHOW statement_timeout").fetchone()[0] == "10s"
+        assert c.info.get_parameters()["connect_timeout"] == "5" and c.autocommit
+
+
+def test_a_schema_error_is_not_taken_for_an_unreachable_database(test_db_url):
+    emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
+    with psycopg.connect(test_db_url, autocommit=True) as old:
+        old.execute("CREATE TEMP TABLE chunks (chunk_id text)")  # shadows the real table: a schema with no embed_model
+        app = api.create_app(conn=old, embedder=emb)
+        r = TestClient(app).get("/readyz")
+        assert r.status_code == 503 and r.json() == {"status": "not ready", "failed": ["schema"]}
+        with pytest.raises(psycopg.errors.UndefinedColumn), TestClient(app):
+            pass
+
+
+def test_the_embed_model_check_deferred_at_startup_runs_on_the_first_ask(conn, tmp_path, monkeypatch):
+    (tmp_path / "t-a.md").write_text(HEAD + "\n## Mites\n\nAlocasia spider mites: wipe leaves, spray weekly.\n", encoding="utf-8")
+    ingest.run(tmp_path, conn, Embedder("nomic-ai/nomic-embed-text-v1.5", model=FakeModel()))
+    real, calls = api.db.embed_models, []
+
+    def down_at_startup(c):
+        calls.append(1)
+        if len(calls) == 1:
+            raise psycopg.OperationalError("connection refused")
+        return real(c)
+
+    monkeypatch.setattr(api.db, "embed_models", down_at_startup)
+    app = api.create_app(conn=conn, embedder=Embedder("BAAI/bge-base-en-v1.5", model=FakeModel()), call=fake_call)
+    with TestClient(app) as client:
+        r = client.post("/ask", json=Q)
+        assert r.status_code == 503 and r.json() == {"detail": "embed_model"}
+        conn.execute("UPDATE chunks SET embed_model = 'BAAI/bge-base-en-v1.5'")  # re-ingested with the served model
+        assert [client.post("/ask", json=Q).status_code for _ in range(2)] == [200, 200]
+    assert len(calls) == 3  # checked until it passed, then never again
+
+
+def _body(size: int) -> bytes:
+    """Q as JSON, padded with insignificant whitespace to exactly `size` bytes."""
+    head = json.dumps(Q).encode()[:-1]
+    return head + b" " * (size - len(head) - 1) + b"}"
+
+
+def test_ask_needs_a_content_length_of_at_most_4096_bytes(client, caplog):
+    ctype = {"Content-Type": "application/json"}
+    assert client.post("/ask", content=_body(4097), headers=ctype).status_code == 413
+    assert client.post("/ask", content=iter([_body(100)]), headers=ctype).status_code == 411  # chunked, no Content-Length
+    # h11 frames the body by Transfer-Encoding when both are sent, so a small Content-Length beside it bounds nothing
+    assert client.post("/ask", content=_body(100), headers=ctype | {"Transfer-Encoding": "chunked"}).status_code == 411
+    assert client.post("/ask", content=_body(4096), headers=ctype).status_code == 200
+    assert [line["status"] for line in _lines(caplog)] == [413, 411, 411, 200]
+
+
+def test_the_question_is_masked_in_the_logged_error_detail(conn, tmp_path, caplog):
+    q = "alocasia spider mites, asks Zelda"
+
+    def echoing(system, user, schema, **kw):
+        raise LLMError("cli_error", f"exit 1: {q} | stderr: {q}", 1)
+
+    r = _client(conn, tmp_path, echoing).post("/ask", json={"question": q})
+    assert r.status_code == 502 and r.json() == {"detail": "cli_error"}
+    [line] = _lines(caplog)
+    assert line["error_detail"] == "exit 1: [question] | stderr: [question]" and "Zelda" not in caplog.text
+
+
+def test_readyz_fails_llm_when_the_cc_backend_has_no_claude_cli(conn, tmp_path, monkeypatch):
+    emb = _seed(conn, tmp_path)
+    monkeypatch.setattr(shutil, "which", lambda name: None if name == "claude" else f"/usr/bin/{name}")
+    r = TestClient(api.create_app(conn=conn, embedder=emb)).get("/readyz")
+    assert r.status_code == 503 and r.json() == {"status": "not ready", "failed": ["llm"]}
+    monkeypatch.setenv("LLM_BACKEND", "api")
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "unused")
+    assert TestClient(api.create_app(conn=conn, embedder=emb)).get("/readyz").status_code == 200  # no CLI on that path
