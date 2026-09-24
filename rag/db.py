@@ -25,15 +25,21 @@ def upsert_document(conn, doc: Doc) -> int:
     ).fetchone()[0]
 
 
-def upsert_chunks(conn, document_id: int, chunks: list[Chunk], embeddings: list[list[float]]) -> None:
+def upsert_chunks(conn, document_id: int, chunks: list[Chunk], embeddings: list[list[float]], embed_model: str) -> None:
     with conn.cursor() as cur:
         cur.executemany(
-            """INSERT INTO chunks (document_id, chunk_id, genus, topic, heading, content, embedding)
-               VALUES (%s, %s, %s, %s, %s, %s, %s)
+            """INSERT INTO chunks (document_id, chunk_id, genus, topic, heading, content, embedding, embed_model)
+               VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
                ON CONFLICT (chunk_id) DO UPDATE SET document_id=EXCLUDED.document_id, genus=EXCLUDED.genus,
-                 topic=EXCLUDED.topic, heading=EXCLUDED.heading, content=EXCLUDED.content, embedding=EXCLUDED.embedding""",
-            [(document_id, c.chunk_id, c.genus, c.topic, c.heading, c.content, e) for c, e in zip(chunks, embeddings)],
+                 topic=EXCLUDED.topic, heading=EXCLUDED.heading, content=EXCLUDED.content, embedding=EXCLUDED.embedding,
+                 embed_model=EXCLUDED.embed_model""",
+            [(document_id, c.chunk_id, c.genus, c.topic, c.heading, c.content, e, embed_model) for c, e in zip(chunks, embeddings)],
         )
+
+
+def embed_models(conn) -> set[str]:
+    """Models behind the stored vectors; a query embedded with any other model ranks garbage without an error."""
+    return {m for (m,) in conn.execute("SELECT DISTINCT embed_model FROM chunks").fetchall()}
 
 
 def prune(conn, keep_chunk_ids: set[str], keep_doc_slugs: set[str]) -> int:

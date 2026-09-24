@@ -19,26 +19,29 @@ class Report:
 
 
 def run(corpus_dir: Path, conn, embedder: Embedder, prune: bool = False) -> Report:
+    """All or nothing: every upsert and the prune share one transaction, so a failure mid-run leaves both tables as they
+    were and a reader never sees a half-updated corpus."""
     report = Report()
     keep_chunks, keep_docs = set(), set()
-    for path in sorted(p for p in corpus_dir.glob("*.md") if not p.name.startswith("_")):
-        try:
-            doc = parse(path)
-        except DocError as exc:
-            report.skipped.append((path.name, str(exc)))
-            continue
-        chunks = chunk(doc)
-        if not chunks:
-            report.skipped.append((path.name, "no H2 sections"))
-            continue
-        doc_id = db.upsert_document(conn, doc)
-        db.upsert_chunks(conn, doc_id, chunks, embedder.embed_docs([c.content for c in chunks]))
-        report.ingested += 1
-        report.chunks += len(chunks)
-        keep_docs.add(doc.slug)
-        keep_chunks.update(c.chunk_id for c in chunks)
-    if prune:
-        report.pruned = db.prune(conn, keep_chunks, keep_docs)
+    with conn.transaction():
+        for path in sorted(p for p in corpus_dir.glob("*.md") if not p.name.startswith("_")):
+            try:
+                doc = parse(path)
+            except DocError as exc:
+                report.skipped.append((path.name, str(exc)))
+                continue
+            chunks = chunk(doc)
+            if not chunks:
+                report.skipped.append((path.name, "no H2 sections"))
+                continue
+            doc_id = db.upsert_document(conn, doc)
+            db.upsert_chunks(conn, doc_id, chunks, embedder.embed_docs([c.content for c in chunks]), embedder.name)
+            report.ingested += 1
+            report.chunks += len(chunks)
+            keep_docs.add(doc.slug)
+            keep_chunks.update(c.chunk_id for c in chunks)
+        if prune:
+            report.pruned = db.prune(conn, keep_chunks, keep_docs)
     return report
 
 

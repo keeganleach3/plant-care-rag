@@ -108,12 +108,13 @@ def test_report_on_a_version_that_never_ran_is_a_clear_error(tmp_path):
 
 
 class FakeConn:
-    def __init__(self, chunk_ids):
-        self.chunk_ids, self.rows = chunk_ids, []
+    def __init__(self, chunk_ids, models=("m",)):
+        self.chunk_ids, self.models, self.rows = chunk_ids, models, []
 
     def execute(self, sql, params=None):
-        self.rows = [("CREATE FUNCTION hybrid_search ...",)] if "pg_get_functiondef" in sql else \
-            [(c, "general", "light", "md5-content", "md5-embedding") for c in self.chunk_ids]
+        self.rows = ([("CREATE FUNCTION hybrid_search ...",)] if "pg_get_functiondef" in sql else
+                     [(m,) for m in self.models] if "embed_model" in sql else
+                     [(c, "general", "light", "md5-content", "md5-embedding") for c in self.chunk_ids])
         return self
 
     def fetchall(self):
@@ -123,12 +124,12 @@ class FakeConn:
         return self.rows[0]
 
 
-def _patch_main(monkeypatch, tmp_path, rows, chunk_ids):
+def _patch_main(monkeypatch, tmp_path, rows, chunk_ids, models=("m",)):
     fake = FakeAsk()
     monkeypatch.setattr(R.questions, "load", lambda *a: rows)
     monkeypatch.setattr(R, "RESULTS", tmp_path)
     monkeypatch.setattr(R, "settings", lambda: {"EMBED_MODEL": "m", "LLM_BACKEND": "cc"})
-    monkeypatch.setattr(R.db, "connect", lambda: FakeConn(chunk_ids))
+    monkeypatch.setattr(R.db, "connect", lambda: FakeConn(chunk_ids, models))
     monkeypatch.setattr(R, "Embedder", lambda name: None)
     monkeypatch.setattr(R.pipeline, "ask", lambda conn, emb, question, **kw: fake(question))
     return fake.calls
@@ -137,6 +138,14 @@ def _patch_main(monkeypatch, tmp_path, rows, chunk_ids):
 def test_main_refuses_on_a_bad_gold_id_before_any_call(tmp_path, monkeypatch):
     calls = _patch_main(monkeypatch, tmp_path, [q("f1", gold_chunk_ids=[["missing#x"]])], ["a#1"])
     with pytest.raises(SystemExit, match="missing#x"):
+        R.main(["--version", "t"])
+    assert calls == [] and not (tmp_path / "t").exists()
+
+
+@pytest.mark.parametrize("models", [("BAAI/bge-base-en-v1.5",), ("BAAI/bge-base-en-v1.5", "m")])  # swapped; half re-ingested
+def test_main_refuses_on_an_embed_model_mismatch_before_any_call(tmp_path, monkeypatch, models):
+    calls = _patch_main(monkeypatch, tmp_path, [q("f1")], ["a#1"], models)
+    with pytest.raises(SystemExit, match=r"BAAI/bge-base-en-v1\.5.*'m'"):
         R.main(["--version", "t"])
     assert calls == [] and not (tmp_path / "t").exists()
 

@@ -20,6 +20,36 @@ def _count(conn):
     return conn.execute("SELECT count(*) FROM chunks WHERE chunk_id LIKE 't-%'").fetchone()[0]
 
 
+def _tables(conn):
+    """Every column of every row, so 'exactly as before' includes ingested_at, embeddings and labels."""
+    return (conn.execute("SELECT d::text FROM documents d ORDER BY id").fetchall(),
+            conn.execute("SELECT c::text FROM chunks c ORDER BY id").fetchall())
+
+
+class DiesOnSecondDoc(FakeModel):
+    def encode(self, texts, **kw):
+        if any("swab" in t for t in texts):  # t-b.md: the 2nd doc, after t-a.md's upserts have run
+            raise RuntimeError("embedder died mid-ingest")
+        return super().encode(texts, **kw)
+
+
+def test_a_failure_on_the_second_doc_leaves_both_tables_exactly_as_before(conn, corpus):
+    ingest.run(corpus, conn, Embedder("BAAI/bge-base-en-v1.5", model=FakeModel()))
+    before = _tables(conn)
+    (corpus / "t-a.md").write_text(HEAD + "\n## Mites\n\nSpray twice weekly.\n", encoding="utf-8")
+    with pytest.raises(RuntimeError, match="mid-ingest"):
+        ingest.run(corpus, conn, Embedder("BAAI/bge-base-en-v1.5", model=DiesOnSecondDoc()), prune=True)
+    assert _tables(conn) == before
+
+
+def test_ingest_labels_every_chunk_with_its_embedder_and_a_reingest_relabels(conn, corpus):
+    assert db.embed_models(conn) == set()
+    ingest.run(corpus, conn, Embedder("BAAI/bge-base-en-v1.5", model=FakeModel()))
+    assert db.embed_models(conn) == {"BAAI/bge-base-en-v1.5"}
+    ingest.run(corpus, conn, Embedder("nomic-ai/nomic-embed-text-v1.5", model=FakeModel()))
+    assert db.embed_models(conn) == {"nomic-ai/nomic-embed-text-v1.5"}
+
+
 def test_ingest_upserts_verified_docs_and_skips_unverified(conn, corpus):
     report = ingest.run(corpus, conn, Embedder("BAAI/bge-base-en-v1.5", model=FakeModel()))
     assert report.ingested == 2 and report.chunks == 3

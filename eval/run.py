@@ -173,6 +173,9 @@ def main(argv=None):
             sql = conn.execute("SELECT string_agg(pg_get_functiondef(p.oid), ' ' ORDER BY p.oid) FROM pg_proc p "
                                "WHERE p.proname = 'hybrid_search'").fetchone()[0]
             cfg, k = settings(), max(1, min(args.k, 20))
+            if (models := db.embed_models(conn)) != {cfg["EMBED_MODEL"]}:
+                raise SystemExit(f"chunks are embedded with {sorted(models)} but EMBED_MODEL is {cfg['EMBED_MODEL']!r}; "
+                                 "re-ingest or set EMBED_MODEL to match")
             config = {"mode": args.mode, "k": k, "decompose": args.decompose, "embed_model": cfg["EMBED_MODEL"], "llm_backend": cfg["LLM_BACKEND"],
                       "llm_model": args.model, "effort": args.effort, "code_sha": _code_sha(), "sql_sha": _sha(str(sql)),
                       "chunks_sha": _sha(json.dumps(chunks)),
