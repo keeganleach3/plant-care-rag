@@ -76,8 +76,19 @@ def _extract_trailing_json(stdout: str) -> dict:
     start = stdout.find("{")
     if start == -1:
         raise LLMError("schema_invalid", "no JSON object found in stdout", 1)
-    obj, _ = json.JSONDecoder().raw_decode(stdout, start)
+    try:
+        obj, _ = json.JSONDecoder().raw_decode(stdout, start)
+    except json.JSONDecodeError as exc:
+        raise LLMError("schema_invalid", f"unparseable JSON in stdout: {exc}", 1) from exc
     return obj
+
+
+def _cli_error_detail(payload: dict, returncode: int, stderr: str) -> str:
+    """subtype + exit code + stderr tail (<=500 chars); exit code always present, so never empty."""
+    subtype = payload.get("subtype")
+    tail = (stderr or "")[-500:]
+    parts = [str(part) for part in (subtype, f"exit {returncode}", tail) if part]
+    return ", ".join(parts)
 
 
 def _system_prompt_file(system: str):
@@ -93,8 +104,11 @@ def _system_prompt_file(system: str):
 
 
 def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, timeout_s: int) -> Result:
+    claude = shutil.which("claude")
+    if claude is None:
+        raise LLMError("cli_error", "claude CLI not found on PATH", 0)
     cmd = [
-        shutil.which("claude"), "-p",
+        claude, "-p",
         "--model", model,
         "--effort", effort,
         "--output-format", "json",
@@ -124,6 +138,13 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
             time.sleep(_backoff(attempts))
             continue
 
+        if proc.returncode != 0:
+            try:
+                payload = _extract_trailing_json(proc.stdout)
+            except LLMError:
+                payload = {}
+            raise LLMError("cli_error", _cli_error_detail(payload, proc.returncode, proc.stderr), attempts, usage=payload.get("usage"))
+
         try:
             payload = _extract_trailing_json(proc.stdout)
         except LLMError as exc:
@@ -131,7 +152,7 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
             raise
 
         if payload.get("is_error"):
-            raise LLMError("cli_error", str(payload.get("result", ""))[:500], attempts, usage=payload.get("usage"))
+            raise LLMError("cli_error", _cli_error_detail(payload, proc.returncode, proc.stderr), attempts, usage=payload.get("usage"))
 
         structured = payload.get("structured_output")
         if structured is None:
@@ -154,7 +175,11 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
 
 
 def _call_api(system: str, user: str, schema: dict, model: str, effort: str, timeout_s: int) -> Result:
-    client = anthropic.Anthropic(api_key=_settings(required=("ANTHROPIC_API_KEY",))["ANTHROPIC_API_KEY"], timeout=timeout_s)
+    client = anthropic.Anthropic(
+        api_key=_settings(required=("ANTHROPIC_API_KEY",))["ANTHROPIC_API_KEY"],
+        timeout=timeout_s,
+        max_retries=0,  # our loop retries, not the SDK's
+    )
     # Haiku 4.5 predates adaptive thinking and `effort`; both are rejected there (claude-api skill table).
     extra = {} if model.startswith("claude-haiku") else {"thinking": {"type": "adaptive"}}
     output_config = {"format": {"type": "json_schema", "schema": schema}}
@@ -172,11 +197,14 @@ def _call_api(system: str, user: str, schema: dict, model: str, effort: str, tim
                 output_config=output_config,
                 **extra,
             )
-        except (anthropic.RateLimitError, anthropic.APIStatusError) as exc:
+        except (anthropic.RateLimitError, anthropic.APIStatusError, anthropic.APIConnectionError) as exc:
             is_5xx = isinstance(exc, anthropic.APIStatusError) and getattr(exc, "status_code", 0) >= 500
-            if (isinstance(exc, anthropic.RateLimitError) or is_5xx) and attempts < _MAX_ATTEMPTS:
+            retryable = isinstance(exc, (anthropic.RateLimitError, anthropic.APIConnectionError)) or is_5xx
+            if retryable and attempts < _MAX_ATTEMPTS:
                 time.sleep(_backoff(attempts))
                 continue
+            if isinstance(exc, anthropic.APITimeoutError):
+                raise LLMError("timeout", str(exc), attempts) from exc
             raise LLMError("cli_error", str(exc), attempts) from exc
 
         if response.model != model:
@@ -184,8 +212,13 @@ def _call_api(system: str, user: str, schema: dict, model: str, effort: str, tim
         if response.stop_reason == "refusal":
             raise LLMError("refusal", "model refused", attempts)
 
-        text = next(b.text for b in response.content if b.type == "text")
-        structured = json.loads(text)
+        text = next((b.text for b in response.content if b.type == "text"), None)
+        if text is None:
+            raise LLMError("schema_invalid", "no text block in response", attempts)
+        try:
+            structured = json.loads(text)
+        except json.JSONDecodeError as exc:
+            raise LLMError("schema_invalid", f"non-JSON text block: {exc}", attempts) from exc
         validate(structured, schema)
 
         usage = {"input_tokens": response.usage.input_tokens, "output_tokens": response.usage.output_tokens}
