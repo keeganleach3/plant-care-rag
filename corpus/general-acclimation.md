@@ -8,6 +8,7 @@ verified: true
 <!-- Source: Keegan, corpus session 1, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
 <!-- 2026-09-24: leaf-melt and yellowing sections plus the sink-water fix come from Keegan's answers during eval gold review (typed, structured by Claude; no facts added). Added after the eval questions f06 and m05 were written. -->
 <!-- 2026-09-24: "base of the plant" instead of "stem" in the leaf-melt section, from Keegan's v0 grading feedback. -->
+<!-- 2026-09-24: "no need to turn the light up" in the plantlet light section, from Keegan's v0.1-vs-v1 comparison notes. -->
 
 ## How tissue-culture plantlets arrive
 
@@ -43,7 +44,7 @@ Water once at potting. Because humidity sits at 100 percent under the dome, it i
 
 ## Light: around 150 PPFD for 10 to 12 hours
 
-Light intensity and fixture distance depend on the light, so the target is the reading, not the distance: around 150 PPFD (not an exact figure) for about ten to twelve hours a day, versus at least 250 for established plants. As the plantlets grow taller they get closer to the fixture, which raises their light exposure on its own and matches their growing need for light.
+Light intensity and fixture distance depend on the light, so the target is the reading, not the distance: around 150 PPFD (not an exact figure) for about ten to twelve hours a day, versus at least 250 for established plants. As the plantlets grow taller they get closer to the fixture, which raises their light exposure on its own and matches their growing need for light, so there is no need to turn the light up.
 
 ## Signs acclimation is working
 

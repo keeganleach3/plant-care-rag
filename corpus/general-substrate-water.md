@@ -7,6 +7,7 @@ verified: true
 
 <!-- Source: Keegan, corpus session 1, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
 <!-- 2026-09-24: first-watering fertilizer dose and the Anthurium second-stage mix come from Keegan's answers during eval gold review (typed, structured by Claude; no facts added). -->
+<!-- 2026-09-24: the plantlet feeding schedule (feed at planting, skip the next watering, then very light feeding), from Keegan's v0.1-vs-v1 comparison notes. -->
 
 ## First substrate mix by genus
 
@@ -18,7 +19,7 @@ Water is balanced to a pH of about 7, or the high sixes. Plain tap water from th
 
 ## What goes in the first watering
 
-For the first watering, per half liter of water: one dropper of water-soluble IBA rooting hormone, a very, very small dose of a high-phosphorus fertilizer, and Trichoderma harzianum T-22. That very small fertilizer dose in the first watering of the soil has resulted in success. Water the freshly potted plantlets with this once. Under a 100 percent humidity dome it is usually at least ten days before they need water again.
+For the first watering, per half liter of water: one dropper of water-soluble IBA rooting hormone, a very, very small dose of a high-phosphorus fertilizer, and Trichoderma harzianum T-22. That very small fertilizer dose in the first watering of the soil has resulted in success. Water the freshly potted plantlets with this once. After that, the next watering gets no fertilizer, and very light feeding starts with the watering after it. Under a 100 percent humidity dome it is usually at least ten days before they need water again.
 
 ## Rooting and biological products used here
 
@@ -38,4 +39,4 @@ For most plants, let the top 50 percent of the pot dry out before watering again
 
 ## Light fertilizing with every watering
 
-Every watering carries a light dose of fertilizer, for all plants, and this produced a large increase in growth. The other levers for a plant that has stalled are more light and a consistent routine.
+Every watering carries a light dose of fertilizer, for all plants (tissue-culture plantlets skip it on their second watering), and this produced a large increase in growth. The other levers for a plant that has stalled are more light and a consistent routine.
