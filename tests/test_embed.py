@@ -1,3 +1,7 @@
+import threading
+import time
+
+from rag.config import ROOT, EMBED_MODELS
 from rag.embed import Embedder
 
 
@@ -38,3 +42,56 @@ def test_returns_768_dim_vectors():
     e = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
     assert len(e.embed_query("q")) == 768
     assert [len(v) for v in e.embed_docs(["a", "bb"])] == [768, 768]
+
+
+class SlowFakeModel:
+    """Records overlapping encode() calls so a missing lock shows up as max_active > 1."""
+
+    def __init__(self):
+        self.active = 0
+        self.max_active = 0
+        self._guard = threading.Lock()
+
+    def encode(self, texts, **kw):
+        with self._guard:
+            self.active += 1
+            self.max_active = max(self.max_active, self.active)
+        time.sleep(0.05)
+        with self._guard:
+            self.active -= 1
+        return [[0.0] * 768 for _ in texts]
+
+
+def test_encode_serializes_across_threads():
+    fake = SlowFakeModel()
+    e = Embedder("BAAI/bge-base-en-v1.5", model=fake)
+    threads = [threading.Thread(target=e.embed_query, args=(f"q{i}",)) for i in range(4)]
+    for t in threads:
+        t.start()
+    for t in threads:
+        t.join()
+    assert fake.max_active == 1
+
+
+def test_embedder_passes_pinned_revision(monkeypatch):
+    calls = []
+
+    class FakeCtor:
+        def __init__(self, name, **kw):
+            calls.append((name, kw))
+
+        def encode(self, texts, **kw):
+            return [[0.0] * 768 for _ in texts]
+
+    monkeypatch.setattr("sentence_transformers.SentenceTransformer", FakeCtor)
+    Embedder("BAAI/bge-base-en-v1.5")
+    assert calls == [(
+        "BAAI/bge-base-en-v1.5",
+        {"device": "cpu", "trust_remote_code": False, "revision": EMBED_MODELS["BAAI/bge-base-en-v1.5"]["revision"]},
+    )]
+
+
+def test_dockerfile_pins_bge_revision():
+    dockerfile = (ROOT / "Dockerfile").read_text(encoding="utf-8")
+    revision = EMBED_MODELS["BAAI/bge-base-en-v1.5"]["revision"]
+    assert revision in dockerfile

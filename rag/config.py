@@ -22,9 +22,10 @@ PRICES = {
 }
 
 # Embedding models: dims must match chunks.embedding vector(768); prefixes are per-model and asymmetric.
+# revision pins the exact snapshot behind the stored vectors, so a model's weights can't drift under a moving tag.
 EMBED_MODELS = {
-    "BAAI/bge-base-en-v1.5": {"dim": 768, "query_prefix": "Represent this sentence for searching relevant passages: ", "doc_prefix": "", "trust_remote_code": False},
-    "nomic-ai/nomic-embed-text-v1.5": {"dim": 768, "query_prefix": "search_query: ", "doc_prefix": "search_document: ", "trust_remote_code": True},
+    "BAAI/bge-base-en-v1.5": {"dim": 768, "query_prefix": "Represent this sentence for searching relevant passages: ", "doc_prefix": "", "trust_remote_code": False, "revision": "a5beb1e3e68b9ab74eb54cfd186867f64f240e1a"},
+    "nomic-ai/nomic-embed-text-v1.5": {"dim": 768, "query_prefix": "search_query: ", "doc_prefix": "search_document: ", "trust_remote_code": True, "revision": None},  # pin on first ingest with this model
 }
 
 _KEYS = ("DATABASE_URL", "LLM_BACKEND", "ANTHROPIC_API_KEY", "EMBED_MODEL", "API_KEY", "MAX_INFLIGHT")

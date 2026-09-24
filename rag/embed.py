@@ -1,5 +1,7 @@
 """Embedding wrapper. Loads the sentence-transformers model once; prefixes come from EMBED_MODELS so a
 model swap cannot silently drop the query/document asymmetry."""
+import threading
+
 from rag.config import EMBED_MODELS
 
 
@@ -9,11 +11,13 @@ class Embedder:
         self.cfg = EMBED_MODELS[name]
         if model is None:
             from sentence_transformers import SentenceTransformer
-            model = SentenceTransformer(name, device="cpu", trust_remote_code=self.cfg["trust_remote_code"])
+            model = SentenceTransformer(name, device="cpu", trust_remote_code=self.cfg["trust_remote_code"], revision=self.cfg["revision"])
         self.model = model
+        self._lock = threading.Lock()
 
     def _encode(self, texts: list[str]) -> list[list[float]]:
-        return [list(map(float, v)) for v in self.model.encode(texts, normalize_embeddings=True, batch_size=32)]
+        with self._lock:
+            return [list(map(float, v)) for v in self.model.encode(texts, normalize_embeddings=True, batch_size=32)]
 
     def embed_query(self, text: str) -> list[float]:
         return self._encode([self.cfg["query_prefix"] + text])[0]
