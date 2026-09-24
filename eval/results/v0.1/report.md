@@ -1,7 +1,7 @@
 # Eval report: v0.1
 
 Config: mode=vector · k=5 · embed_model=BAAI/bge-base-en-v1.5 · llm_backend=cc · llm_model=claude-sonnet-5 · effort=low · code_sha=45c166ea9710 · sql_sha=663f89bf6e8b · chunks_sha=1d71502230ee · questions_sha=bf1b3b20e24b
-Models seen: claude-sonnet-5 · gold: questions sha 71a55c069e52
+Models seen: claude-sonnet-5 · gold: questions sha b7d66cf7e754
 
 - dev: 23 questions; rows per rep: rep 1 23
 

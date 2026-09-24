@@ -3,12 +3,15 @@ import re
 import statistics
 from collections import Counter
 
-# An answer that talks about its own retrieval ("the notes say", "the passages") instead of about the plant.
+from rag.generate import REFUSAL
+
+# An answer that talks about its own retrieval ("the notes say", "the passages") instead of about the plant. The exact
+# refusal sentence is the one mention the prompt allows, including for the part of a question retrieval missed.
 _NARRATION = re.compile(r"\b(?:my|the|these) notes\b|\bpassages?\b|\bprovided (?:text|context|information|sources?)\b", re.I)
 
 
 def narrates(answer: str) -> bool:
-    return bool(_NARRATION.search(answer))
+    return bool(_NARRATION.search(answer.replace(REFUSAL, "")))
 
 
 def recall_at_k(gold_groups: list[list[str]], retrieved: list[str]) -> float | None:

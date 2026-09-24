@@ -53,6 +53,11 @@ def test_narration_of_sources_is_caught_without_flagging_plain_answers():
     assert not G.narrates("Hold 100 percent for about 15 to 20 days [alocasia-acclimation#x], then step down slowly.")
 
 
+def test_the_permitted_refusal_sentence_inside_a_partial_answer_is_not_narration():
+    assert not G.narrates("Hold 100 percent for a week [a#x]. On feeding, I don't have information on that in my notes.")
+    assert G.narrates("Hold 100 percent for a week [a#x]. My notes don't cover feeding.")
+
+
 def test_summary_counts_narration_over_answered_rows_only():
     qs = [ANSWER_Q, {**ANSWER_Q, "id": "f2"}, {**ANSWER_Q, "id": "f3"}, REFUSE_Q]
     rs = [{**res(), "answer": "My notes say 150 PPFD."}, {**res(), "answer": "About 150 PPFD."},
