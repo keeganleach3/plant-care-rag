@@ -14,7 +14,7 @@ Areas touched: `rag/llm.py`, `rag/api.py`, `rag/db.py`, `rag/ingest.py`, `rag/co
 
 | Input enters at | Validated by (at that boundary) |
 |---|---|
-| `Authorization` header on `/ask` | when `API_KEY` is set: `Bearer <key>` compared with `hmac.compare_digest`, 401 otherwise; unset: startup logs a warning that `/ask` is open |
+| `Authorization` header on `/ask` | when `API_KEY` is set: `Bearer <key>` compared with `hmac.compare_digest`, 401 otherwise, and the key must be at least 32 chars; unset: startup logs a warning that `/ask` is open with the free `cc` backend and refuses to start with the paid `api` backend (amended 2026-09-24 after review R3: the §1 worst case was one missing env var away) |
 | `X-Request-ID` header | accepted only if it matches `^[A-Za-z0-9._-]{1,64}$`, else a fresh uuid4; echoed on the response |
 | Request body | unchanged pydantic model (question 1–500 chars, `mode` enum, `k` clamped 1–20, `genus` ∈ GENERA or dropped, `decompose` bool) |
 | `claude -p` stdout/stderr and exit code | every failure path → `LLMError(kind)` with the existing kinds only (the runner retries `cli_error`/`timeout`): `cli_error` (CLI missing from PATH, non-zero exit, `is_error`; detail = CLI `subtype`, exit code, stderr tail ≤ 500 chars), `timeout`, `schema_invalid` (unparseable JSON included), `model_mismatch`, `refusal` |
@@ -32,7 +32,7 @@ Secrets: `API_KEY` (new, optional) in `.env` / container env, never logged, neve
 ## 4. Failure & rollback
 
 Fails by: 503 + `Retry-After` when generations in flight hit `MAX_INFLIGHT`; `/readyz` 503 naming the failed check; 502 with the error kind on a backend failure (unchanged).
-Revert: `git revert <sha>` per item (each item is its own commit).
+Revert: `git revert <sha>` per item, newest first (later items call earlier ones: P5's readiness check calls P3's `db.embed_models`; review R20).
 Down migration: `ALTER TABLE chunks DROP COLUMN embed_model;` (data is derivable: re-ingest restores it).
 
 ```
@@ -77,5 +77,5 @@ P6 no-regression                              → verify: v2 config re-run on ha
 
 ## Open (named, not built this round)
 
-Least-privilege DB role for the API (read-only on `chunks`/`documents`); per-client rate limiting (belongs at the gateway); answer cache; red-team prompt-injection eval set; streaming responses (needs the chat UI).
+Least-privilege DB role for the API (read-only on `chunks`/`documents`); one overall deadline per `/ask` on the `api` backend (a timed-out call is retried today, review R13); per-client rate limiting (belongs at the gateway); answer cache; red-team prompt-injection eval set; streaming responses (needs the chat UI).
 Found during the round: on Windows a `claude -p` timeout should leave the `node` child running, because `subprocess.run` terminates only its direct child, the `cmd.exe` launcher (from the code path, not yet observed; dev backend only, the API backend has no subprocess). Inline `[chunk_id]` markers appear in about half of all answers in every version since v0, although prompt rule 2 asks for them; the validated `citations` list is never empty, so this is a presentation decision (footnote numbers, or no inline markers) for Keegan, not a grounding gap.
