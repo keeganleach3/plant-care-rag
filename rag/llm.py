@@ -7,6 +7,7 @@ of ~143K, and the system-prompt-file indirection works around cmd.exe's 8,191-ch
 import hashlib
 import json
 import random
+import re
 import shutil
 import subprocess
 import time
@@ -17,7 +18,7 @@ import anthropic
 from rag.config import PRICES, ROOT, settings as _settings
 
 _MAX_ATTEMPTS = 3
-_RATE_LIMIT_MARKERS = ("rate limit", "overloaded", "529")
+_RATE_LIMITED = re.compile(r"rate limit|overloaded|\b529\b", re.IGNORECASE)  # matched in error text only, never a success
 
 
 @dataclass
@@ -84,11 +85,9 @@ def _extract_trailing_json(stdout: str) -> dict:
 
 
 def _cli_error_detail(payload: dict, returncode: int, stderr: str) -> str:
-    """subtype + exit code + stderr tail (<=500 chars); exit code always present, so never empty."""
-    subtype = payload.get("subtype")
-    tail = (stderr or "")[-500:]
-    parts = [str(part) for part in (subtype, f"exit {returncode}", tail) if part]
-    return ", ".join(parts)
+    """What the CLI said went wrong: subtype, result text, exit code, stderr tail. Never empty, at most 500 chars."""
+    parts = (payload.get("subtype"), str(payload.get("result") or "")[:300], f"exit {returncode}", (stderr or "")[-300:])
+    return ", ".join(str(p) for p in parts if p)[:500]
 
 
 def _system_prompt_file(system: str):
@@ -121,8 +120,7 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
         "--mcp-config", '{"mcpServers":{}}',
     ]
     attempts = 0
-    last_exc = None
-    while attempts < _MAX_ATTEMPTS:
+    while True:
         attempts += 1
         try:
             proc = subprocess.run(
@@ -132,27 +130,20 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
         except subprocess.TimeoutExpired as exc:
             raise LLMError("timeout", str(exc), attempts) from exc
 
-        combined = f"{proc.stdout}\n{proc.stderr}".lower()
-        if any(marker in combined for marker in _RATE_LIMIT_MARKERS) and attempts < _MAX_ATTEMPTS:
-            last_exc = LLMError("cli_error", proc.stderr[:500] or proc.stdout[:500], attempts)
-            time.sleep(_backoff(attempts))
-            continue
-
-        if proc.returncode != 0:
-            try:
-                payload = _extract_trailing_json(proc.stdout)
-            except LLMError:
-                payload = {}
-            raise LLMError("cli_error", _cli_error_detail(payload, proc.returncode, proc.stderr), attempts, usage=payload.get("usage"))
-
         try:
             payload = _extract_trailing_json(proc.stdout)
         except LLMError as exc:
-            exc.attempts = attempts
-            raise
+            if proc.returncode == 0:
+                exc.attempts = attempts
+                raise
+            payload = {}  # a crashed CLI may print no JSON; its exit code and stderr still explain it
 
-        if payload.get("is_error"):
-            raise LLMError("cli_error", _cli_error_detail(payload, proc.returncode, proc.stderr), attempts, usage=payload.get("usage"))
+        if proc.returncode != 0 or payload.get("is_error"):
+            detail = _cli_error_detail(payload, proc.returncode, proc.stderr)
+            if _RATE_LIMITED.search(detail) and attempts < _MAX_ATTEMPTS:
+                time.sleep(_backoff(attempts))
+                continue
+            raise LLMError("cli_error", detail, attempts, usage=payload.get("usage"))
 
         structured = payload.get("structured_output")
         if structured is None:
@@ -171,7 +162,6 @@ def _call_cc(system: str, user: str, schema: dict, model: str, effort: str, time
             cost_usd=payload.get("total_cost_usd", 0.0),
             attempts=attempts,
         )
-    raise last_exc
 
 
 def _call_api(system: str, user: str, schema: dict, model: str, effort: str, timeout_s: int) -> Result:

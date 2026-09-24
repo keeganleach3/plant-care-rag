@@ -119,6 +119,34 @@ def test_cc_cli_error_detail_joins_subtype_exit_and_truncated_stderr_tail(cc):
     assert len(long_stderr[-500:]) == 500  # sanity: fixture is actually long enough to truncate
 
 
+def _ok_payload(**extra):
+    return json.dumps({"is_error": False, "structured_output": {"answer": "ok"}, "modelUsage": {"claude-sonnet-5": {}},
+                       "usage": {"output_tokens": 1529}, "session_id": "5290-overloaded-cafe", **extra})
+
+
+def test_cc_success_is_never_retried_whatever_its_output_contains(cc):
+    calls = []
+    cc.setattr(llm.subprocess, "run", lambda *a, **kw: calls.append(1) or _proc(stdout=_ok_payload(), returncode=0))
+    cc.setattr(llm.time, "sleep", lambda *a: None)
+    assert llm.call("sys", "user", SCHEMA).attempts == 1 and len(calls) == 1
+
+
+def test_cc_rate_limited_error_is_retried_then_succeeds(cc):
+    replies = iter([_proc(stdout=json.dumps({"is_error": True, "result": "API Error: 529 Overloaded"}), returncode=1),
+                    _proc(stdout=_ok_payload(), returncode=0)])
+    cc.setattr(llm.subprocess, "run", lambda *a, **kw: next(replies))
+    cc.setattr(llm.time, "sleep", lambda *a: None)
+    assert llm.call("sys", "user", SCHEMA).attempts == 2
+
+
+def test_cc_is_error_detail_carries_the_cli_result_text(cc):
+    payload = json.dumps({"is_error": True, "subtype": "success", "result": "Failed to authenticate. API Error: 401"})
+    cc.setattr(llm.subprocess, "run", lambda *a, **kw: _proc(stdout=payload, returncode=1))
+    with pytest.raises(llm.LLMError) as exc_info:
+        llm.call("sys", "user", SCHEMA)
+    assert exc_info.value.kind == "cli_error" and "API Error: 401" in exc_info.value.detail and len(exc_info.value.detail) <= 500
+
+
 def test_cc_timeout(cc):
     def fake_run(cmd, **kw):
         raise subprocess.TimeoutExpired(cmd, kw.get("timeout"))
