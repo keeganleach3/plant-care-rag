@@ -2,7 +2,7 @@
 title: Light for established tissue-culture aroids
 genus: general
 topic: light
-verified: true
+verified: false
 ---
 
 <!-- Source: Keegan, corpus session 2, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->

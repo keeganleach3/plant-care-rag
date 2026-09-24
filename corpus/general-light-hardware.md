@@ -6,6 +6,7 @@ verified: false
 ---
 
 <!-- Source: Keegan, corpus session 7, 2026-09-10 (voice-to-text, structured by Claude; product figures are from the listings he cited). -->
+<!-- 2026-09-24: the S16 multiple-levels line comes from Keegan's answer during eval gold review (typed, structured by Claude). -->
 
 ## Full-spectrum white LED bars are the recommendation
 
@@ -17,7 +18,7 @@ The Barrina T5 is the most common cheap grow light customers own. It is full spe
 
 ## The stronger fixtures used here
 
-The grow tents run either AC Infinity S16 light bars, which use Samsung LED diodes and carry light much further down so it dissipates more slowly, or the thicker Barrina TXS45A bars. AC Infinity does not publish PPFD figures. The Barrina TXS45A listing (135 W, three 45 W bars, CRI 98) shows, per light, 429.7 PPFD at 3.94 inches, 216.9 at 7.87 inches, and 137 at 11.81 inches, which is about 2.4 times a Barrina T5 at the same 8-inch distance. A few inches from the plants these fixtures deliver roughly 350 PPFD, which over 12 hours is a DLI of about 15. That is too much for a very small plant, but small plants are easy to set further from the fixture, and as they grow they move closer and their PPFD rises on its own.
+The grow tents run either AC Infinity S16 light bars, which use Samsung LED diodes and carry light much further down so it dissipates more slowly, or the thicker Barrina TXS45A bars. AC Infinity does not publish PPFD figures, and the S16 can be set to multiple levels, so its output is hard to judge. The Barrina TXS45A listing (135 W, three 45 W bars, CRI 98) shows, per light, 429.7 PPFD at 3.94 inches, 216.9 at 7.87 inches, and 137 at 11.81 inches, which is about 2.4 times a Barrina T5 at the same 8-inch distance. A few inches from the plants these fixtures deliver roughly 350 PPFD, which over 12 hours is a DLI of about 15. That is too much for a very small plant, but small plants are easy to set further from the fixture, and as they grow they move closer and their PPFD rises on its own.
 
 ## Where to put each plant under a bar
 

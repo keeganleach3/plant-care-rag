@@ -2,10 +2,11 @@
 title: Deflasking and acclimating tissue-culture aroid plantlets
 genus: general
 topic: acclimation
-verified: true
+verified: false
 ---
 
 <!-- Source: Keegan, corpus session 1, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
+<!-- 2026-09-24: leaf-melt and yellowing sections plus the sink-water fix come from Keegan's answers during eval gold review (typed, structured by Claude; no facts added). Added after the eval questions f06 and m05 were written. -->
 
 ## How tissue-culture plantlets arrive
 
@@ -51,13 +52,21 @@ Root growth is the main sign. With clear pots, visible roots mean things are goi
 
 Failure shows fast. A plantlet that flops over early is rotting from the center. A center that is soft rather than firm means the plant is lost.
 
+## Leaves melting away after planting is common
+
+After planting from tissue culture, leaves sometimes melt away: they turn to mush and die off. This is pretty common. As long as the stem is fine, keep taking care of the plant. If leaves are turning to mush, consider a slight change to watering, because you might be overwatering, and add some daily airflow if you can. Early in the stage, even opening the dome slightly for a few minutes gets fresh air in.
+
+## Yellowing leaves once the dome comes off
+
+Leaves yellowing right after a plant comes out from under the humidity dome are most likely a humidity problem rather than a light problem, usually from taking the dome off too fast. Also make sure the soil is not drying out too much or staying too damp.
+
 ## When acclimation is done
 
 There is no single tell. Acclimation is done when the dome or lid can stay completely off and the plant is ready to move up a pot size. In a grow space held at 65 to 80 percent ambient humidity, stepping a Monstera down from 100 percent to 65 percent takes about three weeks, roughly 18 to 21 days, sometimes a little longer. Alocasia take four to five weeks. Anthurium and Philodendron sit in between. A drier room takes longer for all of them.
 
 ## Mistakes beginners make most
 
-First: overdoing the start. Distilled water, extra coatings, hormones, and fertilizer on top of each other are not needed, and success rates were higher doing the whole first stage with plain sink water. Second: mistiming the humidity step-down, either dragging it out (delayed growth, the plant needs airflow) or yanking the dome off or never starting at 100 percent (kills the plant). Third: potting into a soil that is too dense.
+First: overdoing the start. Distilled water, extra coatings, hormones, and fertilizer on top of each other are not needed, and success rates were higher cleaning the plantlets off under plain running water at the sink. Second: mistiming the humidity step-down, either dragging it out (delayed growth, the plant needs airflow) or yanking the dome off or never starting at 100 percent (kills the plant). Third: potting into a soil that is too dense.
 
 ## Up-potting: wait for root-bound, do not disturb the roots
 

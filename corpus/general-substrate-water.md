@@ -2,10 +2,11 @@
 title: First substrate mix and watering for tissue-culture aroids
 genus: general
 topic: substrate-water
-verified: true
+verified: false
 ---
 
 <!-- Source: Keegan, corpus session 1, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
+<!-- 2026-09-24: first-watering fertilizer dose and the Anthurium second-stage mix come from Keegan's answers during eval gold review (typed, structured by Claude; no facts added). -->
 
 ## First substrate mix by genus
 
@@ -17,7 +18,7 @@ Water is balanced to a pH of about 7, or the high sixes. Plain tap water from th
 
 ## What goes in the first watering
 
-For the first watering, per half liter of water: one dropper of water-soluble IBA rooting hormone, a small amount of a high-phosphorus fertilizer, and Trichoderma harzianum T-22. Water the freshly potted plantlets with this once. Under a 100 percent humidity dome it is usually at least ten days before they need water again.
+For the first watering, per half liter of water: one dropper of water-soluble IBA rooting hormone, a very, very small dose of a high-phosphorus fertilizer, and Trichoderma harzianum T-22. That very small fertilizer dose in the first watering of the soil has resulted in success. Water the freshly potted plantlets with this once. Under a 100 percent humidity dome it is usually at least ten days before they need water again.
 
 ## Rooting and biological products used here
 
@@ -25,7 +26,7 @@ Alongside the IBA rooting hormone and Trichoderma T-22 in the first watering, Bi
 
 ## Second-stage mix after acclimation: chunky aroid soil
 
-Past the first mix, plants move to a chunky aroid soil: coco coir, perlite, charcoal, coconut husk chips, and a bit of orchid bark. Monstera and Anthurium get the chunkiest version because they love airflow around the roots. Alocasia and Philodendron get the same ingredients with slightly more fine material and coco coir to hold water, because their finer roots struggle in a mix that is too chunky. A very large Alocasia with thick roots can eventually move to a chunkier mix, but that is far in the future.
+Past the first mix, plants move to a chunky aroid soil: coco coir, perlite, charcoal, coconut husk chips, and a bit of orchid bark. Monstera and Anthurium both love airflow around the roots; Monstera get the chunkiest version, and Anthurium a slightly less chunky one because their roots start thinner. Alocasia and Philodendron get the same ingredients with slightly more fine material and coco coir to hold water, because their finer roots struggle in a mix that is too chunky. A very large Alocasia with thick roots can eventually move to a chunkier mix, but that is far in the future.
 
 ## Top watering after the dome: water until it drains
 

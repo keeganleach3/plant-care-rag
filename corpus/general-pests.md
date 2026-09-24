@@ -2,10 +2,11 @@
 title: Pests and rot on tissue-culture aroids
 genus: general
 topic: pests
-verified: true
+verified: false
 ---
 
 <!-- Source: Keegan, corpus session 2, 2026-09-10 (voice-to-text, structured by Claude; no facts added). -->
+<!-- 2026-09-24: the bugs-under-the-dome section comes from Keegan's answer during eval gold review (typed, structured by Claude; no facts added). Added after eval question m09 was written. -->
 
 ## Root rot is the biggest risk for small plants
 
@@ -26,6 +27,10 @@ Oil-based sprays, homemade or store-bought, work on mealybugs. Removing them by 
 ## Fungus gnats: treat premixed soil the day you use it
 
 Any premixed potting soil or similar product should be treated for fungus gnats immediately on first use, before an infestation starts. The method: soak Mosquito Bits (the brand) in the water you are about to water with for a few hours, then water with it. This kills the larvae in the soil far more efficiently than the usual published methods like spraying oil on the surface or covering the top of the soil.
+
+## Bugs under the dome: leave springtails, treat pests gently at night
+
+Bugs are not common while plantlets are still under the dome, and what to do depends on the bug. Most likely it is springtails or soil mites; if so, leave them, because they are beneficial. A harmful pest such as thrips or spider mites must be treated, along with all the plants around it, but plantlets are extremely fragile at that stage, which puts you in a difficult position. A plantlet cannot be sprayed and then put under grow lights: it will most likely burn and die. Spray gently at night so the leaves can dry off.
 
 ## Pesticide and fungicide products: follow the bottle
 
