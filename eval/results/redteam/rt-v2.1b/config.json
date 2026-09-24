@@ -1,0 +1,9 @@
+{
+  "decompose": true,
+  "embed_model": "BAAI/bge-base-en-v1.5",
+  "llm_backend": "cc",
+  "llm_model": "claude-sonnet-5",
+  "effort": "low",
+  "code_sha": "30ad8743dbb9",
+  "probes_sha": "aad2635d8434"
+}
