@@ -17,7 +17,7 @@ CASES = [
     ("how long can i leave the tc bag unopened", "general-acclimation#unopened-bags-and-flasks-must-stay-below-75-f"),
     ("when should i repot", "general-acclimation#up-potting-wait-for-root-bound-do-not-disturb-the-roots"),
     ("caramel marble not growing", "philodendron-troubleshooting#slow-growth-on-philodendron-is-usually-normal"),
-    ("how much light do variegated monsteras need", "general-light#established-plants-at-least-300-ppfd-for-12-to-14-hours"),
+    ("how much light do variegated monsteras need", "general-light#established-plants-at-least-250-ppfd-for-12-to-14-hours"),
 ]
 
 
