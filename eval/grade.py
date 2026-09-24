@@ -26,8 +26,23 @@ def _p95(values: list[float]) -> float:
     return values[0] if len(values) == 1 else statistics.quantiles(values, n=20, method="inclusive")[-1]
 
 
-def summarize(pairs: list[tuple[dict, dict]]) -> dict:
-    """Rates come back as (hits, denominator) so small-n results stay visible; latency covers the `timed` non-error rows."""
+def _accuracy(pairs: list[tuple[dict, dict]], grades: dict) -> tuple[dict, tuple[int, int]]:
+    """Answerable, non-error rows only: an answer takes Keegan's manual grade (c/p/w), a refusal is wrong, an answer
+    he has not graded is counted as ungraded. Returns the counts and (unfaithful marks, graded answers)."""
+    acc, marks = Counter(), []
+    for q, r in pairs:
+        if q["must_refuse"] or r["error"]:
+            continue
+        m = grades.get((q["id"], r["rep"]))
+        acc["w" if r["refused"] else m["grade"] if m else "ungraded"] += 1
+        if m and not r["refused"]:
+            marks.append(bool(m.get("unfaithful")))
+    return dict(acc), (sum(marks), len(marks))
+
+
+def summarize(pairs: list[tuple[dict, dict]], grades: dict | None = None) -> dict:
+    """Rates come back as (hits, denominator) so small-n results stay visible; latency covers the `timed` non-error rows.
+    `grades` maps (id, rep) to a manual grade row."""
     graded = [(r, grade(q, r)) for q, r in pairs]
     recalls = [g["recall"] for _, g in graded if g["recall"] is not None]
 
@@ -42,6 +57,7 @@ def summarize(pairs: list[tuple[dict, dict]]) -> dict:
         "hallucination": count("hallucinated"),
         "false_refusal": count("false_refusal"),
     }
+    out["accuracy"], out["unfaithful"] = _accuracy(pairs, grades or {})
     timed = [r["timings"] for r, g in graded if not g["error"]]
     out["timed"] = len(timed)
     for stage in ("total", "generate"):

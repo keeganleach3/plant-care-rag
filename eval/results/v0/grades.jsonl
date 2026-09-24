@@ -1,0 +1,14 @@
+{"id": "f01", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "f03", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "f04", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "f07", "rep": 1, "grade": "p", "unfaithful": false, "cause": "missing content", "note": "Keegan: put an estimate in days instead of just 'days longer than a Monstera', say 15-20 days; then say that for ambient, do an acclimation process similar to the tissue-culture one."}
+{"id": "f09", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "f11", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "f12", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "f13", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "m02", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "m04", "rep": 1, "grade": "p", "unfaithful": false, "cause": "retrieval miss", "note": "Keegan: first sections good; 'as long as the stem is fine' will be misread as a leaf's petiole, not the base of the plant; missed feeding for TC plants, should recommend a light feeding regimen."}
+{"id": "m05", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "m06", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "m09", "rep": 1, "grade": "c", "unfaithful": false}
+{"id": "m10", "rep": 1, "grade": "p", "unfaithful": false, "cause": "missing content; answer voice", "note": "Keegan: unsure it should reference the notes (is that standard RAG practice?); should do generalized math from the S16's Samsung LM301H EVO LEDs at 3.14 umol/J PPE, at power levels 10, 7 and 5."}

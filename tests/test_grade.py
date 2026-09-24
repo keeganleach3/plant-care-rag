@@ -3,7 +3,7 @@ from eval import grade as G
 
 
 def res(ids=("a#1",), refused=False, error=None, total=100.0, gen=80.0):
-    return {"chunks": [{"chunk_id": c} for c in ids], "refused": None if error else refused,
+    return {"rep": 1, "chunks": [{"chunk_id": c} for c in ids], "refused": None if error else refused,
             "error": {"kind": error, "detail": "x"} if error else None,
             "timings": {"embed_ms": 10.0, "retrieve_ms": 10.0, "generate_ms": gen, "total_ms": total}}
 
@@ -37,6 +37,15 @@ def test_summary_denominators_exclude_errors_from_rates_but_not_from_recall():
     assert s["false_refusal"] == (1, 2)         # f2 refused; f3 errored, so not counted
     assert s["hallucination"] == (1, 1)         # n1 answered; n2 errored
     assert s["timed"] == 3 and (s["p50_total_ms"], s["p95_total_ms"]) == (200.0, 290.0)  # latency over non-error rows only
+
+
+def test_accuracy_takes_manual_grades_for_answers_and_scores_a_wrongful_refusal_as_wrong():
+    qs = [ANSWER_Q, {**ANSWER_Q, "id": "f2"}, {**ANSWER_Q, "id": "f3"}, {**ANSWER_Q, "id": "f4"}, {**ANSWER_Q, "id": "f5"}, REFUSE_Q]
+    rs = [res(), res(), res(refused=True), res(), res(error="timeout"), res(refused=True)]
+    grades = {("f1", 1): {"grade": "c", "unfaithful": False}, ("f2", 1): {"grade": "p", "unfaithful": True}}
+    s = G.summarize(list(zip(qs, rs)), grades)
+    assert s["accuracy"] == {"c": 1, "p": 1, "w": 1, "ungraded": 1}  # f3 refused → w; f4 answered but ungraded; f5 errored
+    assert s["unfaithful"] == (1, 2)
 
 
 def test_summary_of_nothing_applicable_has_a_zero_denominator():

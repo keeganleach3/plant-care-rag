@@ -95,6 +95,13 @@ def test_report_has_no_blank_cells_and_shows_holdout_only_in_aggregate(tmp_path)
     assert "f9" not in text and "n9" not in text
 
 
+def test_report_shows_manual_accuracy_from_the_grades_file(tmp_path):
+    R.run(tmp_path, ROWS, FakeAsk(), CONFIG)
+    (tmp_path / "grades.jsonl").write_text(json.dumps({"id": "f1", "rep": 1, "grade": "c", "unfaithful": False}) + "\n", encoding="utf-8")
+    text = R.report(tmp_path, ROWS)
+    assert "| dev | all | 3 |" in text and "1 c, 0 p, 0 w, 1 ungraded" in text and "0/1" in text
+
+
 def test_report_on_a_version_that_never_ran_is_a_clear_error(tmp_path):
     with pytest.raises(R.RunError, match="no run"):
         R.report(tmp_path / "v9", ROWS)

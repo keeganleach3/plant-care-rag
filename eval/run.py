@@ -96,6 +96,7 @@ def report(out_dir: Path, rows: list[dict]) -> str:
     config = json.loads((out_dir / "config.json").read_text(encoding="utf-8"))
     by_id = {r["id"]: r for r in rows}
     pairs = [(by_id[r["id"]], r) for r in _latest(out_dir).values() if r["id"] in by_id]
+    grades = {(g["id"], g["rep"]): g for g in _jsonl(out_dir / "grades.jsonl")}
     models = sorted({r["model"] for _, r in pairs if r.get("model")}) or ["—"]
     lines = [f"# Eval report: {out_dir.name}", "", "Config: " + " · ".join(f"{k}={v}" for k, v in config.items()),
              f"Models seen: {', '.join(models)} · gold: questions sha {_sha(json.dumps(rows, sort_keys=True))}", ""]
@@ -106,19 +107,24 @@ def report(out_dir: Path, rows: list[dict]) -> str:
                          + ", ".join(f"rep {k} {v}" for k, v in sorted(reps.items())))
     lines += ["", "Recall@k counts a required fact as found when any chunk in its gold group is retrieved. "
               "Hallucination = answered a must-refuse question; false refusal = refused an answerable one; error rows are "
-              f"excluded from both and listed by kind. Latency covers the timed (non-error) rows; P95 needs {P95_MIN} of them.", "",
-              "| split | category | n | recall@k | hallucination | false refusal | errors | timed | P50 total ms | P95 total ms | P50 generate ms | P95 generate ms |",
-              "|---|---|---|---|---|---|---|---|---|---|---|---|"]
+              f"excluded from both and listed by kind. Accuracy covers answerable questions: Keegan's manual grade (correct / "
+              "partial / wrong) for each answer, a refusal counted as wrong; unfaithful = graded answers he marked as saying "
+              f"something not in his notes. Latency covers the timed (non-error) rows; P95 needs {P95_MIN} of them.", "",
+              "| split | category | n | recall@k | accuracy | unfaithful | hallucination | false refusal | errors | timed | P50 total ms | P95 total ms | P50 generate ms | P95 generate ms |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for split in questions.SPLITS:
         in_split = [(q, r) for q, r in pairs if q["split"] == split]
         for cat in ("all",) + (questions.CATEGORIES if split == "dev" else ()):
             sel = in_split if cat == "all" else [(q, r) for q, r in in_split if q["category"] == cat]
             if not sel:
                 continue
-            s = grade.summarize(sel)
+            s = grade.summarize(sel, grades)
             recall, n_recall = s["recall"]
             p95 = lambda key: _num(s[key], "{:.0f}") if s["timed"] >= P95_MIN else "—"
-            cells = [split, cat, s["n"], "—" if not n_recall else f"{recall:.2f} (n={n_recall})", _frac(s["hallucination"]),
+            acc = s["accuracy"]
+            accuracy = "—" if not acc else ", ".join(f"{acc.get(k, 0)} {k}" for k in "cpw") + (f", {acc['ungraded']} ungraded" if acc.get("ungraded") else "")
+            cells = [split, cat, s["n"], "—" if not n_recall else f"{recall:.2f} (n={n_recall})", accuracy, _frac(s["unfaithful"]),
+                     _frac(s["hallucination"]),
                      _frac(s["false_refusal"]), ", ".join(f"{k} {v}" for k, v in sorted(s["errors"].items())) or "0",
                      s["timed"], _num(s["p50_total_ms"], "{:.0f}"), p95("p95_total_ms"),
                      _num(s["p50_generate_ms"], "{:.0f}"), p95("p95_generate_ms")]
