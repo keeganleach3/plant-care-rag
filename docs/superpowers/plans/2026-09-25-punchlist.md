@@ -37,3 +37,9 @@ validated `citations` list is the source the UI will render.
 ## Open at round end
 
 Keegan's blind picks: m04/m06 (v1.1 vs v2, sent 2026-09-24) and 14 questions v2.1 vs v3 (sent 2026-09-25). Judge alignment still needs graded answers. GitHub push not yet asked for. Act 2, if any, on the `cc` backend.
+
+## Ask 5 — "all correct on the generations as far as I can tell"
+
+- [x] Recorded for the v2.1-vs-v3 sheet: 13 questions graded c for both versions (`eval/results/v2.1/grades.jsonl`, `eval/results/v3/grades.jsonl`), comparison 14 ties (`eval/results/comparisons/v2.1_vs_v3.jsonl`), `eval.compare v2.1 v3` → `v2.1 0 · v3 0 · tie 14 · sign test p = 1.0`; reports show `13 c, 0 p, 0 w, 1 ungraded`
+- [ ] m04 grade: both answers say they have no feeding information (retrieval misses the first-watering section); his v0 grading counted that gap as partial, so asked, not assumed
+- [ ] whether "all correct" also covers the m04/m06 v1.1-vs-v2 sheet (sent 2026-09-24): asked
