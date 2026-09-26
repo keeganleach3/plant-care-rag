@@ -1,0 +1,13 @@
+{
+  "mode": "vector",
+  "k": 5,
+  "decompose": true,
+  "embed_model": "BAAI/bge-base-en-v1.5",
+  "llm_backend": "cc",
+  "llm_model": "claude-sonnet-5",
+  "effort": "low",
+  "code_sha": "7aa48107407a",
+  "sql_sha": "6c077bf9564a",
+  "chunks_sha": "b015aee15638",
+  "questions_sha": "bf1b3b20e24b"
+}
