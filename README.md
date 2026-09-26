@@ -39,8 +39,9 @@ flowchart LR
 - **Retrieval** is cosine search over `BAAI/bge-base-en-v1.5` embeddings. A message with several questions ("how long
   do they stay in the dome and when can i start feeding them") is also searched per question and the rankings are
   fused. `mode=hybrid` adds a full-text leg fused by reciprocal rank.
-- **Generation** returns `{answer, citations, refused}` under a JSON schema. A citation outside the retrieved set,
-  in the list or inline in the text, rejects the answer; a refusal is one exact sentence; the question is wrapped as
+- **Generation** returns `{answer, citations, refused}` under a JSON schema. The answer text carries no section ids;
+  the citations list does, and a UI shows it. A citation outside the retrieved set, in the list or in the text,
+  rejects the answer; a refusal is one exact sentence; the question is wrapped as
   data and the prompt tells the model to ignore any instructions inside it.
 
 ## Evaluation
@@ -63,19 +64,21 @@ split holds out 15 of them; the holdout is never read question by question and i
 
 ### Results on the dev split
 
-`n` is the answerable questions scored (the other 9 dev questions must be refused).
+`n` is the answerable questions scored (the other 9 dev questions must be refused); **inline ids** counts answers with a
+`[doc#section]` marker in their text.
 
-Regenerate with `uv run python -m eval.table v0 v0.1 v1 v1.1 v2 v2.1`; each version's one change and the failure that
+Regenerate with `uv run python -m eval.table v0 v0.1 v1 v1.1 v2 v2.1 v3`; each version's one change and the failure that
 motivated it are in `eval/results/<version>/change.md`, and its full report in `report.md` beside it.
 
-| version | k | n | recall@k | multi-hop recall@k | hallucination | false refusal | narrates | errors | P50 total s |
-|---|---|---|---|---|---|---|---|---|---|
-| v0 | 5 | 14 | 0.89 | 0.75 | 0/9 | 0/14 | 3/14 | 0 | 7.2 |
-| v0.1 | 5 | 14 | 0.91 | 0.79 | 0/9 | 0/14 | 2/14 | 0 | 9.1 |
-| v1 | 5 | 14 | 0.91 | 0.79 | 0/9 | 0/14 | 0/14 | 0 | 8.6 |
-| v1.1 | 5 | 14 | 0.88 | 0.71 | 0/9 | 0/14 | 1/14 | 0 | 10.2 |
-| v2 | 5 | 14 | 0.95 | 0.88 | 0/9 | 0/14 | 0/14 | 0 | 9.6 |
-| v2.1 | 5 | 14 | 0.95 | 0.88 | 0/9 | 0/14 | 1/14 | 0 | 11.0 |
+| version | k | n | recall@k | multi-hop recall@k | hallucination | false refusal | narrates | inline ids | errors | P50 total s |
+|---|---|---|---|---|---|---|---|---|---|---|
+| v0 | 5 | 14 | 0.89 | 0.75 | 0/9 | 0/14 | 3/14 | 7/14 | 0 | 7.2 |
+| v0.1 | 5 | 14 | 0.91 | 0.79 | 0/9 | 0/14 | 2/14 | 7/14 | 0 | 9.1 |
+| v1 | 5 | 14 | 0.91 | 0.79 | 0/9 | 0/14 | 0/14 | 7/14 | 0 | 8.6 |
+| v1.1 | 5 | 14 | 0.88 | 0.71 | 0/9 | 0/14 | 1/14 | 4/14 | 0 | 10.2 |
+| v2 | 5 | 14 | 0.95 | 0.88 | 0/9 | 0/14 | 0/14 | 6/14 | 0 | 9.6 |
+| v2.1 | 5 | 14 | 0.95 | 0.88 | 0/9 | 0/14 | 1/14 | 3/14 | 0 | 11.0 |
+| v3 | 5 | 14 | 0.95 | 0.88 | 0/9 | 0/14 | 1/14 | 0/14 | 0 | 7.8 |
 
 - **v0 → v0.1**, corpus fixes from the grower's grades of v0 (two answers were partial for missing content).
 - **v0.1 → v1**, prompt rewrite for answer voice: the grower preferred v1 on 12 of 14 questions, blind
@@ -84,6 +87,8 @@ motivated it are in `eval/results/<version>/change.md`, and its full report in `
   fell from rank 4 to 7 for m06.
 - **v1.1 → v2**, question decomposition: multi-hop recall 0.71 → 0.88, with no other question's retrieval changed.
 - **v2 → v2.1**, the same config re-run on the production-hardened code: the gate passes with identical recall.
+- **v2.1 → v3**, section ids leave the answer text for the citations list, which a UI renders (the grower's call):
+  inline ids 3/14 → 0/14, the gate passes, and the two answers citing fewer sections were read and are complete.
 
 Answer-level numbers (narrates, latency) move between runs of the same config because generation is sampled; recall
 does not, because retrieval is deterministic. Latency is almost all generation: P50 retrieval, embedding included, is
