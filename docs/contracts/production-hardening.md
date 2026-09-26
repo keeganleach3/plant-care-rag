@@ -27,7 +27,7 @@ Areas touched: `rag/llm.py`, `rag/api.py`, `rag/db.py`, `rag/ingest.py`, `rag/co
 |---|---|
 | `documents`, `chunks` | no RLS by design: single-tenant public corpus, every row readable by the app, no per-user rows (contract-pipeline §3). Least-privilege app role is deferred (named in Open). |
 
-Secrets: `API_KEY` (new, optional) in `.env` / container env, never logged, never echoed. `ANTHROPIC_API_KEY` unchanged (Keegan pastes it for Act 2). Logs carry `question_chars` and a 12-hex `question_sha`, never the question text.
+Secrets: `API_KEY` (new, optional) in `.env` / container env, never logged, never echoed. `ANTHROPIC_API_KEY` unused: Keegan, 2026-09-25, "Lets avoid an API for now keep it all local no need to spend yet, if at all"; the `api` backend stays in code, tested with fakes only. Logs carry `question_chars` and a 12-hex `question_sha`, never the question text.
 
 ## 4. Failure & rollback
 

@@ -134,8 +134,9 @@ and CI settings checked by hand) and three stand, with the reasons recorded in
 
 ## Run it
 
-Needs Docker, [uv](https://docs.astral.sh/uv/), and either the Claude Code CLI signed in (`LLM_BACKEND=cc`, the
-default) or an Anthropic API key (`LLM_BACKEND=api`). The first run downloads the embedding model (about 420 MB).
+Everything runs locally and nothing is hosted: the project is demonstrated, not offered as a public service. Needs
+Docker, [uv](https://docs.astral.sh/uv/), and the Claude Code CLI signed in (`LLM_BACKEND=cc`, the default; every
+answer and eval run in this repo came from it). The first run downloads the embedding model (about 420 MB).
 
 ```bash
 cp .env.example .env
@@ -151,7 +152,9 @@ uv run python -m eval.run --version my-run --decompose     # dev split; writes e
 uv run python -m eval.gate v2 my-run
 ```
 
-The API also ships as a container (API backend only, since the CLI login stays on the host):
+The service also builds as a container for a keyed deployment on the Anthropic API backend (`LLM_BACKEND=api`, paid
+per call, never run for this project; the CLI login stays on the host, so the container can't use `cc`). Its guards
+were checked with a dummy key and no calls:
 
 ```bash
 LLM_BACKEND=api ANTHROPIC_API_KEY=... API_KEY=$(python -c "import secrets; print(secrets.token_urlsafe(32))") \
