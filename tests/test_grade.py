@@ -65,6 +65,14 @@ def test_summary_counts_narration_over_answered_rows_only():
     assert G.summarize(list(zip(qs, rs)))["narrates"] == (1, 2)
 
 
+def test_summary_counts_answers_with_inline_chunk_ids_over_answered_rows():
+    assert G.cites_inline("Hold 100 percent [general-acclimation#humidity-hold].") and not G.cites_inline("Hold 100 percent.")
+    qs = [ANSWER_Q, {**ANSWER_Q, "id": "f2"}, REFUSE_Q]
+    rs = [{**res(), "answer": "About 150 PPFD [general-light#x]."}, {**res(), "answer": "About 150 PPFD."},
+          {**res(refused=True), "answer": "I don't have information on that in my notes."}]
+    assert G.summarize(list(zip(qs, rs)))["inline_ids"] == (1, 2)
+
+
 def test_summary_of_nothing_applicable_has_a_zero_denominator():
     s = G.summarize([(ANSWER_Q, res())])
     assert s["hallucination"] == (0, 0)

@@ -14,7 +14,7 @@ from rag.retrieve import Hit
 REFUSAL = "I don't have information on that in my notes."
 MAX_QUESTION = 500
 MODEL, EFFORT = "claude-sonnet-5", "low"
-_INLINE_CITATION = re.compile(r"\[([a-z0-9-]+#[a-z0-9-]+)\]")
+INLINE_CITATION = re.compile(r"\[([a-z0-9-]+#[a-z0-9-]+)\]")
 SYSTEM = (PROMPTS / "answer.md").read_text(encoding="utf-8")
 SCHEMA = json.loads((PROMPTS / "answer.schema.json").read_text(encoding="utf-8"))
 
@@ -51,7 +51,7 @@ def answer(question: str, hits: list[Hit], *, call=llm.call, model=MODEL, effort
         return Answer(REFUSAL, [], True, result.usage, result.model, result.cost_usd)
     allowed = {h.chunk_id for h in hits}
     # inline [chunk_id] markers too: a UI renders them, so a forged one would show as a source
-    bad = [c for c in citations + _INLINE_CITATION.findall(p["answer"]) if c not in allowed]
+    bad = [c for c in citations + INLINE_CITATION.findall(p["answer"]) if c not in allowed]
     if bad:
         raise GenerationError("citation_invalid", f"cited chunk(s) not in retrieved set: {bad}")
     return Answer(p["answer"], citations, False, result.usage, result.model, result.cost_usd)

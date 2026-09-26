@@ -3,11 +3,16 @@ import re
 import statistics
 from collections import Counter
 
-from rag.generate import REFUSAL
+from rag.generate import INLINE_CITATION, REFUSAL
 
 # An answer that talks about its own retrieval ("the notes say", "the passages") instead of about the plant. The exact
 # refusal sentence is the one mention the prompt allows, including for the part of a question retrieval missed.
 _NARRATION = re.compile(r"\b(?:my|the|these) notes\b|\bpassages?\b|\bprovided (?:text|context|information|sources?)\b", re.I)
+
+
+def cites_inline(answer: str) -> bool:
+    """A `[doc#section]` marker in the answer text; since prompt v2 the citations list is the only place for them."""
+    return bool(INLINE_CITATION.search(answer))
 
 
 def narrates(answer: str) -> bool:
@@ -71,6 +76,7 @@ def summarize(pairs: list[tuple[dict, dict]], grades: dict | None = None) -> dic
     out["accuracy"], out["unfaithful"] = _accuracy(pairs, grades or {})
     answered = [r for r, g in graded if not g["error"] and not r["refused"]]
     out["narrates"] = (sum(narrates(r["answer"]) for r in answered), len(answered))
+    out["inline_ids"] = (sum(cites_inline(r["answer"]) for r in answered), len(answered))
     timed = [r["timings"] for r, g in graded if not g["error"]]
     out["timed"] = len(timed)
     for stage in ("total", "generate"):
