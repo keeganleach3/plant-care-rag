@@ -89,8 +89,8 @@ motivated it are in `eval/results/<version>/change.md`, and its full report in `
 - **v2 → v2.1**, the same config re-run on the production-hardened code: the gate passes with identical recall.
 - **v2.1 → v3**, section ids leave the answer text for the citations list, which a UI renders (the grower's call):
   inline ids 3/14 → 0/14, the gate passes, and the two answers citing fewer sections were read and are complete.
-  Blind side-by-side: the grower graded every answer from both versions correct (m04 held, see below) with no
-  preference between them (`uv run python -m eval.compare v2.1 v3`).
+  Blind side-by-side: the grower graded both versions' answers correct except m04, partial in both (the feeding
+  half is missed, see below), with no preference between them (`uv run python -m eval.compare v2.1 v3`).
 
 Answer-level numbers (narrates, latency) move between runs of the same config because generation is sampled; recall
 does not, because retrieval is deterministic. Latency is almost all generation: P50 retrieval, embedding included, is

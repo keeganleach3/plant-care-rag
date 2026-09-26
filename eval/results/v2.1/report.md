@@ -9,9 +9,9 @@ Recall@k counts a required fact as found when any chunk in its gold group is ret
 
 | split | category | n | recall@k | accuracy | unfaithful | narrates | inline ids | hallucination | false refusal | errors | timed | P50 total ms | P95 total ms | P50 generate ms | P95 generate ms |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-| dev | all | 23 | 0.95 (n=14) | 13 c, 0 p, 0 w, 1 ungraded | 0/13 | 1/14 | 3/14 | 0/9 | 0/14 | 0 | 23 | 10959 | 37714 | 10895 | 37692 |
+| dev | all | 23 | 0.95 (n=14) | 13 c, 1 p, 0 w | 0/14 | 1/14 | 3/14 | 0/9 | 0/14 | 0 | 23 | 10959 | 37714 | 10895 | 37692 |
 | dev | factual | 8 | 1.00 (n=8) | 8 c, 0 p, 0 w | 0/8 | 0/8 | 0/8 | — | 0/8 | 0 | 8 | 13694 | — | 13671 | — |
-| dev | multi-hop | 6 | 0.88 (n=6) | 5 c, 0 p, 0 w, 1 ungraded | 0/5 | 1/6 | 3/6 | — | 0/6 | 0 | 6 | 13048 | — | 13026 | — |
+| dev | multi-hop | 6 | 0.88 (n=6) | 5 c, 1 p, 0 w | 0/6 | 1/6 | 3/6 | — | 0/6 | 0 | 6 | 13048 | — | 13026 | — |
 | dev | oos-near | 6 | — | — | — | — | — | 0/6 | — | 0 | 6 | 5793 | — | 5771 | — |
 | dev | oos-far | 3 | — | — | — | — | — | 0/3 | — | 0 | 3 | 4472 | — | 4452 | — |
 

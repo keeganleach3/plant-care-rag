@@ -41,5 +41,6 @@ Keegan's blind picks: m04/m06 (v1.1 vs v2, sent 2026-09-24) and 14 questions v2.
 ## Ask 5 — "all correct on the generations as far as I can tell"
 
 - [x] Recorded for the v2.1-vs-v3 sheet: 13 questions graded c for both versions (`eval/results/v2.1/grades.jsonl`, `eval/results/v3/grades.jsonl`), comparison 14 ties (`eval/results/comparisons/v2.1_vs_v3.jsonl`), `eval.compare v2.1 v3` → `v2.1 0 · v3 0 · tie 14 · sign test p = 1.0`; reports show `13 c, 0 p, 0 w, 1 ungraded`
-- [ ] m04 grade: both answers say they have no feeding information (retrieval misses the first-watering section); his v0 grading counted that gap as partial, so asked, not assumed
+- [x] m04 grade: both answers say they have no feeding information (retrieval misses the first-watering section); his v0 grading counted that gap as partial, so asked, not assumed → Keegan: "m04 is partial ... both say no feeding info so thats a miss": p for v2.1 and v3; also p for v1.1 and v2 (the same missing half; his "too slow" remark answers v1.1's m04), stated to him so he can correct it; v2.1 and v3 reports `13 c, 1 p, 0 w`
+- [ ] corpus: "too slow isnt harmful just slows growth" contradicts `general-acclimation#humidity-hold-100-percent-for-the-first-week` ("Both directions of error hurt: stepping down too slowly delays growth ..."); rewrite proposed to Keegan, applied only on his OK, then ingest and a no-regression check
 - [ ] whether "all correct" also covers the m04/m06 v1.1-vs-v2 sheet (sent 2026-09-24): asked
