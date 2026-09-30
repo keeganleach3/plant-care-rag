@@ -33,10 +33,10 @@ The UI lives in `web/` (a Next.js app inside `app/` would put its routes at `app
 
 ### 7.1 API: `GET /sources` — service-implementer
 Fence: `rag/api.py`, `tests/test_api.py`. Shape and errors: chat-ui-api.md §3–4.
-- [ ] test first: lists every indexed section grouped by note, notes by genus then title, sections in ingest order; section count equals `SELECT count(*) FROM chunks` (fails today: 404)
-- [ ] test: with `API_KEY` set, no bearer → 401
-- [ ] test: database unreachable → 503 `db` with `Retry-After: 5`
-- [ ] route in `rag/api.py` on the existing pool and `authorize` dependency; full suite green (paste the last line)
+- [x] test first: lists every indexed section grouped by note, notes by genus then title, sections in ingest order; section count equals `SELECT count(*) FROM chunks` (fails today: 404) — `test_sources_lists_every_indexed_section_by_note_genus_then_title_in_ingest_order` failed first with `assert (404 == 200)`, passes (`dd0dd90`): exact body over 3 notes / 5 sections whose file order, genus-then-title order and heading order all disagree
+- [x] test: with `API_KEY` set, no bearer → 401 — `test_sources_needs_the_bearer_key_when_api_key_is_set` failed first with `assert (404 == 401)`; now no header and a wrong bearer → 401 `WWW-Authenticate: Bearer`, key absent from the body; the right bearer → 200
+- [x] test: database unreachable → 503 `db` with `Retry-After: 5` — the real-pool test (`127.0.0.1:1`) now covers it too, renamed `test_an_unreachable_database_fails_ask_readyz_and_sources_within_seconds`; failed first with `assert (404 == 503)`; now 503 `{"detail": "db"}`, `Retry-After: 5`, under 10 s
+- [x] route in `rag/api.py` on the existing pool and `authorize` dependency; full suite green (paste the last line) — `dd0dd90`: `175 passed, 1 warning in 23.24s` (173 before; the warning pre-dates it). Mutants 5/5 killed: no `authorize`, `OperationalError` unmapped, borrow without the 2 s timeout, title order dropped, sections by heading. Live on a scratch instance (:8731, random `API_KEY`, dev DB): no bearer → 401; bearer → 200, 22 notes, 96 sections = 96 `chunks` rows, same chunk_id set, genus-then-title order; database unreachable → 503 `{"detail":"db"}`, `retry-after: 5`, in 2.0 s
 - [ ] architect verified: curl against the live service
 
 ### 7.2 Web shell — inline (architect)
