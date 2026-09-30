@@ -21,7 +21,8 @@ Keegan's answers (2026-09-30), one block each. A box is checked only when DONE w
 - [x] history and tracked files scanned: no `.env`/credentials ever committed, no keys or tokens; only the local `plant:plant` fixture
 - [x] private repo `keeganleach3/plant-care-rag` created and pushed; first CI run on GitHub: `173 passed, 1 warning in 24.42s` (run 36766986718)
 - [ ] summary preview: README hero (UI screenshot/GIF), CI and license badges, at-a-glance results; social preview image 1280×640 (GitHub web setting)
-- [ ] Keegan: final read before public; then flip to public on his go
+- [x] Keegan (2026-09-30): "drop the framing issues". The superseded status doc is deleted; the other docs no longer name his other projects or call this a portfolio system (the `rag/llm.py` attribution line stays: it credits copied code). Git history still holds the old doc; purge only on his call, because a rewrite changes every hash since 2026-09-24 and the eval change notes cite commits by hash
+- [ ] flip to public on his go
 
 ## 6 — "I can open it when we demo it but seems like we have more changes to do."
 - [x] noted; Docker started for this round's ingest
