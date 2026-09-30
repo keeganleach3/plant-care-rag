@@ -1,11 +1,12 @@
-"""Local FastAPI service: POST /ask → answer + citations + retrieved chunks + stage timings.
+"""Local FastAPI service: POST /ask → answer + citations + retrieved chunks + stage timings; GET /sources → every indexed
+section, grouped by note (docs/contracts/chat-ui-api.md).
 
   uv run uvicorn rag.api:app --host 127.0.0.1 --port 8000
 The embedding model is loaded once at startup (≈11 s) and held in memory; per-request cost is embed + retrieve + generate.
 Serving guards (docs/contracts/production-hardening.md): a checked connection pool with connect and statement timeouts;
 MAX_INFLIGHT concurrent generations, then 503 busy; a 4096-byte body cap; GET /healthz and /readyz; one JSON log line per
-/ask (request id, never the question text); API_KEY bearer check on /ask (32+ chars, required on the paid api backend;
-set, it also hides /docs and the OpenAPI schema).
+/ask (request id, never the question text); API_KEY bearer check on /ask and /sources (32+ chars, required on the paid api
+backend; set, it also hides /docs and the OpenAPI schema).
 """
 import hashlib
 import hmac
@@ -127,6 +128,22 @@ def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
         if failed:
             return JSONResponse({"status": "not ready", "failed": failed}, status_code=503)
         return {"status": "ready", "chunks": n}
+
+    @app.get("/sources", dependencies=[Depends(authorize)])
+    def sources():
+        """Every indexed section, grouped by note: notes by genus then title, sections in ingest order."""
+        try:
+            with borrow(READY_TIMEOUT_S) as c:
+                rows = c.execute("""SELECT d.slug, d.title, d.genus, d.topic, c.chunk_id, c.heading, c.content
+                                    FROM documents d JOIN chunks c ON c.document_id = d.id
+                                    ORDER BY d.genus, d.title, c.id""").fetchall()
+        except psycopg.OperationalError:  # unreachable, every connection held past the wait, or statement timeout
+            raise HTTPException(503, "db", headers={"Retry-After": "5"})
+        notes = {}
+        for slug, title, genus, topic, chunk_id, heading, content in rows:
+            note = notes.setdefault(slug, {"slug": slug, "title": title, "genus": genus, "topic": topic, "sections": []})
+            note["sections"].append({"chunk_id": chunk_id, "heading": heading, "content": content})
+        return {"embed_model": cfg["EMBED_MODEL"], "notes": list(notes.values())}
 
     @app.post("/ask", dependencies=[Depends(authorize)])
     def ask(req: AskRequest, request: Request):

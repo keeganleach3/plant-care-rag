@@ -88,6 +88,16 @@ def test_ask_needs_the_bearer_key_when_api_key_is_set(conn, tmp_path, monkeypatc
     assert key not in caplog.text
 
 
+def test_sources_needs_the_bearer_key_when_api_key_is_set(conn, tmp_path, monkeypatch):
+    key = secrets.token_urlsafe(32)
+    monkeypatch.setenv("API_KEY", key)
+    client = _client(conn, tmp_path, fake_call)
+    for auth in (None, f"Bearer {key}x"):
+        r = client.get("/sources", headers={} if auth is None else {"Authorization": auth})
+        assert r.status_code == 401 and r.headers["WWW-Authenticate"] == "Bearer" and key not in r.text, auth
+    assert client.get("/sources", headers={"Authorization": f"Bearer {key}"}).status_code == 200
+
+
 def test_open_ask_is_warned_once_at_startup(conn, monkeypatch, caplog):
     def warnings():
         return [r.getMessage() for r in caplog.records if r.name == "rag.api" and r.levelno >= logging.WARNING]
@@ -260,7 +270,7 @@ def test_readyz_and_startup_refuse_vectors_from_another_embedding_model(conn, tm
             pass
 
 
-def test_an_unreachable_database_fails_ask_and_readyz_within_seconds(monkeypatch, caplog):
+def test_an_unreachable_database_fails_ask_readyz_and_sources_within_seconds(monkeypatch, caplog):
     monkeypatch.setenv("DATABASE_URL", "postgresql://plant:plant@127.0.0.1:1/plantcare")
     monkeypatch.setenv("MAX_INFLIGHT", "1")
     with TestClient(api.create_app(embedder=Embedder("BAAI/bge-base-en-v1.5", model=FakeModel()), call=fake_call)) as client:
@@ -272,6 +282,10 @@ def test_an_unreachable_database_fails_ask_and_readyz_within_seconds(monkeypatch
         t = time.perf_counter()
         r = client.get("/readyz")
         assert r.status_code == 503 and r.json()["failed"] == ["db"] and time.perf_counter() - t < 10
+        t = time.perf_counter()
+        r = client.get("/sources")
+        assert r.status_code == 503 and r.json() == {"detail": "db"} and r.headers["Retry-After"] == "5"
+        assert time.perf_counter() - t < 10
     warned = [rec.getMessage() for rec in caplog.records if rec.name == "rag.api" and rec.levelno == logging.WARNING]
     assert any("first /ask" in w for w in warned)  # the embed_model check waits for the database
 
@@ -393,3 +407,26 @@ def test_readyz_fails_llm_when_the_cc_backend_has_no_claude_cli(conn, tmp_path, 
     monkeypatch.setenv("LLM_BACKEND", "api")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "unused")
     assert TestClient(api.create_app(conn=conn, embedder=emb)).get("/readyz").status_code == 200  # no CLI on that path
+
+
+def test_sources_lists_every_indexed_section_by_note_genus_then_title_in_ingest_order(conn, tmp_path):
+    # file (ingest) order runs opposite to genus-then-title, and headings run opposite to ingest order
+    for stem, genus, topic, title, body in [
+            ("a-mon", "monstera", "light", "Light", "## Window\n\nEast window.\n\n## Grow lights\n\nTwelve hours.\n"),
+            ("b-alo", "alocasia", "pests", "Pests", "## Thrips\n\nBlue sticky cards.\n\n## Mites\n\nSpray weekly.\n"),
+            ("c-alo", "alocasia", "humidity", "Humidity", "## Tent\n\nTent it.\n")]:
+        (tmp_path / f"{stem}.md").write_text(f"---\ntitle: {title}\ngenus: {genus}\ntopic: {topic}\nverified: true\n---\n\n{body}",
+                                             encoding="utf-8")
+    emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
+    ingest.run(tmp_path, conn, emb)
+    r = TestClient(api.create_app(conn=conn, embedder=emb)).get("/sources")
+    assert r.status_code == 200 and r.json() == {"embed_model": "BAAI/bge-base-en-v1.5", "notes": [
+        {"slug": "c-alo", "title": "Humidity", "genus": "alocasia", "topic": "humidity",
+         "sections": [{"chunk_id": "c-alo#tent", "heading": "Tent", "content": "Tent it."}]},
+        {"slug": "b-alo", "title": "Pests", "genus": "alocasia", "topic": "pests",
+         "sections": [{"chunk_id": "b-alo#thrips", "heading": "Thrips", "content": "Blue sticky cards."},
+                      {"chunk_id": "b-alo#mites", "heading": "Mites", "content": "Spray weekly."}]},
+        {"slug": "a-mon", "title": "Light", "genus": "monstera", "topic": "light",
+         "sections": [{"chunk_id": "a-mon#window", "heading": "Window", "content": "East window."},
+                      {"chunk_id": "a-mon#grow-lights", "heading": "Grow lights", "content": "Twelve hours."}]}]}
+    assert sum(len(n["sections"]) for n in r.json()["notes"]) == conn.execute("SELECT count(*) FROM chunks").fetchone()[0]
