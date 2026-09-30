@@ -9,6 +9,7 @@ verified: true
 <!-- 2026-09-24: leaf-melt and yellowing sections plus the sink-water fix come from Keegan's answers during eval gold review (typed, structured by Claude; no facts added). Added after the eval questions f06 and m05 were written. -->
 <!-- 2026-09-24: "base of the plant" instead of "stem" in the leaf-melt section, from Keegan's v0 grading feedback. -->
 <!-- 2026-09-24: "no need to turn the light up" in the plantlet light section, from Keegan's v0.1-vs-v1 comparison notes. -->
+<!-- 2026-09-30: a too-slow humidity step-down is not harmful, it only slows growth (Keegan's m04 grading note, sentence approved by him). -->
 
 ## How tissue-culture plantlets arrive
 
@@ -36,7 +37,7 @@ Plantlets go into very small clear pots, about one and a half inches, set in a 7
 
 ## Humidity: hold 100 percent for the first week
 
-Starting humidity is always 100 percent, either a single pot under its own dome or a tray with a dome. Hold 100 percent for at least a week. After about a week, start opening the vents or lifting the lid slightly and keep stepping the humidity down slowly from there. Both directions of error hurt: stepping down too slowly delays growth because the plant needs airflow and lower humidity to keep acclimating, and stepping down too fast, or never giving 100 percent at the start, kills plantlets.
+Starting humidity is always 100 percent, either a single pot under its own dome or a tray with a dome. Hold 100 percent for at least a week. After about a week, start opening the vents or lifting the lid slightly and keep stepping the humidity down slowly from there. Stepping down too slowly is not harmful; it only slows growth, because the plant needs airflow and lower humidity to keep acclimating. Stepping down too fast, or never giving 100 percent at the start, kills plantlets.
 
 ## Watering cadence under the dome
 
