@@ -1,0 +1,662 @@
+{
+ "_source": "GET /sources shape (docs/contracts/chat-ui-api.md), snapshot of the dev database 2026-09-30",
+ "embed_model": "BAAI/bge-base-en-v1.5",
+ "notes": [
+  {
+   "slug": "alocasia-acclimation",
+   "title": "Alocasia from tissue culture: slower step-down, leaf drop, and dormancy",
+   "genus": "alocasia",
+   "topic": "acclimation",
+   "sections": [
+    {
+     "chunk_id": "alocasia-acclimation#all-alocasia-get-the-same-treatment",
+     "heading": "All Alocasia get the same treatment",
+     "content": "No single Alocasia is grown here more than the others. Some are more sensitive and slower-growing than others, but every Alocasia gets the same materials and protocol. An extremely expensive plant gets more consistent watching and care, but nothing about the substrate, water, or schedule changes."
+    },
+    {
+     "chunk_id": "alocasia-acclimation#alocasia-need-a-slower-humidity-step-down-than-monstera",
+     "heading": "Alocasia need a slower humidity step-down than Monstera",
+     "content": "Alocasia stay at 100 percent humidity for about 15 to 20 days before the step-down starts, longer than a Monstera. Then, instead of reaching 65 percent humidity in about three weeks the way a Monstera does, an Alocasia takes four to five weeks to reach 65 percent. Once acclimated, an Alocasia is still not moved straight into ambient room humidity the way a Monstera can be; to bring one down to ambient humidity, give it a gradual acclimation like the one used for the tissue culture."
+    },
+    {
+     "chunk_id": "alocasia-acclimation#leaf-drop-during-alocasia-acclimation-is-normal",
+     "heading": "Leaf drop during Alocasia acclimation is normal",
+     "content": "Alocasia lose leaves during acclimation very often. Most of the time new leaves replace the ones that drop. If the plant goes dormant instead, give it one to two months, sometimes longer, to show signs of growth or improvement before giving up, as long as the rhizome at the center stays firm."
+    }
+   ]
+  },
+  {
+   "slug": "alocasia-pests",
+   "title": "Alocasia leaf spot, fungus, and pest pressure",
+   "genus": "alocasia",
+   "topic": "pests",
+   "sections": [
+    {
+     "chunk_id": "alocasia-pests#leaf-spot-on-alocasia-what-it-looks-like",
+     "heading": "Leaf spot on Alocasia: what it looks like",
+     "content": "Fungal leaf spot on Alocasia shows as black or brown spots on random parts of the leaf with rings around each spot. It is the most common fungal problem on this genus."
+    },
+    {
+     "chunk_id": "alocasia-pests#leaf-spot-on-alocasia-what-to-do",
+     "heading": "Leaf spot on Alocasia: what to do",
+     "content": "Cut off the affected leaves immediately, even if it is the plant's only leaf, and spray with a copper fungicide. A fungicide can also be applied while watering. If leaf spot keeps recurring, add more airflow to the setup. Isolate the plant if it sits near other Alocasia, and treat the surrounding plants with a fungicide as well, exactly as you would for a pest outbreak."
+    },
+    {
+     "chunk_id": "alocasia-pests#alocasia-attract-more-pests-and-get-treated-longer",
+     "heading": "Alocasia attract more pests and get treated longer",
+     "content": "Alocasia tend to attract more pests than other genera. When pests are found on an Alocasia, treat for longer than you would treat a Monstera, and keep watching the plant closely afterward to confirm nothing new has arrived. The pest protocols themselves (thrips, spider mites, mealybugs) are the same as for other aroids."
+    }
+   ]
+  },
+  {
+   "slug": "alocasia-substrate-water",
+   "title": "Alocasia self-watering wick setup",
+   "genus": "alocasia",
+   "topic": "substrate-water",
+   "sections": [
+    {
+     "chunk_id": "alocasia-substrate-water#alocasia-grow-in-a-wick-fed-semi-hydro-setup",
+     "heading": "Alocasia grow in a wick-fed semi-hydro setup",
+     "content": "Alocasia here are kept in a semi-hydro style setup: the plant stays in the tree fern fiber and perlite mix, with a simple cotton wick strung through the bottom of the pot down into a water reservoir underneath. Pon or LECA work too, and there are many ready-made wick pots sold online; the cotton string is just the simplest version. The point is consistent moisture, which Alocasia need and an irregular hand-watering schedule does not give them."
+    },
+    {
+     "chunk_id": "alocasia-substrate-water#topping-up-an-alocasia-wick-reservoir",
+     "heading": "Topping up an Alocasia wick reservoir",
+     "content": "Refill the reservoir when it gets low, around half an inch of water left, so the cotton wick never dries out and stays moist all the way up into the pot."
+    }
+   ]
+  },
+  {
+   "slug": "alocasia-troubleshooting",
+   "title": "Alocasia symptoms customers ask about most",
+   "genus": "alocasia",
+   "topic": "troubleshooting",
+   "sections": [
+    {
+     "chunk_id": "alocasia-troubleshooting#droopy-or-dying-leaves-on-a-small-alocasia",
+     "heading": "Droopy or dying leaves on a small Alocasia",
+     "content": "Alocasia are dramatic: droopy leaves and leaves dying one after another are the most common customer complaint, and it is usually an overreaction. A small Alocasia normally cannot hold more than a couple of leaves. While small, it will typically grow one new leaf while the older leaf dies at the same time, so the plant sits at one leaf. Give it time; as the root system gets stronger and the plant gets bigger it will hold more leaves."
+    },
+    {
+     "chunk_id": "alocasia-troubleshooting#alocasia-need-consistent-water-fertilizer-and-light",
+     "heading": "Alocasia need consistent water, fertilizer, and light",
+     "content": "Alocasia are heavy feeders and need a lot of nutrients, plus consistent light. They also need very consistent watering and do not tolerate an irregular schedule the way a Monstera might. A self-watering setup is highly recommended for Alocasia to keep the watering consistent."
+    }
+   ]
+  },
+  {
+   "slug": "anthurium-acclimation",
+   "title": "Anthurium from tissue culture: step-down, rooting, and substrate",
+   "genus": "anthurium",
+   "topic": "acclimation",
+   "sections": [
+    {
+     "chunk_id": "anthurium-acclimation#which-anthurium-this-covers",
+     "heading": "Which Anthurium this covers",
+     "content": "A variety of Anthurium are grown from tissue culture here, no single kind more than others. Unlike the Monstera, they are mostly green rather than variegated: Anthurium warocqueanum (Queen), King of Spades, Delta Force, and similar."
+    },
+    {
+     "chunk_id": "anthurium-acclimation#anthurium-humidity-step-down-sits-between-monstera-and-alocasia",
+     "heading": "Anthurium humidity step-down sits between Monstera and Alocasia",
+     "content": "Anthurium are more humidity-sensitive than Monstera. Their step-down gets more time than a Monstera and less time than an Alocasia, sitting right between the two. Otherwise they get the same protocol as a Monstera."
+    },
+    {
+     "chunk_id": "anthurium-acclimation#anthurium-rooting-speed",
+     "heading": "Anthurium rooting speed",
+     "content": "Monstera root fastest. Anthurium and Alocasia are the second tier and root and grow at a similar speed to each other. Philodendron are the slowest."
+    },
+    {
+     "chunk_id": "anthurium-acclimation#rot-right-after-deflasking-shows-late-and-subtly",
+     "heading": "Rot right after deflasking shows late and subtly",
+     "content": "Alocasia are the only genus that gives an obvious leaf sign the moment it starts doing poorly. In Anthurium and most others, directly after planting from tissue culture the first sign of rot is a loss of firmness: the plant cannot stand up on its own. By the time leaves start dying it is usually too late. A plant you care about needs close, regular inspection; beyond that, some of it is trial and error, and every grower's substrate, watering, and fertilizer choices shift where the line is. Once a plant is established, rot shows the normal way: yellowing, wilting, droopiness, browning edges, and mushy sections."
+    },
+    {
+     "chunk_id": "anthurium-acclimation#anthurium-substrate-and-watering",
+     "heading": "Anthurium substrate and watering",
+     "content": "Anthurium want lots of light and a chunky soil, but slightly thicker and not quite as chunky as the Monstera mix, because their roots start thinner. Do not let an Anthurium dry out as much as a Monstera."
+    },
+    {
+     "chunk_id": "anthurium-acclimation#moss-at-the-base-speeds-rooting-on-larger-anthurium",
+     "heading": "Moss at the base speeds rooting on larger Anthurium",
+     "content": "This is for larger, established Anthurium, not for tissue-culture acclimation. Anthurium root from the base of the plant, so stacking a little moss over the soil around the root base, or adding a bit of soil there, gives those roots something to grow into and usually speeds up growth. Anthurium also do well climbing."
+    }
+   ]
+  },
+  {
+   "slug": "anthurium-pests",
+   "title": "Anthurium pests and fungus",
+   "genus": "anthurium",
+   "topic": "pests",
+   "sections": [
+    {
+     "chunk_id": "anthurium-pests#no-anthurium-specific-pests-or-fungus",
+     "heading": "No Anthurium-specific pests or fungus",
+     "content": "There are no pests or fungal problems specific to Anthurium. They are treated the same as a Monstera: manual wiping, consistent spraying, and regular checking, following the general thrips, spider mite, and mealybug protocols. Anthurium are watched less closely for pests than Alocasia, which is the one genus most prone to both pests and fungus, but every plant still gets checked."
+    }
+   ]
+  },
+  {
+   "slug": "anthurium-troubleshooting",
+   "title": "Anthurium symptoms customers ask about most",
+   "genus": "anthurium",
+   "topic": "troubleshooting",
+   "sections": [
+    {
+     "chunk_id": "anthurium-troubleshooting#brown-tips-and-slow-growth-on-anthurium",
+     "heading": "Brown tips and slow growth on Anthurium",
+     "content": "Brown tips and slow growth are the Anthurium questions customers ask most, and they are normally a humidity and watering issue. The common mistake is giving an Anthurium too little light and treating it as fussily as an Alocasia. Anthurium are not as dramatic as Alocasia and hold up well; the one thing to guard is never letting them dry out completely."
+    }
+   ]
+  },
+  {
+   "slug": "general-humidity",
+   "title": "Airflow and vent timing in grow cabinets and tents",
+   "genus": "general",
+   "topic": "humidity",
+   "sections": [
+    {
+     "chunk_id": "general-humidity#every-grow-area-has-a-light-fan-running",
+     "heading": "Every grow area has a light fan running",
+     "content": "Every cabinet and grow area has a light fan to fight fungus and mold. It does not need to be strong: leaves should not be whipping around. The test is slight movement in some leaves, or a little movement in the fabric wall of a grow tent. That is enough to keep the air from going still and stale around the plants, which is what causes fungal problems. When fungus shows up anywhere, airflow is one of the first things to check."
+    },
+    {
+     "chunk_id": "general-humidity#vent-timing-works-like-lid-timing",
+     "heading": "Vent timing works like lid timing",
+     "content": "Opening the vents on a dome follows the same rule as lifting the lid: open a little more over time, slowly, as part of the humidity step-down. There is no separate vent schedule."
+    }
+   ]
+  },
+  {
+   "slug": "general-acclimation",
+   "title": "Deflasking and acclimating tissue-culture aroid plantlets",
+   "genus": "general",
+   "topic": "acclimation",
+   "sections": [
+    {
+     "chunk_id": "general-acclimation#how-tissue-culture-plantlets-arrive",
+     "heading": "How tissue-culture plantlets arrive",
+     "content": "Tissue-culture (TC) aroid plantlets arrive sealed in a bag, still in agar. They are usually about two inches tall, a little smaller or larger depending on the plant, with only a few leaves."
+    },
+    {
+     "chunk_id": "general-acclimation#unopened-bags-and-flasks-must-stay-below-75-f",
+     "heading": "Unopened bags and flasks must stay below 75°F",
+     "content": "This is the one temperature rule that matters and most people do not know it: while plantlets are still sealed in the bag or flask, keep them below 75°F. If tissue-culture plantlets are being stored unplanted for a couple of days or longer, they must stay in a cooler spot, because in the bag they melt if it gets too hot. Once they are out of the bag and planted, ordinary room temperatures are fine."
+    },
+    {
+     "chunk_id": "general-acclimation#temperature-once-planted",
+     "heading": "Temperature once planted",
+     "content": "Nothing specific is done to monitor or control temperature after planting. In a San Diego grow space the plants never sit below about 70°F, usually top out around 80 to 85°F, reach about 88°F on a very hot day, and stay below 90°F."
+    },
+    {
+     "chunk_id": "general-acclimation#day-0-to-day-2-leave-them-sealed",
+     "heading": "Day 0 to day 2: leave them sealed",
+     "content": "When plantlets arrive, do not open the bag. Let them sit sealed for a day or two in the spot where they will be grown, so they adjust to that room's temperature and light before anything else changes."
+    },
+    {
+     "chunk_id": "general-acclimation#deflasking-washing-off-the-agar",
+     "heading": "Deflasking: washing off the agar",
+     "content": "After the one-to-two day rest, take the plantlets out of the bag and rinse them under flowing water at the sink. Wash off all of the agar. Peel off any dead leaves. Then soak the plantlets for about fifteen minutes in a bowl of water with a few drops of iodine, very diluted. After the soak, pot them straight into their first container."
+    },
+    {
+     "chunk_id": "general-acclimation#starting-containers-small-clear-pots-under-a-dome",
+     "heading": "Starting containers: small clear pots under a dome",
+     "content": "Plantlets go into very small clear pots, about one and a half inches, set in a 72-cell plant tray with a humidity dome over it. Clear pots matter because root growth through the pot wall is the main sign that acclimation is working."
+    },
+    {
+     "chunk_id": "general-acclimation#humidity-hold-100-percent-for-the-first-week",
+     "heading": "Humidity: hold 100 percent for the first week",
+     "content": "Starting humidity is always 100 percent, either a single pot under its own dome or a tray with a dome. Hold 100 percent for at least a week. After about a week, start opening the vents or lifting the lid slightly and keep stepping the humidity down slowly from there. Stepping down too slowly is not harmful; it only slows growth, because the plant needs airflow and lower humidity to keep acclimating. Stepping down too fast, or never giving 100 percent at the start, kills plantlets."
+    },
+    {
+     "chunk_id": "general-acclimation#watering-cadence-under-the-dome",
+     "heading": "Watering cadence under the dome",
+     "content": "Water once at potting. Because humidity sits at 100 percent under the dome, it is usually at least ten days before the plantlets need water again."
+    },
+    {
+     "chunk_id": "general-acclimation#signs-acclimation-is-working",
+     "heading": "Signs acclimation is working",
+     "content": "Root growth is the main sign. With clear pots, visible roots mean things are going well. A second check when roots are not visible yet: tap the plant lightly, and if it feels more stable in the pot than before, it is rooting. Alocasia can drop every leaf during acclimation and people give up on them, but as long as the center of the plant, the rhizome, is still firm, keep it and keep watering; it will grow back."
+    },
+    {
+     "chunk_id": "general-acclimation#signs-of-early-failure",
+     "heading": "Signs of early failure",
+     "content": "Failure shows fast. A plantlet that flops over early is rotting from the center. A center that is soft rather than firm means the plant is lost."
+    },
+    {
+     "chunk_id": "general-acclimation#when-acclimation-is-done",
+     "heading": "When acclimation is done",
+     "content": "There is no single tell. Acclimation is done when the dome or lid can stay completely off and the plant is ready to move up a pot size. In a grow space held at 65 to 80 percent ambient humidity, stepping a Monstera down from 100 percent to 65 percent takes about three weeks, roughly 18 to 21 days, sometimes a little longer. Alocasia take four to five weeks. Anthurium and Philodendron sit in between. A drier room takes longer for all of them."
+    },
+    {
+     "chunk_id": "general-acclimation#mistakes-beginners-make-most",
+     "heading": "Mistakes beginners make most",
+     "content": "First: overdoing the start. Distilled water, extra coatings, hormones, and fertilizer on top of each other are not needed, and success rates were higher cleaning the plantlets off under plain running water at the sink. Second: mistiming the humidity step-down, either dragging it out (delayed growth, the plant needs airflow) or yanking the dome off or never starting at 100 percent (kills the plant). Third: potting into a soil that is too dense."
+    },
+    {
+     "chunk_id": "general-acclimation#up-potting-wait-for-root-bound-do-not-disturb-the-roots",
+     "heading": "Up-potting: wait for root-bound, do not disturb the roots",
+     "content": "Do not rush the up-pot. Wait until the plant is properly root-bound, with lots of roots circling the pot. Alocasia especially like to be tightly bound. Customers often up-pot the moment a plant looks snug, but most of these plants prefer it and do not want their roots disturbed. When you do up-pot, leave the root ball alone even if the roots are circling everywhere; at most loosen the bottom slightly. Breaking the root ball apart damages the fine root hairs, including ones you cannot see, and the plant takes much longer to recover."
+    },
+    {
+     "chunk_id": "general-acclimation#light-around-150-ppfd-for-10-to-12-hours",
+     "heading": "Light: around 150 PPFD for 10 to 12 hours",
+     "content": "Light intensity and fixture distance depend on the light, so the target is the reading, not the distance: around 150 PPFD (not an exact figure) for about ten to twelve hours a day, versus at least 250 for established plants. As the plantlets grow taller they get closer to the fixture, which raises their light exposure on its own and matches their growing need for light, so there is no need to turn the light up."
+    },
+    {
+     "chunk_id": "general-acclimation#leaves-melting-away-after-planting-is-common",
+     "heading": "Leaves melting away after planting is common",
+     "content": "After planting from tissue culture, leaves sometimes melt away: they turn to mush and die off. This is pretty common. As long as the base of the plant is fine (the base, not a leaf's stalk), keep taking care of it. If leaves are turning to mush, consider a slight change to watering, because you might be overwatering, and add some daily airflow if you can. Early in the stage, even opening the dome slightly for a few minutes gets fresh air in."
+    },
+    {
+     "chunk_id": "general-acclimation#yellowing-leaves-once-the-dome-comes-off",
+     "heading": "Yellowing leaves once the dome comes off",
+     "content": "Leaves yellowing right after a plant comes out from under the humidity dome are most likely a humidity problem rather than a light problem, usually from taking the dome off too fast. Also make sure the soil is not drying out too much or staying too damp."
+    }
+   ]
+  },
+  {
+   "slug": "general-substrate-water",
+   "title": "First substrate mix and watering for tissue-culture aroids",
+   "genus": "general",
+   "topic": "substrate-water",
+   "sections": [
+    {
+     "chunk_id": "general-substrate-water#first-substrate-mix-by-genus",
+     "heading": "First substrate mix by genus",
+     "content": "The first potting mix for tissue-culture Monstera and Anthurium is tree fern fiber and perlite at about 45 percent each, plus about 10 percent coco coir. For Alocasia and Philodendron it is the same mix with about 20 percent coco coir, with the tree fern and perlite each dropping slightly to make room. The only goal of the change is a bit more dense material for fine roots to pull water from. Any plant with very fine, thin roots gets the denser mix, because fine roots need less airflow and need to be able to grab water from the substrate. A mix that is too dense is one of the most common beginner mistakes."
+    },
+    {
+     "chunk_id": "general-substrate-water#water-ph-for-the-first-watering",
+     "heading": "Water pH for the first watering",
+     "content": "Water is balanced to a pH of about 7, or the high sixes. Plain tap water from the sink, with a tap water conditioner added, is fine; distilled water is not needed and did not improve success rates."
+    },
+    {
+     "chunk_id": "general-substrate-water#what-goes-in-the-first-watering",
+     "heading": "What goes in the first watering",
+     "content": "For the first watering, per half liter of water: one dropper of water-soluble IBA rooting hormone, a very, very small dose of a high-phosphorus fertilizer, and Trichoderma harzianum T-22. That very small fertilizer dose in the first watering of the soil has resulted in success. Water the freshly potted plantlets with this once. After that, the next watering gets no fertilizer, and very light feeding starts with the watering after it. Under a 100 percent humidity dome it is usually at least ten days before they need water again."
+    },
+    {
+     "chunk_id": "general-substrate-water#second-stage-mix-after-acclimation-chunky-aroid-soil",
+     "heading": "Second-stage mix after acclimation: chunky aroid soil",
+     "content": "Past the first mix, plants move to a chunky aroid soil: coco coir, perlite, charcoal, coconut husk chips, and a bit of orchid bark. Monstera and Anthurium both love airflow around the roots; Monstera get the chunkiest version, and Anthurium a slightly less chunky one because their roots start thinner. Alocasia and Philodendron get the same ingredients with slightly more fine material and coco coir to hold water, because their finer roots struggle in a mix that is too chunky. A very large Alocasia with thick roots can eventually move to a chunkier mix, but that is far in the future."
+    },
+    {
+     "chunk_id": "general-substrate-water#top-watering-after-the-dome-water-until-it-drains",
+     "heading": "Top watering after the dome: water until it drains",
+     "content": "Once a plant is past the dome and not on a wick, it is top watered. Water until a little runs out of the bottom of the pot every time, so the whole pot is evenly saturated, then let it drain fully. Do not leave it soaked; the goal is a complete, even watering, not a heavy one."
+    },
+    {
+     "chunk_id": "general-substrate-water#let-plants-dry-out-more-than-you-think-except-alocasia",
+     "heading": "Let plants dry out more than you think, except Alocasia",
+     "content": "For most plants, let the top 50 percent of the pot dry out before watering again. That is more drying than most people expect. Alocasia are the exception and need consistent moisture. Clear pots are highly recommended for anyone who tends to overthink or underthink watering, because you can see the moisture level instead of guessing."
+    },
+    {
+     "chunk_id": "general-substrate-water#light-fertilizing-with-every-watering",
+     "heading": "Light fertilizing with every watering",
+     "content": "Every watering carries a light dose of fertilizer, for all plants (tissue-culture plantlets skip it on their second watering), and this produced a large increase in growth. The other levers for a plant that has stalled are more light and a consistent routine."
+    },
+    {
+     "chunk_id": "general-substrate-water#rooting-and-biological-products-used-here",
+     "heading": "Rooting and biological products used here",
+     "content": "Alongside the IBA rooting hormone and Trichoderma T-22 in the first watering, Big Foot mycorrhizae and a \"living charcoal\" product are used: a biochar blended with natural fertilizers such as blood meal and worm castings. Exact brands vary and are hard to source consistently, so treat these as the categories to look for rather than specific products to buy."
+    }
+   ]
+  },
+  {
+   "slug": "general-light-hardware",
+   "title": "Grow light hardware: what is used here and what to buy",
+   "genus": "general",
+   "topic": "light",
+   "sections": [
+    {
+     "chunk_id": "general-light-hardware#full-spectrum-white-led-bars-are-the-recommendation",
+     "heading": "Full-spectrum white LED bars are the recommendation",
+     "content": "Every fixture used here is an LED bar. Bars are the most useful form and the easiest to place around a shelf or tent; large full panels are overkill for these builds and do not penetrate as far down. One hanging bulb is used only because it was convenient. The light must be full spectrum; that is the thing to check when a customer asks which grow light to buy. Color does not matter in practice: white works fine, and while pink or red-blue lights might show a statistical difference if you dug deep, a balanced white light is the choice here."
+    },
+    {
+     "chunk_id": "general-light-hardware#the-barrina-t5-is-weak-the-numbers",
+     "heading": "The Barrina T5 is weak: the numbers",
+     "content": "The Barrina T5 is the most common cheap grow light customers own. It is full spectrum, but a single bar puts out very little usable light and it falls off fast with distance. Per its product chart, measured at the center of the bar, one bar delivers about 91 PPFD at 8 inches, 59.3 at 12 inches, and 31.2 at 20 inches. At 8 inches, which is quite close, for 12 hours a day, that is a DLI of 3.93, below even the low-light band. To make a T5 setup work, stack several bars side by side or buy a stronger fixture."
+    },
+    {
+     "chunk_id": "general-light-hardware#the-stronger-fixtures-used-here",
+     "heading": "The stronger fixtures used here",
+     "content": "The grow tents run either AC Infinity S16 light bars, which use Samsung LED diodes and carry light much further down so it dissipates more slowly, or the thicker Barrina TXS45A bars. AC Infinity does not publish PPFD figures, and the S16 can be set to multiple levels, so its output is hard to judge. Its bars use Samsung LM301H EVO LEDs, rated at 3.14 µmol/J PPE, and a set of four IONBEAM S16 bars is listed at 42 watts. The Barrina TXS45A listing (135 W, three 45 W bars, CRI 98) shows, per light and measured at the center of the bar, 429.7 PPFD at 3.94 inches, 216.9 at 7.87 inches, and 137 at 11.81 inches, which is about 2.4 times a Barrina T5 at the same 8-inch distance. A few inches from the plants these fixtures deliver roughly 350 PPFD, which over 12 hours is a DLI of about 15. That is too much for a very small plant, but small plants are easy to set further from the fixture, and as they grow they move closer and their PPFD rises on its own."
+    },
+    {
+     "chunk_id": "general-light-hardware#where-to-put-each-plant-under-a-bar",
+     "heading": "Where to put each plant under a bar",
+     "content": "A light bar is strongest directly under its center and weaker toward its ends, so PPFD drops as you move a plant toward the sides. The most light-hungry plants go in the center: variegated Monstera and Alocasia get the most light here. Anything that wants less light, or is getting too much under a strong fixture, goes toward the side or further away."
+    },
+    {
+     "chunk_id": "general-light-hardware#photoperiod-used-here",
+     "heading": "Photoperiod used here",
+     "content": "All established plants get at least 12 hours of light a day. Acclimating plantlets get 10 to 12, sometimes 12. The schedule is never shortened."
+    },
+    {
+     "chunk_id": "general-light-hardware#estimating-ac-infinity-s16-light-from-its-watts",
+     "heading": "Estimating AC Infinity S16 light from its watts",
+     "content": "AC Infinity publishes no PPFD chart for the S16, so its light is estimated from power. A set of four IONBEAM S16 bars draws 42 watts at level 10, and power scales with the level: about 29.4 watts at level 7 and 21 watts at level 5. Multiplying the watts by the LM301H EVO rating of 3.14 µmol/J gives the light the bars put out: about 132 µmol/s at level 10, 92 at level 7, and 66 at level 5. Dividing that by the lit area in square meters gives the average PPFD across the area: over a 2 × 2 ft space (0.37 m²) about 355 at level 10, 248 at level 7, and 177 at level 5; over a 2 × 4 ft space (0.74 m²) about 177, 124, and 89. These are estimates from the LED rating, not measurements, and they are averages across the whole area, while the Barrina charts measure the center of the bar, where light is strongest."
+    }
+   ]
+  },
+  {
+   "slug": "general-humidity-equipment",
+   "title": "Humidity equipment: domes, cabinets, hygrometers, and dry homes",
+   "genus": "general",
+   "topic": "humidity",
+   "sections": [
+    {
+     "chunk_id": "general-humidity-equipment#domes-and-trays-used-here",
+     "heading": "Domes and trays used here",
+     "content": "Several kinds of humidity domes are in use: AC Infinity domes with grow lights built into the lid, and domes from Greenhouse Megastore over 72-cell trays. Any of them work; the dome is what lets the tray hold 100 percent humidity for the first week."
+    },
+    {
+     "chunk_id": "general-humidity-equipment#cabinets-instead-of-humidifiers",
+     "heading": "Cabinets instead of humidifiers",
+     "content": "Plants past the dome live in retrofitted IKEA glass cabinets (Fabrikör and Milsbo) and a Barrina LP900 grow cabinet. No humidifier is used anywhere: the plants and the enclosed cabinet hold the humidity on their own at the 65 to 80 percent the grow space runs at. Cabinets are the recommendation for anyone wanting to raise humidity, and they pair naturally with LED light bars mounted inside."
+    },
+    {
+     "chunk_id": "general-humidity-equipment#airflow-inside-a-cabinet",
+     "heading": "Airflow inside a cabinet",
+     "content": "Small fans sit in the corners of each cabinet to get a circular air movement going. Strength is not the point; the \"leaves barely move\" test from the airflow notes still applies."
+    },
+    {
+     "chunk_id": "general-humidity-equipment#hygrometers",
+     "heading": "Hygrometers",
+     "content": "Any cheap hygrometer from Amazon is fine for reading cabinet or tent humidity. Nothing special is needed."
+    },
+    {
+     "chunk_id": "general-humidity-equipment#advice-for-a-dry-home-with-no-cabinet",
+     "heading": "Advice for a dry home with no cabinet",
+     "content": "For a customer whose house sits around 40 percent humidity: group plants together so they raise the humidity around each other, consider a cabinet with light bars for both humidity and light, and when a new plant first arrives, cover it in a clear plastic bag and slowly expose it to more air over time so it adjusts to the room's ambient humidity instead of being shocked by it."
+    },
+    {
+     "chunk_id": "general-humidity-equipment#condensation-under-domes-is-not-a-problem",
+     "heading": "Condensation under domes is not a problem",
+     "content": "Condensation and standing water under a dome are not something to worry about when planting tissue-culture plantlets. It goes away on its own as the dome is opened further during the humidity step-down."
+    }
+   ]
+  },
+  {
+   "slug": "general-light",
+   "title": "Light for established tissue-culture aroids",
+   "genus": "general",
+   "topic": "light",
+   "sections": [
+    {
+     "chunk_id": "general-light#light-intensity-drops-off-fast-with-distance",
+     "heading": "Light intensity drops off fast with distance",
+     "content": "Usable light drops off with distance from the fixture far faster than people expect. On a single Barrina T5, the product chart shows 91 PPFD at 8 inches, 59.3 at 12 inches, and 31.2 at 20 inches. It also drops toward the ends of a bar compared with directly under its center. Cheaper fixtures and cheaper LED nodes make both effects worse."
+    },
+    {
+     "chunk_id": "general-light#cheap-grow-lights-work-only-up-close",
+     "heading": "Cheap grow lights work only up close",
+     "content": "Cheap grow lights are not inherently wrong. Barrina T5 fixtures are very popular with customers but very weak, and off-brand lights give roughly what you pay for. Plants under them need to be kept very close to the fixture, or several bars stacked together."
+    },
+    {
+     "chunk_id": "general-light#established-plants-at-least-250-ppfd-for-12-to-14-hours",
+     "heading": "Established plants: at least 250 PPFD for 12 to 14 hours",
+     "content": "Once past acclimation, all of these aroids, and variegated forms especially, want a lot of light. Grow lights here sit very close to the plants and run twelve to fourteen hours a day, with the plants getting at least 250 PPFD and ideally 300 or more. Acclimating plantlets use a lower target of around 150 PPFD; see the acclimation protocol."
+    },
+    {
+     "chunk_id": "general-light#signs-of-too-little-light",
+     "heading": "Signs of too little light",
+     "content": "Slow growth, leggy growth, and leaves that stay small instead of sizing up. A plant that is growing slowly, stretching, and not producing big full leaves is almost always short on light."
+    },
+    {
+     "chunk_id": "general-light#signs-of-too-much-light",
+     "heading": "Signs of too much light",
+     "content": "A plant that seems to be leaning away from the light, or develops a yellowish burned area on the leaf, is getting light burn, the indoor version of sunburn. Fixtures can also run hot, and a leaf touching a hot fixture will burn; it has not happened here but it can."
+    },
+    {
+     "chunk_id": "general-light#the-most-common-lighting-mistake",
+     "heading": "The most common lighting mistake",
+     "content": "Without doubt: not giving plants enough light. Blast them with light. They appreciate it and grow faster for it."
+    }
+   ]
+  },
+  {
+   "slug": "general-pests",
+   "title": "Pests and rot on tissue-culture aroids",
+   "genus": "general",
+   "topic": "pests",
+   "sections": [
+    {
+     "chunk_id": "general-pests#root-rot-is-the-biggest-risk-for-small-plants",
+     "heading": "Root rot is the biggest risk for small plants",
+     "content": "Root rot is the main problem across all genera, especially while plants are small and held in high humidity. The cause is almost always too little airflow under the dome or lid. With Alocasia, watch for fungus as well, for the same reason: give them a good amount of airflow. On an established plant, rot looks the same as overwatering: yellowing, wilting, droopiness, browning edges, and mushy sections. Directly after planting from tissue culture the only early sign is usually a loss of firmness, and by the time leaves die it is too late."
+    },
+    {
+     "chunk_id": "general-pests#thrips-rotate-sprays-every-four-days-or-use-systemic-granules",
+     "heading": "Thrips: rotate sprays every four days, or use systemic granules",
+     "content": "Thrips adapt to pesticides quickly and lay eggs in the soil, so treatment must be consistent and rotated between different pesticides. When thrips are found, spray every four days, mostly with a spinosad-based pesticide. Where it is legal, systemic granules (imidacloprid or a similar active ingredient) watered into the soil protect the plant for a month or more; the plant takes the chemical up and pests that bite it die. Do not use systemic granules if spider mites are present: they have been found to speed up spider-mite reproduction rather than kill them, so an infestation can spread faster."
+    },
+    {
+     "chunk_id": "general-pests#spider-mites-sprays-plus-wiping",
+     "heading": "Spider mites: sprays plus wiping",
+     "content": "Spider mites are an easier kill than thrips. Neem oil, spinosad, or most other pesticide sprays work, combined with manually wiping the leaves. Wipe both sides of each leaf."
+    },
+    {
+     "chunk_id": "general-pests#mealybugs-oil-sprays-and-alcohol-swabs",
+     "heading": "Mealybugs: oil sprays and alcohol swabs",
+     "content": "Oil-based sprays, homemade or store-bought, work on mealybugs. Removing them by hand with a rubbing-alcohol swab is very effective and easy."
+    },
+    {
+     "chunk_id": "general-pests#beneficial-insects-are-not-used-here",
+     "heading": "Beneficial insects are not used here",
+     "content": "Beneficial insects have not been used here. Growers who tried them found they sounded better in theory than they worked in practice: they take too long, they maintain a pest population instead of stopping the spread, and you cannot spray pesticides while they are present without killing them. Pesticides kill the pests and they stay gone."
+    },
+    {
+     "chunk_id": "general-pests#fungus-gnats-treat-premixed-soil-the-day-you-use-it",
+     "heading": "Fungus gnats: treat premixed soil the day you use it",
+     "content": "Any premixed potting soil or similar product should be treated for fungus gnats immediately on first use, before an infestation starts. The method: soak Mosquito Bits (the brand) in the water you are about to water with for a few hours, then water with it. This kills the larvae in the soil far more efficiently than the usual published methods like spraying oil on the surface or covering the top of the soil."
+    },
+    {
+     "chunk_id": "general-pests#bugs-under-the-dome-leave-springtails-treat-pests-gently-at-night",
+     "heading": "Bugs under the dome: leave springtails, treat pests gently at night",
+     "content": "Bugs are not common while plantlets are still under the dome, and what to do depends on the bug. Most likely it is springtails or soil mites; if so, leave them, because they are beneficial. A harmful pest such as thrips or spider mites must be treated, along with all the plants around it, but plantlets are extremely fragile at that stage, which puts you in a difficult position. A plantlet cannot be sprayed and then put under grow lights: it will most likely burn and die. Spray gently at night so the leaves can dry off."
+    },
+    {
+     "chunk_id": "general-pests#pesticide-and-fungicide-products-follow-the-bottle",
+     "heading": "Pesticide and fungicide products: follow the bottle",
+     "content": "Pesticides and fungicides here are bought premixed, or diluted per the instructions on each bottle. Products come from several brands on Amazon and every one dilutes differently, so there is no single dilution rule; read the label of the product in hand."
+    }
+   ]
+  },
+  {
+   "slug": "general-light-ppfd-dli",
+   "title": "PPFD and DLI: how much light aroids actually need",
+   "genus": "general",
+   "topic": "light",
+   "sections": [
+    {
+     "chunk_id": "general-light-ppfd-dli#what-ppfd-means",
+     "heading": "What PPFD means",
+     "content": "PPFD stands for photosynthetic photon flux density. In the simplest terms it is the light a plant can see: the amount of usable light that actually lands on the surface of the leaf, which is different from the brightness our eyes see. It is measured in micromoles per square meter per second (µmol/m²/s). Grow-light listings also quote lumens, lux, or just \"strong,\" and those numbers mean different things; online calculators convert between them, but PPFD is the one to compare."
+    },
+    {
+     "chunk_id": "general-light-ppfd-dli#what-dli-means-and-the-three-light-bands",
+     "heading": "What DLI means and the three light bands",
+     "content": "DLI (daily light integral) is PPFD multiplied by the hours the light is on, so it captures how much light a plant gets over a whole day rather than at one instant. Addition (standard formula, matches the Waveform Lighting DLI calculator at waveformlighting.com/horticulture/daily-light-integral-dli-calculator): DLI = PPFD × hours × 3600 ÷ 1,000,000. By that calculator's bands, low-light plants need a DLI of 5 to 10, medium-light plants 10 to 15, and high-light plants more than 15."
+    },
+    {
+     "chunk_id": "general-light-ppfd-dli#aroids-are-high-light-plants-whatever-the-store-label-says",
+     "heading": "Aroids are high-light plants, whatever the store label says",
+     "content": "Big-box labels call tropical aroids medium- or low-light plants. Indoors, they almost never are. These are not outdoor plants unless they are slowly acclimated to sun, but as indoor plants they need more light than people think. Every aroid grown here is treated as a high-light plant with a target DLI of 15 or more, and established plants are given at least 250 PPFD, with 300 or more as the goal. Tissue-culture plantlets start lower, around 150 PPFD (it is not an exact figure), and pick up more light as they grow toward the fixture."
+    },
+    {
+     "chunk_id": "general-light-ppfd-dli#how-to-measure-light-at-the-plant",
+     "heading": "How to measure light at the plant",
+     "content": "Most fixtures publish PPFD at several distances in their listing images, and that chart is the first place to look. To measure directly, a cheap lux meter from Amazon plus an online lux-to-PPFD calculator gives a workable PPFD estimate at the leaf."
+    }
+   ]
+  },
+  {
+   "slug": "general-water-chemistry",
+   "title": "Water chemistry and feeding: pH down, flushing, fertilizer ratio",
+   "genus": "general",
+   "topic": "substrate-water",
+   "sections": [
+    {
+     "chunk_id": "general-water-chemistry#ph-down-on-every-watering-in-hard-water-areas",
+     "heading": "pH down on every watering in hard-water areas",
+     "content": "San Diego tap water is very hard, so a product literally called pH Down goes into every watering, following the instructions on the bottle, to bring the water to about pH 7 or the high sixes. pH is checked with a cheap meter from Amazon; it measures pH only, not dissolved solids. Anyone elsewhere should look up how hard their local water is and measure their own water before deciding whether they need pH adjustment at all."
+    },
+    {
+     "chunk_id": "general-water-chemistry#tap-water-with-conditioner-or-rain-and-reverse-osmosis",
+     "heading": "Tap water with conditioner, or rain and reverse osmosis",
+     "content": "Tap water with a tap water conditioner added is used for everything here. Many other growers use rainwater or reverse-osmosis water instead to avoid hard-water problems entirely; that is a fine alternative, not a requirement."
+    },
+    {
+     "chunk_id": "general-water-chemistry#nutrient-lockout-what-it-looks-like-and-how-to-avoid-it",
+     "heading": "Nutrient lockout: what it looks like and how to avoid it",
+     "content": "Nutrient lockout mostly shows up as slower growth. Sometimes there is visible salt buildup on the leaves. To avoid it, one out of every four or five waterings is a heavy top watering with plain water only, no fertilizer, to flush accumulated salts out of the pot. There is no set amount of water per pot; pour until the pot has been thoroughly flushed and drains."
+    },
+    {
+     "chunk_id": "general-water-chemistry#fertilizer-any-3-1-2-ratio-plus-cal-mag",
+     "heading": "Fertilizer: any 3-1-2 ratio, plus cal-mag",
+     "content": "A varied group of fertilizer products is used here and the brand does not matter. What matters is a 3-1-2 NPK ratio in any multiple: 6-2-4 and 9-3-6 are the same thing. If the fertilizer does not already include calcium and magnesium, add a cal-mag supplement. Dosing depends on the specific brand, so follow that product's label rather than a fixed rule; the standing practice is a light dose with every watering except the flush."
+    },
+    {
+     "chunk_id": "general-water-chemistry#the-two-biggest-watering-and-feeding-mistakes",
+     "heading": "The two biggest watering and feeding mistakes",
+     "content": "First, inconsistent watering: plants swinging back and forth between wet and dry. Second, under-fertilizing. Those two account for most of the slow-growth problems customers bring in."
+    }
+   ]
+  },
+  {
+   "slug": "monstera-acclimation",
+   "title": "Monstera from tissue culture: acclimation and step-down",
+   "genus": "monstera",
+   "topic": "acclimation",
+   "sections": [
+    {
+     "chunk_id": "monstera-acclimation#which-monstera-this-covers",
+     "heading": "Which Monstera this covers",
+     "content": "Tissue-culture Monstera here are mostly Monstera deliciosa and Monstera borsigiana, and almost all variegated: Thai Constellation, albo, white monster, bulbosa, devil monster, green on green, aurea, and many more. All of them are handled the same way. Monstera adansonii has not been grown from tissue culture here, so nothing in this corpus covers it."
+    },
+    {
+     "chunk_id": "monstera-acclimation#monstera-tolerate-a-faster-humidity-step-down",
+     "heading": "Monstera tolerate a faster humidity step-down",
+     "content": "Monstera are faster growers and more tolerant of problems than Alocasia or Anthurium. A Monstera reaches 65 percent humidity in about three weeks, roughly 18 to 21 days, sometimes a little longer. Once a Monstera is acclimated to 75 to 80 percent humidity and is more than a few inches tall, roughly in a three-inch pot, it can go straight into 50 percent humidity without issues. Alocasia need a much slower step-down and should not be moved like this."
+    },
+    {
+     "chunk_id": "monstera-acclimation#monstera-root-faster-and-need-less-water",
+     "heading": "Monstera root faster and need less water",
+     "content": "Monstera usually root faster than other genera, so they need to size up sooner. They are also more resilient to drought, so they are watered less often than Alocasia or Anthurium."
+    },
+    {
+     "chunk_id": "monstera-acclimation#what-a-tc-monstera-should-look-like-at-week-one",
+     "heading": "What a TC Monstera should look like at week one",
+     "content": "At week one the plantlet should look about the same as when it was potted, just a little perkier. A plant that flopped because it grew crooked in the bag is fine as long as it feels firm in the pot. A plant that moves around a lot when touched needs checking."
+    },
+    {
+     "chunk_id": "monstera-acclimation#what-a-tc-monstera-should-look-like-at-week-three",
+     "heading": "What a TC Monstera should look like at week three",
+     "content": "By week three there should be multiple visible roots in a clear pot, or at least one piece of new growth, often a couple. In a one-and-a-half-inch starter pot this is usually up-pot time; in a larger pot it will not be yet."
+    }
+   ]
+  },
+  {
+   "slug": "monstera-troubleshooting",
+   "title": "Monstera symptoms customers ask about most",
+   "genus": "monstera",
+   "topic": "troubleshooting",
+   "sections": [
+    {
+     "chunk_id": "monstera-troubleshooting#yellowing-leaves-or-black-spots-on-monstera",
+     "heading": "Yellowing leaves or black spots on Monstera",
+     "content": "Yellowing and black spots on a Monstera are most often root rot. Root rot is the biggest issue for small plants held in high humidity without enough airflow."
+    },
+    {
+     "chunk_id": "monstera-troubleshooting#no-new-growth-or-small-leaves-on-monstera",
+     "heading": "No new growth or small leaves on Monstera",
+     "content": "No new growth or undersized leaves on a Monstera almost always means not enough fertilizer and not enough light. Variegated Monstera in particular want a lot of light. The questions to ask first: how consistent is the watering and fertilizing routine, what light is the plant under, and how far from it is the plant."
+    }
+   ]
+  },
+  {
+   "slug": "monstera-quirks",
+   "title": "Variegated Monstera: managing variegation",
+   "genus": "monstera",
+   "topic": "quirks",
+   "sections": [
+    {
+     "chunk_id": "monstera-quirks#small-variegated-monstera-often-show-less-color",
+     "heading": "Small variegated Monstera often show less color",
+     "content": "Small tissue-culture Monstera often carry less variegation than they will later, and some simply have less from the start. Do not worry about low variegation until the plant is larger."
+    },
+    {
+     "chunk_id": "monstera-quirks#if-a-variegated-monstera-is-reverting-to-green",
+     "heading": "If a variegated Monstera is reverting to green",
+     "content": "Two options: cut the stem back to the last node where variegation was visible, or give the plant more light. Both are ways to push variegation when new growth is showing less of it."
+    },
+    {
+     "chunk_id": "monstera-quirks#if-a-monstera-is-producing-full-moon-leaves",
+     "heading": "If a Monstera is producing full-moon leaves",
+     "content": "Fully white (full moon) leaves are also a problem, because there is no green for the plant to live on. Do the opposite of the reverting fix: feed a higher-nitrogen fertilizer, which tends to promote green growth, and give slightly less light so the plant produces more green."
+    },
+    {
+     "chunk_id": "monstera-quirks#all-variegated-monstera-get-the-same-light-and-care",
+     "heading": "All variegated Monstera get the same light and care",
+     "content": "Thai Constellation, albo, aurea, white monster, and the other variegated Monstera all get the same treatment; there is no real care difference between them. They all get a lot of light, placed in the strongest spot under the bar, to fight reversion and grow quickly."
+    }
+   ]
+  },
+  {
+   "slug": "philodendron-acclimation",
+   "title": "Philodendron from tissue culture: hardy, slow to root",
+   "genus": "philodendron",
+   "topic": "acclimation",
+   "sections": [
+    {
+     "chunk_id": "philodendron-acclimation#which-philodendron-this-covers",
+     "heading": "Which Philodendron this covers",
+     "content": "A variety of Philodendron are grown from tissue culture here. The most common is Philodendron Caramel Marble, along with its pink form, sold as Pink Caramel Marble or Strawberry Philodendron, which is a slightly separate plant. These are very slow growers."
+    },
+    {
+     "chunk_id": "philodendron-acclimation#philodendron-are-hardy-and-treated-like-monstera",
+     "heading": "Philodendron are hardy and treated like Monstera",
+     "content": "Philodendron are treated much the same as Monstera. Both are hardy. Philodendron can dry out, can take low humidity, and are resilient to changes in conditions."
+    },
+    {
+     "chunk_id": "philodendron-acclimation#philodendron-humidity-step-down",
+     "heading": "Philodendron humidity step-down",
+     "content": "Philodendron sit between Monstera and Alocasia on humidity step-down: more time than a Monstera's three weeks, less than an Alocasia's four to five. They get a little longer than a Monstera specifically because their roots are thinner."
+    },
+    {
+     "chunk_id": "philodendron-acclimation#philodendron-root-the-slowest",
+     "heading": "Philodendron root the slowest",
+     "content": "Philodendron are the slowest rooters of the four genera. Monstera are fastest, Anthurium and Alocasia are second, Philodendron last. Philodendron also do well climbing."
+    }
+   ]
+  },
+  {
+   "slug": "philodendron-pests",
+   "title": "Philodendron pests and fungus",
+   "genus": "philodendron",
+   "topic": "pests",
+   "sections": [
+    {
+     "chunk_id": "philodendron-pests#no-philodendron-specific-pests-or-fungus",
+     "heading": "No Philodendron-specific pests or fungus",
+     "content": "There are no pests or fungal problems specific to Philodendron. They are treated the same as a Monstera: manual wiping, consistent spraying, and regular checking, following the general thrips, spider mite, and mealybug protocols."
+    }
+   ]
+  },
+  {
+   "slug": "philodendron-troubleshooting",
+   "title": "Philodendron symptoms customers ask about most",
+   "genus": "philodendron",
+   "topic": "troubleshooting",
+   "sections": [
+    {
+     "chunk_id": "philodendron-troubleshooting#slow-growth-on-philodendron-is-usually-normal",
+     "heading": "Slow growth on Philodendron is usually normal",
+     "content": "Slow growth is the Philodendron question customers ask most, and most of the time it is simply how the plant grows: Philodendron, and Caramel Marble types especially, are very slow growers. It is the main thing customers get confused about with Philodendron and Anthurium."
+    }
+   ]
+  }
+ ]
+}

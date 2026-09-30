@@ -1,0 +1,65 @@
+{
+ "_source": "eval/results/v3/results.jsonl, dev question n03, rep 1",
+ "_question": "how do i take care of my monstera adansonii cuttings",
+ "params": {
+  "k": 5,
+  "mode": "vector",
+  "genus": null,
+  "decompose": true
+ },
+ "queries": [
+  "how do i take care of my monstera adansonii cuttings"
+ ],
+ "chunks": [
+  {
+   "chunk_id": "monstera-acclimation#which-monstera-this-covers",
+   "content": "Tissue-culture Monstera here are mostly Monstera deliciosa and Monstera borsigiana, and almost all variegated: Thai Constellation, albo, white monster, bulbosa, devil monster, green on green, aurea, and many more. All of them are handled the same way. Monstera adansonii has not been grown from tissue culture here, so nothing in this corpus covers it.",
+   "heading": "Which Monstera this covers",
+   "genus": "monstera",
+   "topic": "acclimation",
+   "score": 0.679048080501076
+  },
+  {
+   "chunk_id": "monstera-acclimation#monstera-tolerate-a-faster-humidity-step-down",
+   "content": "Monstera are faster growers and more tolerant of problems than Alocasia or Anthurium. A Monstera reaches 65 percent humidity in about three weeks, roughly 18 to 21 days, sometimes a little longer. Once a Monstera is acclimated to 75 to 80 percent humidity and is more than a few inches tall, roughly in a three-inch pot, it can go straight into 50 percent humidity without issues. Alocasia need a much slower step-down and should not be moved like this.",
+   "heading": "Monstera tolerate a faster humidity step-down",
+   "genus": "monstera",
+   "topic": "acclimation",
+   "score": 0.6480293660181394
+  },
+  {
+   "chunk_id": "monstera-troubleshooting#no-new-growth-or-small-leaves-on-monstera",
+   "content": "No new growth or undersized leaves on a Monstera almost always means not enough fertilizer and not enough light. Variegated Monstera in particular want a lot of light. The questions to ask first: how consistent is the watering and fertilizing routine, what light is the plant under, and how far from it is the plant.",
+   "heading": "No new growth or small leaves on Monstera",
+   "genus": "monstera",
+   "topic": "troubleshooting",
+   "score": 0.6462970586838103
+  },
+  {
+   "chunk_id": "general-acclimation#when-acclimation-is-done",
+   "content": "There is no single tell. Acclimation is done when the dome or lid can stay completely off and the plant is ready to move up a pot size. In a grow space held at 65 to 80 percent ambient humidity, stepping a Monstera down from 100 percent to 65 percent takes about three weeks, roughly 18 to 21 days, sometimes a little longer. Alocasia take four to five weeks. Anthurium and Philodendron sit in between. A drier room takes longer for all of them.",
+   "heading": "When acclimation is done",
+   "genus": "general",
+   "topic": "acclimation",
+   "score": 0.6367898420346016
+  },
+  {
+   "chunk_id": "philodendron-acclimation#philodendron-are-hardy-and-treated-like-monstera",
+   "content": "Philodendron are treated much the same as Monstera. Both are hardy. Philodendron can dry out, can take low humidity, and are resilient to changes in conditions.",
+   "heading": "Philodendron are hardy and treated like Monstera",
+   "genus": "philodendron",
+   "topic": "acclimation",
+   "score": 0.6342138648033142
+  }
+ ],
+ "model": "claude-sonnet-5",
+ "answer": "I don't have information on that in my notes.",
+ "citations": [],
+ "refused": true,
+ "timings": {
+  "embed_ms": 21.8,
+  "retrieve_ms": 4.0,
+  "generate_ms": 7747.4,
+  "total_ms": 7773.2
+ }
+}

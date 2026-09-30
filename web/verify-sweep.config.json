@@ -1,0 +1,19 @@
+{
+  "base": "http://localhost:3100",
+  "routes": [
+    "/",
+    "/?fixture=answer",
+    "/?fixture=thread",
+    "/?fixture=refusal",
+    "/?fixture=loading",
+    "/?fixture=error",
+    "/?fixture=busy",
+    "/?fixture=offline",
+    "/?fixture=library",
+    "/?fixture=history"
+  ],
+  "headSelector": "",
+  "readySelector": "[data-ready]",
+  "chromeSelectors": "nav",
+  "shotsDir": "shots"
+}

@@ -1,0 +1,67 @@
+{
+ "_source": "eval/results/v3/results.jsonl, dev question f11, rep 1",
+ "_question": "whats the best way to deal with thrips on my baby aroids",
+ "params": {
+  "k": 5,
+  "mode": "vector",
+  "genus": null,
+  "decompose": true
+ },
+ "queries": [
+  "whats the best way to deal with thrips on my baby aroids"
+ ],
+ "chunks": [
+  {
+   "chunk_id": "general-pests#spider-mites-sprays-plus-wiping",
+   "content": "Spider mites are an easier kill than thrips. Neem oil, spinosad, or most other pesticide sprays work, combined with manually wiping the leaves. Wipe both sides of each leaf.",
+   "heading": "Spider mites: sprays plus wiping",
+   "genus": "general",
+   "topic": "pests",
+   "score": 0.6980611861907742
+  },
+  {
+   "chunk_id": "general-pests#thrips-rotate-sprays-every-four-days-or-use-systemic-granules",
+   "content": "Thrips adapt to pesticides quickly and lay eggs in the soil, so treatment must be consistent and rotated between different pesticides. When thrips are found, spray every four days, mostly with a spinosad-based pesticide. Where it is legal, systemic granules (imidacloprid or a similar active ingredient) watered into the soil protect the plant for a month or more; the plant takes the chemical up and pests that bite it die. Do not use systemic granules if spider mites are present: they have been found to speed up spider-mite reproduction rather than kill them, so an infestation can spread faster.",
+   "heading": "Thrips: rotate sprays every four days, or use systemic granules",
+   "genus": "general",
+   "topic": "pests",
+   "score": 0.6763944222692011
+  },
+  {
+   "chunk_id": "general-pests#fungus-gnats-treat-premixed-soil-the-day-you-use-it",
+   "content": "Any premixed potting soil or similar product should be treated for fungus gnats immediately on first use, before an infestation starts. The method: soak Mosquito Bits (the brand) in the water you are about to water with for a few hours, then water with it. This kills the larvae in the soil far more efficiently than the usual published methods like spraying oil on the surface or covering the top of the soil.",
+   "heading": "Fungus gnats: treat premixed soil the day you use it",
+   "genus": "general",
+   "topic": "pests",
+   "score": 0.602507472038269
+  },
+  {
+   "chunk_id": "alocasia-pests#alocasia-attract-more-pests-and-get-treated-longer",
+   "content": "Alocasia tend to attract more pests than other genera. When pests are found on an Alocasia, treat for longer than you would treat a Monstera, and keep watching the plant closely afterward to confirm nothing new has arrived. The pest protocols themselves (thrips, spider mites, mealybugs) are the same as for other aroids.",
+   "heading": "Alocasia attract more pests and get treated longer",
+   "genus": "alocasia",
+   "topic": "pests",
+   "score": 0.5918842797348343
+  },
+  {
+   "chunk_id": "alocasia-pests#leaf-spot-on-alocasia-what-to-do",
+   "content": "Cut off the affected leaves immediately, even if it is the plant's only leaf, and spray with a copper fungicide. A fungicide can also be applied while watering. If leaf spot keeps recurring, add more airflow to the setup. Isolate the plant if it sits near other Alocasia, and treat the surrounding plants with a fungicide as well, exactly as you would for a pest outbreak.",
+   "heading": "Leaf spot on Alocasia: what to do",
+   "genus": "alocasia",
+   "topic": "pests",
+   "score": 0.5820096731185913
+  }
+ ],
+ "model": "claude-sonnet-5",
+ "answer": "Thrips adapt to pesticides fast and lay eggs in the soil, so you need to be consistent and rotate sprays rather than using one product repeatedly. When you find thrips, spray every four days, mostly with a spinosad-based pesticide. Where it's legal, you can also water systemic granules (imidacloprid or similar) into the soil, which protects the plant for a month or more as it takes up the chemical and kills pests that bite it.\n\nOne important exception: don't use systemic granules if spider mites are also present. Granules have been found to speed up spider-mite reproduction instead of killing them, so it can make a mite infestation spread faster.",
+ "citations": [
+  "general-pests#thrips-rotate-sprays-every-four-days-or-use-systemic-granules"
+ ],
+ "refused": false,
+ "timings": {
+  "embed_ms": 27.8,
+  "retrieve_ms": 5.3,
+  "generate_ms": 11691.8,
+  "total_ms": 11724.9
+ }
+}
