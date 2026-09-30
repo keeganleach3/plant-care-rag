@@ -66,7 +66,7 @@ def create_app(conn=None, embedder=None, call=llm.call) -> FastAPI:
         if not api_key:
             if cfg["LLM_BACKEND"] == "api":  # anyone who reaches the port would spend the Anthropic budget
                 raise ConfigError("API_KEY is required with LLM_BACKEND=api: /ask would be open on the paid backend")
-            log.warning("API_KEY is not set: /ask is open to anyone who can reach this port")
+            log.warning("API_KEY is not set: /ask and /sources are open to anyone who can reach this port")
         if conn is None:
             state["pool"] = ConnectionPool(settings()["DATABASE_URL"], kwargs=DB_KWARGS, min_size=1, max_size=inflight + 2,
                                            configure=db.register, check=ConnectionPool.check_connection, open=True)

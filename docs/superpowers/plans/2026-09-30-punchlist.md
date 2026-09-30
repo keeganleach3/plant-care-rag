@@ -37,7 +37,7 @@ Fence: `rag/api.py`, `tests/test_api.py`. Shape and errors: chat-ui-api.md §3�
 - [x] test: with `API_KEY` set, no bearer → 401 — `test_sources_needs_the_bearer_key_when_api_key_is_set` failed first with `assert (404 == 401)`; now no header and a wrong bearer → 401 `WWW-Authenticate: Bearer`, key absent from the body; the right bearer → 200
 - [x] test: database unreachable → 503 `db` with `Retry-After: 5` — the real-pool test (`127.0.0.1:1`) now covers it too, renamed `test_an_unreachable_database_fails_ask_readyz_and_sources_within_seconds`; failed first with `assert (404 == 503)`; now 503 `{"detail": "db"}`, `Retry-After: 5`, under 10 s
 - [x] route in `rag/api.py` on the existing pool and `authorize` dependency; full suite green (paste the last line) — `dd0dd90`: `175 passed, 1 warning in 23.24s` (173 before; the warning pre-dates it). Mutants 5/5 killed: no `authorize`, `OperationalError` unmapped, borrow without the 2 s timeout, title order dropped, sections by heading. Live on a scratch instance (:8731, random `API_KEY`, dev DB): no bearer → 401; bearer → 200, 22 notes, 96 sections = 96 `chunks` rows, same chunk_id set, genus-then-title order; database unreachable → 503 `{"detail":"db"}`, `retry-after: 5`, in 2.0 s
-- [ ] architect verified: curl against the live service
+- [x] architect verified: live service on :8000 (`/readyz` → ready, 96 chunks), then through the web proxy: `GET localhost:3100/api/sources` → `200`, `x-request-id` set, 22 notes, 96 sections, genus-first order. Startup warning now names `/sources` too (`4 passed` on the warning and sources tests). Known limits, accepted: `embed_model` reports the configured model (equal to the stored one once the startup check passes); "ingest order" is `chunks.id`, so a section added to an existing note lists last until a fresh ingest
 
 ### 7.2 Web shell — inline (architect)
 - [x] scaffold `web/` (Next 16.3.8, TypeScript, Tailwind 4, Geist); tokens and the fluid root size in `globals.css`; `NEXT_DIST_DIR` so parallel dev servers don't collide (Next 16 locks its dist dir per `next dev`)
@@ -70,7 +70,15 @@ Fence: `web/components/{Thread,Turn,AnswerCard,SourcesPanel,SourceCard}.tsx` and
 Port styles from `B-answer.dc.html`; decisions in contract-chat-ui.md §6.
 - [ ] header (the first question, truncated), question bubble, query chips ("Searched n ways", first chip "the whole message"; none for one query)
 - [ ] AnswerCard: forest gradient, "From the grower's notes", paragraphs, footer "Cited n of k retrieved sections" (a button that makes the answer active) and "Answered in x s · retrieval y ms"
-- [ ] refusal card; loading placeholder with elapsed seconds; error card per kind with Retry
+- [ ] refusal card; loading placeholder with elapsed seconds; error card per kind with Retry. Wording (`error.kind`, then `detail` for 502s):
+  busy → "The service is answering other questions right now." (+ "Try again in n s" from `retryAfter`) ·
+  db → "The notes database isn't reachable. Is Docker running?" ·
+  embed_model → "The index was built with a different embedding model. Re-ingest the notes, then try again." ·
+  unreachable → "Can't reach the answer service. Start it from the project folder with `uv run uvicorn rag.api:app`." (detail "web server" → "Can't reach this app's server.") ·
+  timeout → "No answer after 150 seconds, so the app stopped waiting." ·
+  generation + timeout → "The model took too long to answer." · + cli_error → "The model call failed." · + schema_invalid → "The model's reply came back malformed, so it was withheld." · + citation_invalid → "The answer cited a section it wasn't given, so it was withheld." · + model_mismatch → "A different model answered than the one configured, so the answer was withheld." · + refusal → "The model declined to answer." · + anything else → "Generation failed (detail)." ·
+  rejected → "The service rejected this app's key. Check RAG_API_KEY in web/.env.local." · unknown → "Something went wrong (status)."
+  Answer text: paragraphs split on blank lines; lines starting "- " or "1. " become lists; text nodes only. Never show raw scores.
 - [ ] SourcesPanel: the aside at ≥1280px, inline below; cited cards and not-used tiles; each opens to the full section; follows the active answer
 - [ ] typecheck, build, sweep, route shots at 1920 and 390 for `?fixture=answer|thread|refusal|loading|error` (pasted)
 
