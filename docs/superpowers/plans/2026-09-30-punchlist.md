@@ -95,7 +95,7 @@ Port styles from `B-answer.dc.html`; decisions in contract-chat-ui.md §6.
 - [ ] social preview PNG, 1280×640, in `docs/images/` for Keegan to upload in the repo settings
 
 ## 8 — "i can also do research on some of the things ive learned about rag ... we plan more instead of just guessing"
-- [ ] sourced survey of production RAG practice (research agent): every claim linked to a page the agent read → `docs/design/rag-research.md`
+- [x] sourced survey of production RAG practice: 44 pages opened, every number linked (`docs/design/rag-research-survey.md`); the 12 headline numbers re-opened by a second agent (7 confirmed, 5 corrected for scope or wording, 0 not found); two wrong recall intervals (the survey assumed n=38 and n=15) replaced by bootstrap intervals from the v3 report (0.857–1.000 over 14; 0.708–1.000 over 6). Brief for the planning session: `docs/design/rag-research.md`
 - [ ] Keegan's findings + the survey → planning session → scope for the over-build (replaces the open decision in 2)
 
 ## Open at round end
