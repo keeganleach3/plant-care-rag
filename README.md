@@ -1,22 +1,23 @@
 # Plant Care RAG
 
+[![CI](https://github.com/keeganleach3/plant-care-rag/actions/workflows/ci.yml/badge.svg)](https://github.com/keeganleach3/plant-care-rag/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-2f7a52)](LICENSE)
+
 A retrieval-augmented question answering service for tissue-culture aroid care (Monstera, Alocasia, Anthurium,
 Philodendron). It answers from one grower's verified notes, cites the sections it used, and refuses questions the
 notes don't cover. It was built eval-first: each version makes one change, is measured on a fixed question set the
 grower wrote in customer voice, and ships only if the numbers hold.
 
+![The chat UI answering a two-part question: it searched three ways, answered from the grower's notes, and lists the five sections it retrieved, three of them cited](docs/images/chat-answer.png)
+
+<sub>Dev question m06 from eval run v3, replayed in the UI from its recorded result (`eval/results/v3/results.jsonl`).</sub>
+
+**At a glance** (v3, dev split, [results](#results-on-the-dev-split)): recall@5 0.95 on the 14 answerable questions ·
+0 of 9 must-refuse questions answered · 0 false refusals · 13 of 14 answers graded correct and 1 partial (blind, by the
+grower) · median 7.8 s per answer, 7.7 s of it generation.
+
 > This is an engineering project, not plant-care advice. Answers are only as good as one grower's notes and are limited to
 > what those notes cover.
-
-```
-$ curl -s localhost:8000/ask -H "Content-Type: application/json" \
-    -d '{"question": "leaves turning yellow right after i took them out of the humidity dome, is it light or humidity"}'
-```
-> It's most likely humidity, not light. That usually happens when the dome comes off too fast. Also check that the
-> soil isn't drying out too much or staying too damp, since that can contribute too.
-
-(Answer to dev question m05 in eval run v2, verbatim from `eval/results/v2/results.jsonl`; the response also carries
-the cited section ids, every retrieved section, and per-stage timings.)
 
 ## How it works
 
@@ -26,6 +27,7 @@ flowchart LR
     C["corpus/*.md<br/>verified: true only"] --> K["chunker<br/>one H2 section = one chunk"] --> E["bge-base-en-v1.5<br/>CPU embeddings"]
   end
   E --> DB[("Postgres 17 + pgvector<br/>HNSW + full-text GIN<br/>chunks.embed_model")]
+  U["web/ chat UI, Next.js<br/>key stays on its server"] --> Q
   Q["POST /ask"] --> D["decompose<br/>split multi-question messages"] --> R["retrieve per query<br/>vector or hybrid"]
   DB --> R
   R --> F["reciprocal rank fusion<br/>top 5"] --> G["Claude, JSON schema<br/>citations must be retrieved ids<br/>exact refusal sentence"] --> A["answer + citations<br/>+ chunks + timings"]
@@ -40,9 +42,13 @@ flowchart LR
   do they stay in the dome and when can i start feeding them") is also searched per question and the rankings are
   fused. `mode=hybrid` adds a full-text leg fused by reciprocal rank.
 - **Generation** returns `{answer, citations, refused}` under a JSON schema. The answer text carries no section ids;
-  the citations list does, and a UI shows it. A citation outside the retrieved set, in the list or in the text,
+  the citations list does, and the UI shows it. A citation outside the retrieved set, in the list or in the text,
   rejects the answer; a refusal is one exact sentence; the question is wrapped as
   data and the prompt tells the model to ignore any instructions inside it.
+- **The chat UI** (`web/`, Next.js) shows each answer with what was searched, how long it took, and the retrieved
+  sections beside it, cited or not used, each opening to its full text. A refusal shows the closest sections it
+  searched. A library lists every indexed section (`GET /sources`), and past conversations reopen without a new call.
+  The browser only talks to the UI's own server, which holds the service's key.
 
 ## Evaluation
 
@@ -138,6 +144,7 @@ and CI settings checked by hand) and three stand, with the reasons recorded in
 | An LLM backend failure escapes as a stack trace, or leaks internals to the caller | every backend failure becomes a typed error (`cli_error`, `timeout`, `schema_invalid`, `model_mismatch`, `refusal`); the caller gets a `502` with the kind only, the detail goes to the log line; only rate-limited failures are retried |
 | A change regresses quality unnoticed | `eval.gate` (fails a candidate with errors, hallucinations, more false refusals, lower recall, or missing rows); CI runs the test suite against a pgvector service with read-only permissions and SHA-pinned actions |
 | A compromised process rewrites its own code | the container runs as a non-root user that owns only a scratch directory |
+| The browser holds the service's key | the UI's route handlers forward to the service with the key from server-only env (no `NEXT_PUBLIC_`); a production build was searched for a marker key and it appears in no shipped file; bodies over 4 KB are refused while being read; a down or slow service is a `503` or `504`, not a hang |
 
 ## Run it
 
@@ -152,6 +159,25 @@ uv sync
 uv run python -m rag.ingest --prune
 uv run uvicorn rag.api:app --host 127.0.0.1 --port 8000
 ```
+
+Then the UI, from `web/` (Node 24); it opens on http://localhost:3100:
+
+```bash
+npm install
+npm run dev -- -p 3100
+```
+
+Or ask over HTTP:
+
+```
+$ curl -s localhost:8000/ask -H "Content-Type: application/json" \
+    -d '{"question": "leaves turning yellow right after i took them out of the humidity dome, is it light or humidity"}'
+```
+> It's most likely humidity, not light. That usually happens when the dome comes off too fast. Also check that the
+> soil isn't drying out too much or staying too damp, since that can contribute too.
+
+(Answer to dev question m05 in eval run v2, verbatim from `eval/results/v2/results.jsonl`; the response also carries
+the cited section ids, every retrieved section, and per-stage timings.)
 
 ```bash
 uv run pytest -q                                           # needs the db container

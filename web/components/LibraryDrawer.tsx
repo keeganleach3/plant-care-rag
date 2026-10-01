@@ -1,11 +1,10 @@
 // Library (punchlist 2026-09-30 §7.3): everything indexed, as /sources lists it (genus, then title): notes grouped by
 // genus, each opening to its sections, each section to its full text.
 import type { Sources, SourcesState } from "@/lib/types";
-import { plural } from "@/lib/format";
+import { capitalize, plural } from "@/lib/format";
 import { Icon } from "./icons";
 import { Sheet } from "./Sheet";
 
-const name = (g: string) => g[0].toUpperCase() + g.slice(1);
 const chevron = <path d="m6 9 6 6 6-6" />;
 const summary = "flex cursor-pointer list-none items-center gap-3 rounded-tile px-2 [&::-webkit-details-marker]:hidden";
 
@@ -39,7 +38,7 @@ export function LibraryDrawer(props: {
           {[...Map.groupBy(notes, (note) => note.genus)].map(([genus, group]) => (
             <section key={genus} className="mt-3">
               <h3 className="px-2 py-1 text-small font-[560] text-secondary">
-                {name(genus)} · {plural(group.length, "note")}
+                {capitalize(genus)} · {plural(group.length, "note")}
               </h3>
               {group.map((note) => (
                 <details key={note.slug} className="group/note rounded-tile open:bg-pill">

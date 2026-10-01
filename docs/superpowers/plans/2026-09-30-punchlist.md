@@ -85,15 +85,15 @@ Port styles from `B-answer.dc.html`; decisions in contract-chat-ui.md §6.
 
 ### 7.5 Verify and review — architect
 - [ ] reviewer on the diff against both contracts and this punchlist
-- [ ] verify-sweep on every fixture route (pasted)
-- [ ] route shots read at 1440, 1920×1080, 2560 and 390
-- [ ] impeccable audit
-- [ ] live: real questions on `cc` (an answer, a refusal, a genus-scoped one); proofs 4 (key absent from the build) and 7 (request id in the service log)
+- [x] verify-sweep on every fixture route: `verify-sweep: 7 failing, 0 warn, 8 ignored · 10 routes × 1 scheme(s) · h-scroll 390/1440/1920/2560/3440/5120`; the 7 are the one-short-turn `void-mid` bands, now matched by reasoned entries (the first keys used the printed double space; replaying that run's findings through `partition`: `findings 7 ignored 7 still active 0`). The 8 `focus` findings: the ring is drawn on the composer card, probed (`FORM outline 2px solid rgb(47, 122, 82)` on keyboard focus). Horizontal scroll: none at any width
+- [x] shots read at 2558×1270 (welcome, answer, library), 1920×1080 (thread, refusal), 1440×900 (answer), 390×844 (welcome, answer), plus 3440 and 1280 measured: `scrollWidth/clientWidth` equal on all 25. Seen and fixed: at 2558 the 404px aside sat ~490px from the answer and truncated note titles → `w-[max(25.25rem,30%)]`; a refusal card said "From the grower's notes" above "I don't have information on that in my notes" → "Not in the grower's notes"
+- [x] impeccable audit: detector `[]` on `web/components` and `web/app`; read-through fixed `aria-pressed` on the "Cited n of k" switch in multi-answer threads and one duplicated helper. Scores: accessibility 3, performance 4, responsive 4, theming 3 (light only, by contract), integrity 4 = 18/20
+- [x] live on `cc` through the UI: the soil-mix prompt answered in 9.5 s (2 of 5 cited, titles from live `/sources`); "whats a good chicken marinade" refused in 6.9 s (0 of 5, closest sections listed); Alocasia scope retrieved only `general-*` and `alocasia-*` sections (log line `4050d26b…`); History saved the 3-question thread, Esc closed it, focus returned to History. Proof 4: a production build with a random marker as `RAG_API_KEY` has the marker in no shipped file (only Turbopack's local build cache, never served); the one `RAG_API_KEY` string in client code is the "rejected" error message naming the setting; no fixture text in client chunks. Proof 7: request id `e654e098…` from the proxy appears in the service's log line, question logged as length and hash only. Follow-up found: the genus scope filters retrieval but the model is not told it, so a scoped question can lead with general timing (a prompt change, needs an eval run)
 - [ ] CI web job (lint, typecheck, build) green on GitHub
 
 ### 7.6 README preview — after 7.5
-- [ ] hero screenshot at the top of the README; CI and license badges; an at-a-glance line
-- [ ] social preview PNG, 1280×640, in `docs/images/` for Keegan to upload in the repo settings
+- [x] README: CI and license badges, the hero (`docs/images/chat-answer.png`, the m06 v3 answer replayed, 1440×900 at 2x), an at-a-glance line with every figure from `eval/results/v3/report.md` (recall@5 0.95 over 14, 0/9 hallucination, 0/14 false refusal, 13 c 1 p, P50 7773 ms total / 7747 ms generate); the UI in "How it works", the key row in the hardening table, UI steps in "Run it"
+- [x] `docs/images/social-preview.png`, 1280×640, 207 KB: for Keegan to upload in the repo's Settings → Social preview (GitHub has no API for it)
 
 ## 8 — "i can also do research on some of the things ive learned about rag ... we plan more instead of just guessing"
 - [x] sourced survey of production RAG practice: 44 pages opened, every number linked (`docs/design/rag-research-survey.md`); the 12 headline numbers re-opened by a second agent (7 confirmed, 5 corrected for scope or wording, 0 not found); two wrong recall intervals (the survey assumed n=38 and n=15) replaced by bootstrap intervals from the v3 report (0.857–1.000 over 14; 0.708–1.000 over 6). Brief for the planning session: `docs/design/rag-research.md`

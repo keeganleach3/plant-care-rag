@@ -1,10 +1,10 @@
 {
   "no designed ring: TEXTAREA \"Your question\"": "Keyboard focus in the question box draws the 2px accent ring on the whole composer card (:has(textarea:focus-visible)), as the comp has no ring inside the card; probed 2026-09-30: FORM outline 2px solid rgb(47, 122, 82). The sweep only checks the focused element itself.",
-  "void-mid /?fixture=refusal @1920x1080  scrollY=0 296px ink-free band (y=703->998 in-frame)": "One short turn: a chat thread anchors at the top and the docked composer at the bottom, so a single refusal leaves canvas between them; it fills as the thread grows.",
-  "void-mid /?fixture=loading @1920x1080  scrollY=0 725px ink-free band (y=274->998 in-frame)": "One short turn (a pending question): top-anchored thread, docked composer; fills as the answer arrives.",
-  "void-mid /?fixture=loading @1440x900  scrollY=0 585px ink-free band (y=243->827 in-frame)": "One short turn (a pending question): top-anchored thread, docked composer; fills as the answer arrives.",
-  "void-mid /?fixture=error @1920x1080  scrollY=0 693px ink-free band (y=306->998 in-frame)": "One short turn (a failed question): top-anchored thread, docked composer.",
-  "void-mid /?fixture=error @1440x900  scrollY=0 556px ink-free band (y=272->827 in-frame)": "One short turn (a failed question): top-anchored thread, docked composer.",
-  "void-mid /?fixture=busy @1920x1080  scrollY=0 691px ink-free band (y=308->998 in-frame)": "One short turn (a busy error): top-anchored thread, docked composer.",
-  "void-mid /?fixture=busy @1440x900  scrollY=0 554px ink-free band (y=274->827 in-frame)": "One short turn (a busy error): top-anchored thread, docked composer."
+  "void-mid /?fixture=refusal @1920x1080 scrollY=0 390px ink-free band (y=609->998 in-frame)": "One short turn: a chat thread anchors at the top and the docked composer at the bottom, so a single refusal leaves canvas between them; it fills as the thread grows.",
+  "void-mid /?fixture=loading @1920x1080 scrollY=0 725px ink-free band (y=274->998 in-frame)": "One short turn (a pending question): top-anchored thread, docked composer; fills as the answer arrives.",
+  "void-mid /?fixture=loading @1440x900 scrollY=0 585px ink-free band (y=243->827 in-frame)": "One short turn (a pending question): top-anchored thread, docked composer; fills as the answer arrives.",
+  "void-mid /?fixture=error @1920x1080 scrollY=0 693px ink-free band (y=306->998 in-frame)": "One short turn (a failed question): top-anchored thread, docked composer.",
+  "void-mid /?fixture=error @1440x900 scrollY=0 556px ink-free band (y=272->827 in-frame)": "One short turn (a failed question): top-anchored thread, docked composer.",
+  "void-mid /?fixture=busy @1920x1080 scrollY=0 691px ink-free band (y=308->998 in-frame)": "One short turn (a busy error): top-anchored thread, docked composer.",
+  "void-mid /?fixture=busy @1440x900 scrollY=0 554px ink-free band (y=274->827 in-frame)": "One short turn (a busy error): top-anchored thread, docked composer."
 }

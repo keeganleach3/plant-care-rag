@@ -16,7 +16,7 @@ export function Turn({
   inlineSources,
 }: {
   turn: TurnData;
-  ring: boolean;
+  ring?: boolean; // undefined when there is one answer: nothing to choose between
   onActivate?: () => void; // absent when the sources sit inline: nothing to switch
   onRetry(): void;
   busy: boolean;

@@ -42,7 +42,7 @@ export function Thread(props: {
             <Turn
               key={t.id}
               turn={t}
-              ring={ring && t.id === activeId}
+              ring={ring ? t.id === activeId : undefined}
               onActivate={inlineSources ? undefined : () => onActivate(t.id)}
               onRetry={() => onRetry(t.id)}
               busy={busy}

@@ -28,7 +28,7 @@ export function AnswerCard({
   onActivate,
 }: {
   response: AskResponse;
-  ring: boolean;
+  ring?: boolean;
   onActivate?: () => void;
 }) {
   const { refused, citations, chunks, timings } = response;
@@ -67,6 +67,7 @@ export function AnswerCard({
           <button
             type="button"
             onClick={onActivate}
+            aria-pressed={ring}
             className={`min-h-6 cursor-pointer rounded-chip underline-offset-4 hover:underline ${refused ? "" : "focus-visible:outline-on-answer"}`}
           >
             {cited}

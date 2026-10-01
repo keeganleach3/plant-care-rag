@@ -2,10 +2,9 @@
 // Enter asks, Shift+Enter is a new line; Ask is disabled when empty, over the limit, offline or pending.
 import { useId, type FormEvent } from "react";
 import { MAX_QUESTION } from "@/lib/api";
+import { capitalize } from "@/lib/format";
 import { GENERA, type Genus, type SourcesState } from "@/lib/types";
 import { BOOK, Icon } from "./icons";
-
-const name = (g: string) => g[0].toUpperCase() + g.slice(1);
 
 // The comp draws no ring on the textarea; the card (or pill) around it carries the focus ring instead.
 const ring =
@@ -66,7 +65,7 @@ export function Composer(props: {
         <optgroup label="One genus, plus the general notes">
           {GENERA.map((g) => (
             <option key={g} value={g}>
-              {name(g)}
+              {capitalize(g)}
             </option>
           ))}
         </optgroup>
