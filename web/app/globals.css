@@ -65,6 +65,12 @@
     outline-offset: 2px;
   }
 
+  /* A named stack, not the generic "monospace" (browsers shrink that to 13px). */
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.95em;
+  }
+
   @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -74,5 +80,14 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
+  }
+}
+
+/* The composer card draws the question box's focus ring through :has(); a browser without :has() (Firefox before
+   121) gets it on the box itself. Unlayered, so it beats the box's outline-none utility. */
+@supports not selector(:has(*)) {
+  textarea:focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
   }
 }

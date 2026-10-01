@@ -1,17 +1,22 @@
 // Composer (punchlist 2026-09-30 §7.3): the welcome card (comp B-welcome) and the docked pill (comp B-answer).
 // Enter asks, Shift+Enter is a new line; Ask is disabled when empty, over the limit, offline or pending.
-import { useId, type FormEvent } from "react";
+import { useId, type FormEvent, type Ref } from "react";
 import { MAX_QUESTION } from "@/lib/api";
-import { capitalize } from "@/lib/format";
-import { GENERA, type Genus, type SourcesState } from "@/lib/types";
+import { message } from "@/lib/errors";
+import { capitalize, plural } from "@/lib/format";
+import { GENERA, type AskError, type Genus, type SourcesState } from "@/lib/types";
 import { BOOK, Icon } from "./icons";
 
 // The comp draws no ring on the textarea; the card (or pill) around it carries the focus ring instead.
 const ring =
   "has-[textarea:focus-visible]:outline-2 has-[textarea:focus-visible]:outline-offset-2 has-[textarea:focus-visible]:outline-accent";
 
-export function Composer(props: {
+export function Composer({
+  ref,
+  ...props
+}: {
   variant: "welcome" | "docked";
+  ref: Ref<HTMLTextAreaElement>;
   value: string;
   onChange(value: string): void;
   onSubmit(): void;
@@ -19,6 +24,7 @@ export function Composer(props: {
   onGenus(genus: Genus | null): void;
   pending: boolean;
   sourcesState: SourcesState;
+  sourcesError: AskError | null;
   corpus: { notes: number; sections: number } | null;
   onReconnect(): void;
 }) {
@@ -37,6 +43,7 @@ export function Composer(props: {
 
   const textarea = (
     <textarea
+      ref={ref}
       aria-label="Your question"
       aria-describedby={showCount ? counter : undefined}
       rows={docked ? 1 : 2}
@@ -96,8 +103,9 @@ export function Composer(props: {
   );
 
   const reconnect = (
-    <span className="flex items-center gap-1.5">
-      Can’t reach the notes.
+    // Inline, not flex: the reason is one sentence that may hold a <code> run.
+    <span>
+      {props.sourcesError ? message(props.sourcesError) : "Can’t reach the notes."}{" "}
       <button type="button" onClick={props.onReconnect} className="-my-2 py-2 text-accent hover:text-ink">
         Try again
       </button>
@@ -139,7 +147,7 @@ export function Composer(props: {
             : props.corpus && (
                 <span className="flex items-center gap-1.5 tabular-nums">
                   <Icon d={BOOK} className="size-4" />
-                  {props.corpus.notes} notes · {props.corpus.sections} sections
+                  {plural(props.corpus.notes, "note")} · {plural(props.corpus.sections, "section")}
                 </span>
               )}
         </div>

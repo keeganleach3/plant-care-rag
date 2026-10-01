@@ -1,11 +1,15 @@
 // Library (punchlist 2026-09-30 §7.3): everything indexed, as /sources lists it (genus, then title): notes grouped by
 // genus, each opening to its sections, each section to its full text.
-import type { Sources, SourcesState } from "@/lib/types";
+import { message } from "@/lib/errors";
+import type { AskError, Note, Sources, SourcesState } from "@/lib/types";
 import { capitalize, plural } from "@/lib/format";
 import { Icon } from "./icons";
 import { Sheet } from "./Sheet";
 
 const chevron = <path d="m6 9 6 6 6-6" />;
+// Insertion order keeps /sources' genus-then-title order.
+const byGenus = (notes: Note[]) =>
+  notes.reduce<Record<string, Note[]>>((groups, note) => ((groups[note.genus] ??= []).push(note), groups), {});
 const summary = "flex cursor-pointer list-none items-center gap-3 rounded-tile px-2 [&::-webkit-details-marker]:hidden";
 
 export function LibraryDrawer(props: {
@@ -13,6 +17,7 @@ export function LibraryDrawer(props: {
   onClose(): void;
   sources: Sources | null;
   sourcesState: SourcesState;
+  sourcesError: AskError | null;
   onReconnect(): void;
 }) {
   const notes = props.sources?.notes ?? [];
@@ -26,7 +31,7 @@ export function LibraryDrawer(props: {
     >
       {props.sourcesState === "offline" ? (
         <p className="px-5 text-secondary">
-          Can’t reach the notes.{" "}
+          {props.sourcesError ? message(props.sourcesError) : "Can’t reach the notes."}{" "}
           <button type="button" onClick={props.onReconnect} className="-my-2 py-2 text-accent hover:text-ink">
             Try again
           </button>
@@ -35,7 +40,7 @@ export function LibraryDrawer(props: {
         <p className="px-5 text-secondary">Loading the notes…</p>
       ) : (
         <div className="min-h-0 flex-1 overflow-y-auto px-3 pb-4">
-          {[...Map.groupBy(notes, (note) => note.genus)].map(([genus, group]) => (
+          {Object.entries(byGenus(notes)).map(([genus, group]) => (
             <section key={genus} className="mt-3">
               <h3 className="px-2 py-1 text-small font-[560] text-secondary">
                 {capitalize(genus)} · {plural(group.length, "note")}

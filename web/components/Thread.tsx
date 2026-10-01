@@ -28,11 +28,26 @@ export function Thread(props: {
     list.current?.lastElementChild?.scrollIntoView({ behavior: glide ? "smooth" : "instant", block: "start" });
   }, [lastId, lastStatus]);
 
-  // The aside follows one answer; with several, a ring marks which.
-  const ring = !inlineSources && turns.length > 1;
+  // The aside follows one answer; only with several is there a choice, which a ring marks.
+  const choose = !inlineSources && turns.length > 1;
+  // One polite region for the thread: it outlives the loading card, so the answer's arrival is announced. Errors
+  // announce themselves (role=alert).
+  const last = turns.at(-1);
+  const r = last?.status === "done" ? last.response : undefined;
+  const status =
+    last?.status === "pending"
+      ? "Waiting for the answer."
+      : !r
+        ? ""
+        : r.refused
+          ? "Not in the grower’s notes."
+          : `Answer ready. Cited ${new Set(r.citations).size} of ${r.chunks.length} retrieved sections.`;
 
   return (
     <section aria-label="Conversation" className="flex min-h-0 flex-1 flex-col">
+      <p aria-live="polite" className="sr-only">
+        {status}
+      </p>
       <header className="flex h-14 shrink-0 items-center px-4 md:h-[4.5rem] md:px-12">
         <h1 className="truncate text-small text-secondary">{turns[0]?.question}</h1>
       </header>
@@ -42,8 +57,8 @@ export function Thread(props: {
             <Turn
               key={t.id}
               turn={t}
-              ring={ring ? t.id === activeId : undefined}
-              onActivate={inlineSources ? undefined : () => onActivate(t.id)}
+              ring={choose ? t.id === activeId : undefined}
+              onActivate={choose ? () => onActivate(t.id) : undefined}
               onRetry={() => onRetry(t.id)}
               busy={busy}
               titles={titles}

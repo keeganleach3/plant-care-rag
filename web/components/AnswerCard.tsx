@@ -2,22 +2,27 @@
 import type { AskResponse } from "@/lib/types";
 import { Icon, LEAF } from "./icons";
 
-type Part = { list?: "ul" | "ol"; lines: string[] };
+type Part = { list?: "ul" | "ol"; start?: number; lines: string[] };
 
-// Paragraphs split on blank lines; runs of lines starting "- " or "1. " become lists. Text nodes only.
+// Lines starting "- " or "1. " become list items and join the list above them even across a blank line, so
+// "1. a\n\n2. b" stays one list. Other lines join the paragraph directly above; a blank line starts a new one.
+// Text nodes only.
 function parts(text: string): Part[] {
   const out: Part[] = [];
-  for (const block of text.split(/\n\s*\n/)) {
-    let prev: Part | undefined;
-    for (const raw of block.split("\n")) {
-      const line = raw.trim();
-      if (!line) continue;
-      const item = /^(-|\d+\.)\s+(.*)$/.exec(line);
-      const list = item ? (item[1] === "-" ? "ul" : "ol") : undefined;
-      const content = item ? item[2] : line;
-      if (prev && prev.list === list) prev.lines.push(content);
-      else out.push((prev = { list, lines: [content] }));
+  let gap = true;
+  for (const raw of text.split("\n")) {
+    const line = raw.trim();
+    if (!line) {
+      gap = true;
+      continue;
     }
+    const item = /^(?:-|(\d+)\.)\s+(.*)$/.exec(line);
+    const list = item ? (item[1] ? "ol" : "ul") : undefined;
+    const content = item ? item[2] : line;
+    const last = out.at(-1);
+    if (last && last.list === list && (list || !gap)) last.lines.push(content);
+    else out.push({ list, start: item?.[1] ? Number(item[1]) : undefined, lines: [content] });
+    gap = false;
   }
   return out;
 }
@@ -37,7 +42,7 @@ export function AnswerCard({
     ? "bg-card shadow-card"
     : "bg-answer-to bg-linear-160 from-answer-from to-answer-to text-on-answer shadow-answer";
   const meta = refused ? "text-secondary" : "text-on-answer-meta";
-  const cited = `Cited ${citations.length} of ${chunks.length} retrieved sections`;
+  const cited = `Cited ${new Set(citations).size} of ${chunks.length} retrieved sections`;
   return (
     <div
       className={`rounded-card px-5 pt-5 pb-4 sm:px-7 sm:pt-6 sm:pb-5 ${skin} ${ring ? "outline-2 outline-offset-4 outline-accent" : ""}`}
@@ -47,9 +52,9 @@ export function AnswerCard({
         {refused ? "Not in the grower’s notes" : "From the grower’s notes"}
       </p>
       <div className="flex flex-col gap-3 leading-[1.62] break-words">
-        {parts(response.answer).map(({ list: List, lines }, i) =>
+        {parts(response.answer).map(({ list: List, start, lines }, i) =>
           List ? (
-            <List key={i} className={`pl-5 ${List === "ul" ? "list-disc" : "list-decimal"}`}>
+            <List key={i} start={start} className={`pl-5 ${List === "ul" ? "list-disc" : "list-decimal"}`}>
               {lines.map((line, j) => (
                 <li key={j}>{line}</li>
               ))}

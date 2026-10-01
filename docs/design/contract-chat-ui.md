@@ -68,19 +68,26 @@ Geist, weights 420 display / 560 titles. Light theme only.
 - **Sources:** the aside at ≥1280px; below that, inline under each answer. A card opens to the full section text. With
   several answers in a thread, the aside follows the active answer (ring on it); an answer's "Cited n of k" footer makes
   it active.
-- **Refusal:** a white card, not the forest block: the refusal line, then "Closest sections searched", all marked
-  not used.
+- **Refusal:** a white card, not the forest block, labelled "Not in the grower's notes" (the comp's "From the grower's
+  notes" read as a contradiction above the refusal line), then "Closest sections searched", all marked not used.
 - **Loading:** the question bubble, then an answer-shaped placeholder with elapsed seconds. No invented stages: the
   client cannot see them.
 - **Errors, in plain words, each with Retry:** busy (503 busy), notes database unreachable (503 db, "is Docker
   running?"), index built with another embedding model (503 embed_model), service unreachable (proxy 503 unreachable,
-  with the start command), generation failed (502 + kind: timeout, rate limited, CLI error, invalid answer).
+  with the start command), generation failed (502 + kind: timeout, CLI error, invalid answer; the service retries a
+  rate limit itself and reports one that persists as a CLI error). When the notes fail to load, the composer and the
+  library give the same reason in the same words.
 - **Genus:** native select: All genera, Monstera, Alocasia, Anthurium, Philodendron. A genus keeps the general notes in
   scope (that is how the search filter works), and the option says so.
 - **History:** threads saved in this browser only (localStorage), reopened without a new call; clear all.
 - **Scale:** the root size is 16px up to 1440 wide, then grows with the viewport to 20px at 2400 and holds; everything is
   in rem, so the composition grows with it, then centres while the canvas keeps bleeding. At 390 the rail becomes a top
   bar and the prompts stack.
+- **One viewport, by construction:** the app is `h-dvh` with its own scroll regions, so the sweep's hero-fill check has
+  nothing to measure (`headSelector: ""`).
+- **Focus:** after asking or retrying, the caret returns to the question box on devices with a fine pointer (on touch
+  it would raise the keyboard over the answer); one polite live region per thread announces "Waiting for the answer."
+  and then the answer or the refusal; errors use `role="alert"`.
 - **Dev fixtures:** in development only, `/?fixture=<name>` seeds a recorded state (answer, thread, refusal, loading,
   error, library) from dev-set eval rows, so every state can be swept and shot without the model. Production builds
   drop it. Never a holdout row.

@@ -1,5 +1,5 @@
-import { forward } from "@/lib/upstream";
+import { forward, refuse } from "@/lib/upstream";
 
-export async function GET() {
-  return forward("/sources", { method: "GET" }, 10_000);
+export async function GET(req: Request) {
+  return refuse(req) ?? forward("/sources", { method: "GET" }, 10_000);
 }

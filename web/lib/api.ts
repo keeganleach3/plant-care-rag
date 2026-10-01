@@ -2,6 +2,9 @@
 import type { AskError, AskErrorKind, AskResponse, Genus, Sources } from "./types";
 
 export const MAX_QUESTION = 500; // rag/generate.py MAX_QUESTION
+// How long the proxy waits for /ask: past one 120 s generation (rag/llm.py). A rate-limited retry can run longer, and the
+// service then finishes the answer unseen.
+export const ASK_TIMEOUT_S = 150;
 
 export class ApiError extends Error {
   constructor(readonly info: AskError) {

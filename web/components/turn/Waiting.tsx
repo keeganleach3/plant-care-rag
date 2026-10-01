@@ -23,10 +23,6 @@ export function Waiting({ askedAt }: { askedAt: string }) {
           <span key={i} className={`h-3 rounded-full bg-sunken ${w}`} />
         ))}
       </div>
-      {/* Empty for the first second, so the region exists before it speaks: announced once, never per tick. */}
-      <p aria-live="polite" className="sr-only">
-        {seconds ? "Waiting for the answer." : ""}
-      </p>
     </div>
   );
 }

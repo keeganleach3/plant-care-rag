@@ -5,7 +5,7 @@ import { SourceCard } from "./SourceCard";
 
 export function SourcesPanel({ turn, titles }: { turn: Turn | null; titles: Map<string, string> }) {
   const r = turn?.status === "done" ? turn.response : undefined;
-  const cited = r ? r.citations.flatMap((id) => r.chunks.filter((c) => c.chunk_id === id)) : [];
+  const cited = r ? [...new Set(r.citations)].flatMap((id) => r.chunks.filter((c) => c.chunk_id === id)) : [];
   const unused = r ? r.chunks.filter((c) => !r.citations.includes(c.chunk_id)) : [];
   const note = (chunkId: string) => {
     const slug = chunkId.split("#")[0];

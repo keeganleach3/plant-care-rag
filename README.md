@@ -144,7 +144,8 @@ and CI settings checked by hand) and three stand, with the reasons recorded in
 | An LLM backend failure escapes as a stack trace, or leaks internals to the caller | every backend failure becomes a typed error (`cli_error`, `timeout`, `schema_invalid`, `model_mismatch`, `refusal`); the caller gets a `502` with the kind only, the detail goes to the log line; only rate-limited failures are retried |
 | A change regresses quality unnoticed | `eval.gate` (fails a candidate with errors, hallucinations, more false refusals, lower recall, or missing rows); CI runs the test suite against a pgvector service with read-only permissions and SHA-pinned actions |
 | A compromised process rewrites its own code | the container runs as a non-root user that owns only a scratch directory |
-| The browser holds the service's key | the UI's route handlers forward to the service with the key from server-only env (no `NEXT_PUBLIC_`); a production build was searched for a marker key and it appears in no shipped file; bodies over 4 KB are refused while being read; a down or slow service is a `503` or `504`, not a hang |
+| The browser holds the service's key | the UI's route handlers forward to the service with the key from server-only env (no `NEXT_PUBLIC_`, a `server-only` import); a production build was searched for a marker key and it appears in no shipped file; bodies over 4 KB are refused while being read; a down or slow service is a `503` or `504`, not a hang |
+| Another device, a cross-site page or a rebound DNS name uses the UI's key | the UI listens on `127.0.0.1` only, and its routes refuse (`403`/`415`) a foreign `Host`, a cross-site `Sec-Fetch-Site` or `Origin`, and any POST that isn't JSON, before calling the service |
 
 ## Run it
 

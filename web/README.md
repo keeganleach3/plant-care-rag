@@ -11,7 +11,7 @@ npm install
 npm run dev -- -p 3100
 ```
 
-Server settings go in `web/.env.local` (never committed): `RAG_API_URL` (default `http://127.0.0.1:8000`) and
+The UI listens on `127.0.0.1` only. Server settings go in `web/.env.local` (never committed): `RAG_API_URL` (default `http://127.0.0.1:8000`) and
 `RAG_API_KEY` (the service's `API_KEY`, when it has one). The browser only calls this app's `/api` routes, so the key
 stays on the server.
 

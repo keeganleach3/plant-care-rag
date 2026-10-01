@@ -16,6 +16,8 @@ Areas touched: `rag/api.py` (new route), `tests/test_api.py`, `web/` (new), `.gi
 
 | Input enters at | Validated by (at that boundary) |
 |---|---|
+| Network → the Next server | listens on `127.0.0.1` only (`-H 127.0.0.1` on `next dev` and `next start`): the proxy adds the key, so nothing off this machine may reach it |
+| Browser → `web/app/api/*` | `refuse()` in `lib/upstream.ts`, before any upstream call: `Host` must be localhost, 127.0.0.1 or [::1] (a rebound DNS name fails); `Sec-Fetch-Site`, when sent, must be `same-origin`, and `Origin`, when sent, must match `Host` (a cross-site page's fetch fails); a POST must be `application/json` (a cross-site "simple" POST can't be, without a preflight nothing answers). 403 / 415 |
 | Browser → `web/app/api/ask` body | ≤ 4096 bytes or 413 before any upstream call; passed through as JSON; the service validates fields (422) |
 | Next server → RAG service | base URL only from server env `RAG_API_URL` (default `http://127.0.0.1:8000`), never from the request |
 | Service response → browser | status and body passed through; the service's 5xx bodies are already kind-only (`api.py`) |
@@ -33,13 +35,19 @@ Areas touched: `rag/api.py` (new route), `tests/test_api.py`, `web/` (new), `.gi
 when `API_KEY` is set; `503 db` (with `Retry-After: 5`) when the database is unreachable.
 
 Secrets: `RAG_API_KEY` lives in `web/.env.local` (gitignored) and equals the service's `API_KEY`. The Next server
-sends it as `Authorization: Bearer`. No `NEXT_PUBLIC_` prefix; it never reaches a client bundle or a response.
+sends it as `Authorization: Bearer`. No `NEXT_PUBLIC_` prefix; it never reaches a client bundle or a response, and
+`lib/upstream.ts` imports `server-only`, so a client import fails the build. A value a header can't carry fails at
+load with a message that doesn't quote it. Turbopack's local build cache (`web/.next/cache`) records env values: it is
+never served, and it must not be shared between machines.
 
 ## 4. Failure & rollback
 
 Fails by: service down → proxy `503 {"detail": "unreachable"}`; generation past 150 s → proxy `504 {"detail":
-"timeout"}`; database down → `503 db` from the service, passed through.
-Revert: `git revert <sha>`. The route is additive and `web/` is a new directory.
+"timeout"}` (a rate-limited retry can outlast that; the service then finishes the answer unseen); database down →
+`503 db` from the service, passed through.
+Revert: the round is spread over several commits with unrelated docs commits between them. `git rm -r web`, then
+`git revert --no-commit 2368282 dd0dd90` (GET /sources, its warning text and the CI web job), and restore the README's
+pre-UI top from `46d50d3`. The route is additive and `web/` is a new directory.
 Down migration: n/a. Destructive steps: none.
 
 ## 5. Proof plan
@@ -55,6 +63,11 @@ Down migration: n/a. Destructive steps: none.
 6. Service down → verify: curl /api/ask with the service stopped: 503 unreachable
 7. End to end → verify: a real question through the UI on cc; answer and sources render; the proxy's X-Request-ID
    appears in the service's log line
+8. Off-machine and cross-site callers can't use the key (added after review) → verify: the server listens on
+   127.0.0.1 only; curl with Host attacker.example, with Origin http://evil.example, with Sec-Fetch-Site cross-site,
+   and a text/plain POST each get 403 or 415 without reaching the service
+9. The 504 path (added after review) → verify: /api/sources against a service that accepts and never answers returns
+   504 timeout after its 10 s budget
 ```
 
 ## 6. Model & budget plan

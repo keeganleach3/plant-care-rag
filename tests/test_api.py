@@ -105,7 +105,7 @@ def test_open_ask_is_warned_once_at_startup(conn, monkeypatch, caplog):
     emb = Embedder("BAAI/bge-base-en-v1.5", model=FakeModel())
     with TestClient(api.create_app(conn=conn, embedder=emb)):
         pass
-    assert len(warnings()) == 1 and "/ask" in warnings()[0]
+    assert len(warnings()) == 1 and "/ask" in warnings()[0] and "/sources" in warnings()[0]
     caplog.clear()
     monkeypatch.setenv("API_KEY", secrets.token_urlsafe(32))
     with TestClient(api.create_app(conn=conn, embedder=emb)):

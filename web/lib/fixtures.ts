@@ -1,7 +1,7 @@
 // Development only (contract-chat-ui.md §6): `/?fixture=<name>` seeds a state for sweeps, route shots and building
 // without the model. Chat.tsx loads this through a dynamic import behind a NODE_ENV check. Every answer is a recorded
 // eval row from the DEV set (lib/fixtures/*.json name their source); never a holdout row.
-import type { AskResponse, Drawer, Sources, SourcesState, Thread, Turn } from "./types";
+import type { AskError, AskResponse, Drawer, Sources, SourcesState, Thread, Turn } from "./types";
 import f11 from "./fixtures/f11.json";
 import m06 from "./fixtures/m06.json";
 import n03 from "./fixtures/n03.json";
@@ -11,6 +11,7 @@ import snapshot from "./fixtures/sources.json";
 export interface Seed {
   sources: Sources | null;
   sourcesState: SourcesState;
+  sourcesError?: AskError;
   thread?: Thread;
   threads?: Thread[];
   drawer?: Drawer;
@@ -67,7 +68,9 @@ const SEEDS: Record<string, () => Omit<Seed, "sources" | "sourcesState">> = {
 };
 
 export function seed(name: string): Seed | null {
-  if (name === "offline") return { sources: null, sourcesState: "offline" };
+  if (name === "offline") {
+    return { sources: null, sourcesState: "offline", sourcesError: { kind: "unreachable", detail: "", status: 503 } };
+  }
   const make = SEEDS[name];
   return make ? { sources, sourcesState: "ready", ...make() } : null;
 }

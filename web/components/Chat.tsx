@@ -4,7 +4,7 @@
 import { useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { ask, fetchSources, MAX_QUESTION, toAskError } from "@/lib/api";
 import { clearThreads, loadThreads, saveThread } from "@/lib/history";
-import type { Drawer, Genus, Sources, SourcesState, Thread as ThreadData, Turn } from "@/lib/types";
+import type { AskError, Drawer, Genus, Sources, SourcesState, Thread as ThreadData, Turn } from "@/lib/types";
 import { Composer } from "./Composer";
 import { HistoryDrawer } from "./HistoryDrawer";
 import { LibraryDrawer } from "./LibraryDrawer";
@@ -28,6 +28,7 @@ const newThread = (): ThreadData => ({ id: uid(), createdAt: new Date().toISOStr
 export function Chat() {
   const [sources, setSources] = useState<Sources | null>(null);
   const [sourcesState, setSourcesState] = useState<SourcesState>("loading");
+  const [sourcesError, setSourcesError] = useState<AskError | null>(null); // why the notes didn't load
   const [thread, setThread] = useState<ThreadData>(newThread);
   const [threads, setThreads] = useState<ThreadData[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -35,48 +36,67 @@ export function Chat() {
   const [draft, setDraft] = useState("");
   const [drawer, setDrawer] = useState<Drawer>(null);
   const inflight = useRef<AbortController | null>(null);
+  const input = useRef<HTMLTextAreaElement>(null);
   const fixture = useRef(false); // a seeded dev state is never written to history
+  const settled = useRef(false); // an answer just landed: save the thread (reopening one never re-saves it)
+  const refocus = useRef(false); // put the caret back in the question box after asking or retrying
   const wide = useSyncExternalStore(subscribeWide, () => matchMedia(WIDE).matches, () => true);
 
   const connect = (signal?: AbortSignal) =>
     fetchSources(signal).then(
       (s) => {
         setSources(s);
+        setSourcesError(null);
         setSourcesState("ready");
       },
-      () => {
-        if (!signal?.aborted) setSourcesState("offline");
+      (err) => {
+        if (signal?.aborted) return;
+        setSourcesError(toAskError(err));
+        setSourcesState("offline");
       },
     );
 
   useEffect(() => {
-    const name = process.env.NODE_ENV === "development" ? new URLSearchParams(location.search).get("fixture") : null;
-    if (name) {
-      fixture.current = true;
-      import("@/lib/fixtures").then(({ seed }) => {
-        const s = seed(name);
-        if (!s) return;
-        setSources(s.sources);
-        setSourcesState(s.sourcesState);
-        if (s.thread) {
-          setThread(s.thread);
-          setActiveId(s.thread.turns.at(-1)?.id ?? null);
-        }
-        if (s.threads) setThreads(s.threads);
-        if (s.drawer) setDrawer(s.drawer);
-      });
-      return;
-    }
     const ctl = new AbortController();
-    connect(ctl.signal);
+    const name = process.env.NODE_ENV === "development" ? new URLSearchParams(location.search).get("fixture") : null;
+    if (!name) {
+      connect(ctl.signal);
+      return () => ctl.abort();
+    }
+    fixture.current = true;
+    import("@/lib/fixtures").then(({ seed }) => {
+      const s = seed(name);
+      if (!s) {
+        fixture.current = false; // an unknown name: load as if none were asked for
+        connect(ctl.signal);
+        return;
+      }
+      setSources(s.sources);
+      setSourcesError(s.sourcesError ?? null);
+      setSourcesState(s.sourcesState);
+      if (s.thread) {
+        setThread(s.thread);
+        setActiveId(s.thread.turns.at(-1)?.id ?? null);
+      }
+      if (s.threads) setThreads(s.threads);
+      if (s.drawer) setDrawer(s.drawer);
+    });
     return () => ctl.abort();
   }, []);
 
   const pending = thread.turns.some((t) => t.status === "pending");
 
   useEffect(() => {
-    if (!fixture.current && !pending) saveThread(thread);
+    if (!settled.current || pending || fixture.current) return;
+    settled.current = false;
+    saveThread(thread);
   }, [thread, pending]);
+
+  useEffect(() => {
+    if (!refocus.current) return;
+    refocus.current = false;
+    input.current?.focus();
+  });
 
   const settle = (threadId: string, turnId: string, patch: Partial<Turn>) =>
     setThread((t) => (t.id !== threadId ? t : { ...t, turns: t.turns.map((x) => (x.id === turnId ? { ...x, ...patch } : x)) }));
@@ -85,7 +105,10 @@ export function Chat() {
     const ctl = new AbortController();
     inflight.current = ctl;
     ask(turn.question, turn.genus, ctl.signal).then(
-      (response) => settle(threadId, turn.id, { status: "done", response, error: undefined }),
+      (response) => {
+        settled.current = true;
+        settle(threadId, turn.id, { status: "done", response, error: undefined });
+      },
       (err) => {
         if (!ctl.signal.aborted) settle(threadId, turn.id, { status: "error", error: toAskError(err) });
       },
@@ -93,6 +116,8 @@ export function Chat() {
   };
 
   const canAsk = !pending && sourcesState !== "offline";
+  // A fine pointer means a keyboard is likely; on touch, focusing would raise the keyboard over the answer.
+  const keepFocus = () => (refocus.current = matchMedia("(pointer: fine)").matches);
 
   const submit = (text: string) => {
     const question = text.trim();
@@ -101,6 +126,7 @@ export function Chat() {
     setThread((t) => ({ ...t, turns: [...t.turns, turn] }));
     setActiveId(turn.id);
     setDraft("");
+    keepFocus();
     run(thread.id, turn);
   };
 
@@ -110,6 +136,7 @@ export function Chat() {
     const again: Turn = { ...turn, status: "pending", error: undefined, askedAt: new Date().toISOString() };
     settle(thread.id, turnId, again);
     setActiveId(turnId);
+    keepFocus();
     run(thread.id, again);
   };
 
@@ -142,6 +169,7 @@ export function Chat() {
   const composer = (variant: "welcome" | "docked") => (
     <Composer
       variant={variant}
+      ref={input}
       value={draft}
       onChange={setDraft}
       onSubmit={() => submit(draft)}
@@ -149,6 +177,7 @@ export function Chat() {
       onGenus={setGenus}
       pending={pending}
       sourcesState={sourcesState}
+      sourcesError={sourcesError}
       corpus={corpus}
       onReconnect={reconnect}
     />
@@ -200,6 +229,7 @@ export function Chat() {
         onClose={() => setDrawer(null)}
         sources={sources}
         sourcesState={sourcesState}
+        sourcesError={sourcesError}
         onReconnect={reconnect}
       />
     </div>
