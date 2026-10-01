@@ -89,7 +89,7 @@ Port styles from `B-answer.dc.html`; decisions in contract-chat-ui.md §6.
 - [x] shots read at 2558×1270 (welcome, answer, library), 1920×1080 (thread, refusal), 1440×900 (answer), 390×844 (welcome, answer), plus 3440 and 1280 measured: `scrollWidth/clientWidth` equal on all 25. Seen and fixed: at 2558 the 404px aside sat ~490px from the answer and truncated note titles → `w-[max(25.25rem,30%)]`; a refusal card said "From the grower's notes" above "I don't have information on that in my notes" → "Not in the grower's notes"
 - [x] impeccable audit: detector `[]` on `web/components` and `web/app`; read-through fixed `aria-pressed` on the "Cited n of k" switch in multi-answer threads and one duplicated helper. Scores: accessibility 3, performance 4, responsive 4, theming 3 (light only, by contract), integrity 4 = 18/20
 - [x] live on `cc` through the UI: the soil-mix prompt answered in 9.5 s (2 of 5 cited, titles from live `/sources`); "whats a good chicken marinade" refused in 6.9 s (0 of 5, closest sections listed); Alocasia scope retrieved only `general-*` and `alocasia-*` sections (log line `4050d26b…`); History saved the 3-question thread, Esc closed it, focus returned to History. Proof 4: a production build with a random marker as `RAG_API_KEY` has the marker in no shipped file (only Turbopack's local build cache, never served); the one `RAG_API_KEY` string in client code is the "rejected" error message naming the setting; no fixture text in client chunks. Proof 7: request id `e654e098…` from the proxy appears in the service's log line, question logged as length and hash only. Follow-up found: the genus scope filters retrieval but the model is not told it, so a scoped question can lead with general timing (a prompt change, needs an eval run)
-- [ ] CI web job (lint, typecheck, build) green on GitHub
+- [x] CI web job (lint, typecheck, build) green on GitHub: run 36799717715 on `171b476`, `web: success` (`✓ Compiled successfully in 5.9s`), `test: success` (`175 passed, 1 warning in 29.92s`)
 
 ### 7.7 Review fixes — reviewer (opus, read-only): no blockers, 5 major, 22 minor
 - [x] SEC-1 (major) the UI listened on 0.0.0.0, so another device could use its key → `-H 127.0.0.1` on `next dev` and `next start`; `Get-NetTCPConnection`: `127.0.0.1 3100`, `127.0.0.1 8000`
@@ -110,5 +110,9 @@ Port styles from `B-answer.dc.html`; decisions in contract-chat-ui.md §6.
 - [x] sourced survey of production RAG practice: 44 pages opened, every number linked (`docs/design/rag-research-survey.md`); the 12 headline numbers re-opened by a second agent (7 confirmed, 5 corrected for scope or wording, 0 not found); two wrong recall intervals (the survey assumed n=38 and n=15) replaced by bootstrap intervals from the v3 report (0.857–1.000 over 14; 0.708–1.000 over 6). Brief for the planning session: `docs/design/rag-research.md`
 - [ ] Keegan's findings + the survey → planning session → scope for the over-build (replaces the open decision in 2)
 
+Final sweep after the review fixes: `verify-sweep: 0 failing, 0 warn, 15 ignored · 10 routes × 1 scheme(s) · h-scroll 390/1440/1920/2560/3440/5120` (the 15: the composer-card focus ring ×8 and one-short-turn bands ×7, each with its reason in `web/verify-sweep.ignore.json`).
+
 ## Open at round end
-Scope decision (2, now after the research in 8), the public flip (5).
+- Scope decision (2), after Keegan's research and the brief in 8
+- Keegan: upload `docs/images/social-preview.png` (Settings → Social preview); the public flip (5) on his go
+- Follow-ups found this round: the genus scope is not passed to the model (a prompt change, so an eval run); one deadline across the service's generation retries
