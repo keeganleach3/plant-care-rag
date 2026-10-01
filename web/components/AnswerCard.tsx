@@ -44,7 +44,7 @@ export function AnswerCard({
     >
       <p className={`mb-2.5 flex items-center gap-2 text-small leading-tight ${meta}`}>
         <Icon d={LEAF} className="size-4" />
-        From the grower&apos;s notes
+        {refused ? "Not in the grower’s notes" : "From the grower’s notes"}
       </p>
       <div className="flex flex-col gap-3 leading-[1.62] break-words">
         {parts(response.answer).map(({ list: List, lines }, i) =>

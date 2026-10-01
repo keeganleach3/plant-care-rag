@@ -180,7 +180,8 @@ export function Chat() {
         )}
       </main>
       {wide && !welcome && (
-        <aside aria-label="Sources" className="w-[25.25rem] shrink-0 overflow-y-auto">
+        // The comp's 404px at 1440, then 30% of the frame, so wide screens don't strand the sources far from the answer.
+        <aside aria-label="Sources" className="w-[max(25.25rem,30%)] shrink-0 overflow-y-auto">
           <SourcesPanel turn={activeTurn} titles={titles} />
         </aside>
       )}
