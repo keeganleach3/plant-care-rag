@@ -1,6 +1,6 @@
 // One retrieved section: a white card when cited, a sunken tile when not used. Opens to the full section text.
 import type { Chunk } from "@/lib/types";
-import { CHECK, Icon } from "./turn/icons";
+import { CHECK, Icon } from "./icons";
 
 export function SourceCard({ chunk, note, cited }: { chunk: Chunk; note: string; cited: boolean }) {
   const meta = cited ? "text-secondary" : "text-sunken-meta";

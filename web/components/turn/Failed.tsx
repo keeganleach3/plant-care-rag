@@ -1,7 +1,7 @@
 // An error card per kind, with Retry. Wording: punchlist 2026-09-30 §7.4 (`kind`, then `detail` for 502s).
 import { useEffect, useState, type ReactNode } from "react";
 import type { AskError } from "@/lib/types";
-import { ALERT, Icon, RETRY } from "./icons";
+import { ALERT, Icon, RETRY } from "../icons";
 
 const GENERATION = new Map([
   ["timeout", "The model took too long to answer."],
@@ -64,7 +64,7 @@ export function Failed({ error, onRetry, busy }: { error: AskError; onRetry(): v
             className="flex h-[2.625rem] items-center gap-2 rounded-full bg-ink px-[1.125rem] text-small font-[560] text-on-answer enabled:cursor-pointer disabled:opacity-50"
           >
             Retry
-            <Icon d={RETRY} stroke={2.2} />
+            <Icon d={RETRY} stroke={2.2} className="size-4" />
           </button>
           {wait > 0 && <span className="text-small text-secondary tabular-nums">Try again in {wait} s</span>}
         </div>

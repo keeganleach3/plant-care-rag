@@ -1,30 +1,7 @@
 // Rail (punchlist 2026-09-30 §7.3; contract-chat-ui.md §6): logo and New chat start a new chat; History and Library
 // open their drawers. A top bar below 768px.
-import type { ReactNode } from "react";
 import type { Drawer } from "@/lib/types";
-
-/** The comp's icon frame: 24-unit grid, stroke 2, round caps and joins. Decorative; the control carries the label. */
-export const Icon = ({ className = "size-5", children }: { className?: string; children: ReactNode }) => (
-  <svg
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth={2}
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    aria-hidden
-    className={className}
-  >
-    {children}
-  </svg>
-);
-
-export const BOOK = (
-  <>
-    <path d="M2 4h6a4 4 0 0 1 4 4v13a3 3 0 0 0-3-3H2z" />
-    <path d="M22 4h-6a4 4 0 0 0-4 4v13a3 3 0 0 1 3-3h7z" />
-  </>
-);
+import { BOOK, Icon } from "./icons";
 
 const round = "grid size-11.5 place-items-center rounded-full";
 const quiet = `${round} text-secondary hover:bg-card hover:text-ink aria-expanded:bg-card aria-expanded:text-ink`;
@@ -69,7 +46,7 @@ export function Rail(props: { drawer: Drawer; onNewChat(): void; onOpen(drawer: 
         onClick={() => props.onOpen("library")}
         className={quiet}
       >
-        <Icon>{BOOK}</Icon>
+        <Icon d={BOOK} />
       </button>
     </nav>
   );

@@ -3,7 +3,7 @@ import type { Turn as TurnData } from "@/lib/types";
 import { AnswerCard } from "./AnswerCard";
 import { SourcesPanel } from "./SourcesPanel";
 import { Failed } from "./turn/Failed";
-import { Icon, SPLIT } from "./turn/icons";
+import { Icon, SPLIT } from "./icons";
 import { Waiting } from "./turn/Waiting";
 
 export function Turn({
@@ -32,7 +32,7 @@ export function Turn({
       {r && r.queries.length > 1 && (
         <ul className="flex flex-wrap items-center gap-2 text-small leading-tight text-secondary">
           <li className="mr-1 flex items-center gap-1.5">
-            <Icon d={SPLIT} />
+            <Icon d={SPLIT} className="size-4" />
             Searched {r.queries.length} ways
           </li>
           {r.queries.map((q, i) => (

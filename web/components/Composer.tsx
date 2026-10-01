@@ -3,7 +3,7 @@
 import { useId, type FormEvent } from "react";
 import { MAX_QUESTION } from "@/lib/api";
 import { GENERA, type Genus, type SourcesState } from "@/lib/types";
-import { BOOK, Icon } from "./Rail";
+import { BOOK, Icon } from "./icons";
 
 const name = (g: string) => g[0].toUpperCase() + g.slice(1);
 
@@ -49,7 +49,7 @@ export function Composer(props: {
         e.preventDefault();
         if (canAsk) props.onSubmit();
       }}
-      className={`min-w-0 flex-1 resize-none bg-transparent py-0.5 leading-normal outline-none! placeholder:text-quiet ${docked ? "basis-full max-sm:px-3.5 sm:basis-0" : ""}`}
+      className={`min-w-0 flex-1 resize-none bg-transparent py-0.5 leading-normal outline-none placeholder:text-quiet ${docked ? "basis-full max-sm:px-3.5 sm:basis-0" : ""}`}
     />
   );
 
@@ -139,7 +139,7 @@ export function Composer(props: {
             ? reconnect
             : props.corpus && (
                 <span className="flex items-center gap-1.5 tabular-nums">
-                  <Icon className="size-4">{BOOK}</Icon>
+                  <Icon d={BOOK} className="size-4" />
                   {props.corpus.notes} notes · {props.corpus.sections} sections
                 </span>
               )}

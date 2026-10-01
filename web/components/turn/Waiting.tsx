@@ -1,6 +1,6 @@
 // Loading (contract-chat-ui.md §6): an answer-shaped placeholder with elapsed seconds. No invented stages.
 import { useEffect, useState } from "react";
-import { Icon, LEAF } from "./icons";
+import { Icon, LEAF } from "../icons";
 
 const since = (iso: string) => Math.max(0, Math.floor((Date.now() - Date.parse(iso)) / 1000));
 
@@ -13,7 +13,7 @@ export function Waiting({ askedAt }: { askedAt: string }) {
   return (
     <div className="rounded-card bg-card px-5 pt-5 pb-6 shadow-card sm:px-7 sm:pt-6 sm:pb-7">
       <p aria-hidden className="mb-4 flex items-center gap-2 text-small leading-tight text-secondary">
-        <Icon d={LEAF} />
+        <Icon d={LEAF} className="size-4" />
         Waiting for the answer
         <span className="ml-auto tabular-nums">{seconds} s</span>
       </p>

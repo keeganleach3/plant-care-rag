@@ -42,34 +42,37 @@
   --text-small--line-height: 1.45;
 }
 
-/* 16px up to 1440 wide, then +1px per 240px of viewport to 20px at 2400, held beyond (ceiling, then the canvas bleeds).
-   rem inside the root's own font-size is the user's default size, so a larger browser default still scales. */
-html {
-  font-size: clamp(1rem, calc(1rem + (100vw - 90rem) / 240), 1.25rem);
-  color-scheme: light;
-  background: var(--color-canvas);
-}
+/* In the base layer so utilities (focus-visible:outline-*, outline-none) override these defaults. */
+@layer base {
+  /* 16px up to 1440 wide, then +1px per 240px of viewport to 20px at 2400, held beyond (ceiling, then the canvas
+     bleeds). rem inside the root's own font-size is the user's default size, so a larger browser default still scales. */
+  html {
+    font-size: clamp(1rem, calc(1rem + (100vw - 90rem) / 240), 1.25rem);
+    color-scheme: light;
+    background: var(--color-canvas);
+  }
 
-body {
-  background: var(--color-canvas);
-  color: var(--color-ink);
-  font-family: var(--font-sans);
-  font-size: var(--text-body);
-  line-height: var(--text-body--line-height);
-}
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: var(--text-body);
+    line-height: var(--text-body--line-height);
+  }
 
-:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+  }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }

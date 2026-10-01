@@ -1,8 +1,9 @@
 // Library (punchlist 2026-09-30 §7.3): everything indexed, as /sources lists it (genus, then title): notes grouped by
 // genus, each opening to its sections, each section to its full text.
 import type { Sources, SourcesState } from "@/lib/types";
-import { plural, Sheet } from "./HistoryDrawer";
-import { Icon } from "./Rail";
+import { plural } from "@/lib/format";
+import { Icon } from "./icons";
+import { Sheet } from "./Sheet";
 
 const name = (g: string) => g[0].toUpperCase() + g.slice(1);
 const chevron = <path d="m6 9 6 6 6-6" />;

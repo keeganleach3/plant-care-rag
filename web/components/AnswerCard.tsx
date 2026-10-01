@@ -1,6 +1,6 @@
 // The answer in the forest block (the AI's own voice); a refusal gets a white card (contract-chat-ui.md §6).
 import type { AskResponse } from "@/lib/types";
-import { Icon, LEAF } from "./turn/icons";
+import { Icon, LEAF } from "./icons";
 
 type Part = { list?: "ul" | "ol"; lines: string[] };
 
@@ -43,7 +43,7 @@ export function AnswerCard({
       className={`rounded-card px-5 pt-5 pb-4 sm:px-7 sm:pt-6 sm:pb-5 ${skin} ${ring ? "outline-2 outline-offset-4 outline-accent" : ""}`}
     >
       <p className={`mb-2.5 flex items-center gap-2 text-small leading-tight ${meta}`}>
-        <Icon d={LEAF} />
+        <Icon d={LEAF} className="size-4" />
         From the grower&apos;s notes
       </p>
       <div className="flex flex-col gap-3 leading-[1.62] break-words">
