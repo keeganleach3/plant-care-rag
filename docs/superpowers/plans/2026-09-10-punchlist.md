@@ -10,7 +10,7 @@ A box is checked only when DONE and verified with pasted output. Ledger rows: `|
 ## 0.2 Repo scaffold
 - [x] dirs, `uv init --python 3.12`, pyproject with CPU torch index, .gitignore/.gitattributes/.env.example, LICENSE
 - [x] deps installed; verified: `torch 2.14.0+cpu cuda False`, `sentence-transformers 6.0.1`
-- [x] first commit `2253611`
+- [x] first commit `c121ab8`
 - ledger: `| 0.2 | inline | 15K | — |`
 
 ## 0.3 Docker compose + schema

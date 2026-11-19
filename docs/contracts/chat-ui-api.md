@@ -46,8 +46,8 @@ Fails by: service down → proxy `503 {"detail": "unreachable"}`; generation pas
 "timeout"}` (a rate-limited retry can outlast that; the service then finishes the answer unseen); database down →
 `503 db` from the service, passed through.
 Revert: the round is spread over several commits with unrelated docs commits between them. `git rm -r web`, then
-`git revert --no-commit 2368282 dd0dd90` (GET /sources, its warning text and the CI web job), and restore the README's
-pre-UI top from `46d50d3`. The route is additive and `web/` is a new directory.
+`git revert --no-commit 80a221c b3a847a` (GET /sources, its warning text and the CI web job), and restore the README's
+pre-UI top from `99788fc`. The route is additive and `web/` is a new directory.
 Down migration: n/a. Destructive steps: none.
 
 ## 5. Proof plan

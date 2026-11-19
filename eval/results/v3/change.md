@@ -7,4 +7,4 @@ Why: Keegan, 2026-09-25: "drop them and let the UI show the citation when we mak
 Result: `uv run python -m eval.gate v2.1 v3` passes (recall identical, 0 errors, hallucinations or false refusals);
 inline ids 3/14 → 0/14. Citations per answer 2.64 → 2.50: the two answers citing fewer sections (f09, f11) were read,
 and every fact in them is in a section they cite; they draw on fewer sections (median answer 128.5 → 113 words).
-Commits: `a409128` (metric), `3c70514` (prompt), this run. Numbers: [report.md](report.md).
+Commits: `488f3e0` (metric), `8c69282` (prompt), this run. Numbers: [report.md](report.md).

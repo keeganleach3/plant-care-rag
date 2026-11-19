@@ -7,4 +7,4 @@ Why: m04 ("how long do they stay in the dome and when can i start feeding them")
 the feeding section ranked 13th for the whole message and 1st for its second question.
 Result: only m04 and m06 retrieve differently. m04 still misses the feeding section (known miss, see
 [../../notes.md](../../notes.md)); a cross-encoder reranker was probed as the fix and rejected there.
-Commits: `15a8dcb` (code), `b08fd7d` (run). Numbers: [report.md](report.md).
+Commits: `d49e98e` (code), `f23bb1e` (run). Numbers: [report.md](report.md).
